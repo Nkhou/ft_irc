@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:28:11 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/04 17:13:29 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:31:15 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,22 @@ void Server::Server_init(int port_num)
             std::cout << "Failed Poll Try Again"<<std::endl;
             exit(0);
         }
-        // while(i < fds.size())
-        // {
-        //     if(fds[i].revents & POLLIN)
-        //     {
-        //         if(fds[i].fd == ser_fd)
-        //         {
-        //             AcceptNewclient();
-        //         }
-        //         else
-        //         {
-        //             ReceiveNewData(fds[i].fd);
-        //         }
-        //     }
-        //     i++;
-        // }
+        while(i < fds.size())
+        {
+            if(fds[i].revents & POLLIN)
+            {
+                if(fds[i].fd == ser_fd)
+                {
+                    AcceptNewclient();
+                }
+                else
+                {
+                    ReceiveNewData(fds[i].fd);
+                }
+            }
+            i++;
+        }
+        i = 0;
         
     }
 } 
