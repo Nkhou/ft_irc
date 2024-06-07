@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:28:11 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/04 17:31:15 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/06 20:27:52 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Server::Server_init(int port_num)
     //creation du Server
      struct sockaddr_in addr;
      struct pollfd fdpoll;
-    //  size_t i = 0;
+     size_t i = 0;
         int pe = 1;
      addr.sin_family = AF_INET; // specifies IPV4(protocol for communication)
      addr.sin_port = htons(port_num); // sets the port ,function htons:converting it to network byte order 
@@ -56,7 +56,7 @@ void Server::Server_init(int port_num)
     fds.push_back(fdpoll);
     std::cout << "Server is Ready to Accept a Connection...."<<std::endl;
     // infinite loop
-    while(1)
+    while(1) 
     {
         //now using function poll to check if there is any incoming connection
         if(poll(fds.data(),fds.size(),-1) < 0)
@@ -74,17 +74,42 @@ void Server::Server_init(int port_num)
                 }
                 else
                 {
+                    printf("its here/n");
                     ReceiveNewData(fds[i].fd);
                 }
             }
             i++;
         }
-        i = 0;
-        
+         
     }
 } 
 
 
+void Server::AcceptNewclient()
+{
+    Client cli;
+    struct sockaddr_in addr;
+    struct pollfd fdpoll;
+    socklen_t len = sizeof(addr);
+
+    int cli_fd = accept(ser_fd,(struct sockaddr*)&addr,&len); //accept the incoming connection
+    if(cli_fd < 0)
+    {
+        std::cout << "Failed Accept Try Again"<<std::endl;
+        exit(0);
+    }
+    if (fcntl(cli_fd, F_SETFL, O_NONBLOCK) == -1) //-> set the socket option (O_NONBLOCK) for non-blocking socket
+        throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
+    fdpoll.fd = cli_fd;
+    fdpoll.events = POLLIN;
+    fdpoll.revents = 0;
+    
+    cli.setFD(cli_fd);
+    cli.setIP(inet_ntoa(addr.sin_addr));
+    clients.push_back(cli);
+    fds.push_back(fdpoll);
+    std::cout << "<<< New Client Connected >>> " << cli_fd<< std::endl;
+}
 void Client::setIP(std::string ip_addr)
 {
     this->ip_addr = ip_addr;
@@ -96,37 +121,23 @@ int Client::setFD(int fd)
     return fd;
 }
 
-// void Server::AcceptNewclient()
-// {
-//     Client cli;
-//     struct sockaddr_in addr;
-//     struct pollfd fdpoll;
-//     socklen_t len = sizeof(addr);
 
-//     int cli_fd = accept(ser_fd,(struct sockaddr*)&addr,&len); //accept the incoming connection
-//     if(cli_fd < 0)
-//     {
-//         std::cout << "Failed Accept Try Again"<<std::endl;
-//         exit(0);
-//     }
-//     if (fcntl(cli_fd, F_SETFL, O_NONBLOCK) == -1) //-> set the socket option (O_NONBLOCK) for non-blocking socket
-//         throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
-//     cli.setFD(cli_fd);
-//     cli.setIP(inet_ntoa(addr.sin_addr));
-//     clients.push_back(cli);
-//     fdpoll.fd = cli_fd;
-//     fdpoll.events = POLLIN;
-//     fdpoll.revents = 0;
-//     fds.push_back(fdpoll);
-// }
 void Server::ReceiveNewData(int cli_fd)
 {
+    printf("hiii!!!!");
     char buffer[1024]; 
-    int read_bytes = recv(cli_fd,buffer,1024,0); //receive data from client
-    if(read_bytes < 0)
+    memset(buffer,0,sizeof(buffer));
+    ssize_t size = recv(cli_fd,buffer,sizeof(buffer),0); //receive the data from the client
+    if(size <= 0)
+      {  
+        std::cout << "client Disconnected"<<cli_fd<<std::endl;
+        close(cli_fd);
+      }
+    else 
     {
-        std::cout << "Failed Receive Try Again"<<std::endl;
-        exit(0);
+        
+        buffer[size] = '\0';
+        std::cout<< "Client< "<< cli_fd << ">Data: "<< buffer;
+        
     }
-    std::cout << "Client: " << buffer << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/04 11:50:11 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/06 18:19:15 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Client
          int fd; //file descriptor clients
          std::string ip_addr; // ip address for clients
     public:
-        Client();
+        Client(){};
         void setIP(std::string ip);
         int setFD(int fd);
 };

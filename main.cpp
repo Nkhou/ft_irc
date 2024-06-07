@@ -15,7 +15,7 @@ int main(int argc,char **argv)
     }
     port_num = atoi(argv[1]);
     password = atoi(argv[2]);
-    if (port_num < 0 || port_num > 65535)
+    if (port_num < 1024 || port_num > 65535)
     {
         std::cout <<"Error Try Again"<<std::endl;
         exit (0);
