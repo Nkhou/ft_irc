@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/06 18:19:15 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/07 17:34:54 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,20 @@ class Client
     private:
          int fd; //file descriptor clients
          std::string ip_addr; // ip address for clients
+         std::string user_name;
+         std::string hostname;
+         std::string servername;
+         std::string realname;
+         std::string nickname;
     public:
         Client(){};
-        void setIP(std::string ip);
-        int setFD(int fd);
+        void setIP(std::string ip){this->ip_addr = ip;};
+        int  setFD(int fd){this->fd = fd; return fd;};
+        void setUserName(std::string user_name){this->user_name = user_name;};
+        void setHostName(std::string hostname){this->hostname = hostname;};
+        void setServerName(std::string servername){this->servername = servername;};
+        void setRealName(std::string realname){this->realname = realname;};
+        void setNickName(std::string nickname){this->nickname = nickname;};
 };
 /*For Server*/
 class Server

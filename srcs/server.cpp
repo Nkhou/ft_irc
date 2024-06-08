@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:28:11 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/06 20:27:52 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/08 14:13:01 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ Server::Server()
 {
     this->ser_fd = -1;
 }
+
 void Server::Server_init(int port_num)
 {
    
     //creation du Server
      struct sockaddr_in addr;
      struct pollfd fdpoll;
-     size_t i = 0;
+   
         int pe = 1;
      addr.sin_family = AF_INET; // specifies IPV4(protocol for communication)
      addr.sin_port = htons(port_num); // sets the port ,function htons:converting it to network byte order 
@@ -64,18 +65,75 @@ void Server::Server_init(int port_num)
             std::cout << "Failed Poll Try Again"<<std::endl;
             exit(0);
         }
+        size_t i = 0;
         while(i < fds.size())
         {
             if(fds[i].revents & POLLIN)
             {
                 if(fds[i].fd == ser_fd)
                 {
-                    AcceptNewclient();
+                   Client cli;
+                   struct sockaddr_in addr;
+                   struct pollfd fdpoll;
+                   socklen_t len = sizeof(addr);
+               
+                   int cli_fd = accept(ser_fd,(struct sockaddr*)&addr,&len); //accept the incoming connection
+                   if(cli_fd < 0)
+                   {
+                       std::cout << "Failed Accept Try Again"<<std::endl;
+                       exit(0);
+                   }
+                   if (fcntl(cli_fd, F_SETFL, O_NONBLOCK) == -1) //-> set the socket option (O_NONBLOCK) for non-blocking socket
+                       throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
+                   
+                   fdpoll.fd = cli_fd;
+                   fdpoll.events = POLLIN;
+                   fdpoll.revents = 0;
+                   
+                   cli.setFD(cli_fd);
+                   cli.setIP(inet_ntoa(addr.sin_addr));
+                   cli.setUserName("");
+                   cli.setHostName("");
+                   cli.setServerName("");
+                   cli.setRealName("");
+                   cli.setNickName("");
+                   
+                   clients.push_back(cli);
+                   fds.push_back(fdpoll);
+                   std::cout << "<<< New Client Connected >>> " << cli_fd << std::endl;
                 }
                 else
                 {
-                    printf("its here/n");
-                    ReceiveNewData(fds[i].fd);
+                    printf("abcdits here/n");
+                    char buffer[1024]; 
+                    memset(buffer,0,sizeof(buffer));
+                    ssize_t size = recv(fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
+                    if(size <= 0)
+                      {  
+                         printf("1its here/n");
+                        std::cout << "client Disconnected"<<fds[i].fd<<std::endl;
+                        close(fds[i].fd);
+                      }
+                    else 
+                    {
+                         printf("2its here/n");
+                        buffer[size] = '\0';
+                        std::cout<< "Client< "<< fds[i].fd << ">Data: "<< buffer;
+                        
+                    }
+                    if(buffer[0] == 'Q' && buffer[1] == 'U' && buffer[2] == 'I' && buffer[3] == 'T')
+                    {
+                        close(fds[i].fd);
+                        std::cout << "Client Disconnected"<<fds[i].fd<<std::endl;
+                       
+                    }
+                    else
+                    {
+                        printf("3its here/n");
+                        std::string msg = "Server: ";
+                        msg += buffer;
+                        send(fds[i].fd,msg.c_str(),msg.size(),0);
+                    }
                 }
             }
             i++;
@@ -85,59 +143,70 @@ void Server::Server_init(int port_num)
 } 
 
 
-void Server::AcceptNewclient()
-{
-    Client cli;
-    struct sockaddr_in addr;
-    struct pollfd fdpoll;
-    socklen_t len = sizeof(addr);
+// void Server::AcceptNewclient()
+// {
+//     Client cli;
+//     struct sockaddr_in addr;
+//     struct pollfd fdpoll;
+//     socklen_t len = sizeof(addr);
 
-    int cli_fd = accept(ser_fd,(struct sockaddr*)&addr,&len); //accept the incoming connection
-    if(cli_fd < 0)
-    {
-        std::cout << "Failed Accept Try Again"<<std::endl;
-        exit(0);
-    }
-    if (fcntl(cli_fd, F_SETFL, O_NONBLOCK) == -1) //-> set the socket option (O_NONBLOCK) for non-blocking socket
-        throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
-    fdpoll.fd = cli_fd;
-    fdpoll.events = POLLIN;
-    fdpoll.revents = 0;
+//     int cli_fd = accept(ser_fd,(struct sockaddr*)&addr,&len); //accept the incoming connection
+//     if(cli_fd < 0)
+//     {
+//         std::cout << "Failed Accept Try Again"<<std::endl;
+//         exit(0);
+//     }
+//     if (fcntl(cli_fd, F_SETFL, O_NONBLOCK) == -1) //-> set the socket option (O_NONBLOCK) for non-blocking socket
+//         throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
+//     fdpoll.fd = cli_fd;
+//     fdpoll.events = POLLIN;
+//     fdpoll.revents = 0;
     
-    cli.setFD(cli_fd);
-    cli.setIP(inet_ntoa(addr.sin_addr));
-    clients.push_back(cli);
-    fds.push_back(fdpoll);
-    std::cout << "<<< New Client Connected >>> " << cli_fd<< std::endl;
-}
-void Client::setIP(std::string ip_addr)
-{
-    this->ip_addr = ip_addr;
-}
-
-int Client::setFD(int fd)
-{
-    this->fd = fd;
-    return fd;
-}
+//     cli.setFD(cli_fd);
+//     cli.setIP(inet_ntoa(addr.sin_addr));
+//     cli.setUserName("");
+//     cli.setHostName("");
+//     cli.setServerName("");
+//     cli.setRealName("");
+//     cli.setNickName("");
+    
+//     clients.push_back(cli);
+//     fds.push_back(fdpoll);
+//     std::cout << "<<< New Client Connected >>> " << cli_fd<< std::endl;
+// }
 
 
-void Server::ReceiveNewData(int cli_fd)
-{
-    printf("hiii!!!!");
-    char buffer[1024]; 
-    memset(buffer,0,sizeof(buffer));
-    ssize_t size = recv(cli_fd,buffer,sizeof(buffer),0); //receive the data from the client
-    if(size <= 0)
-      {  
-        std::cout << "client Disconnected"<<cli_fd<<std::endl;
-        close(cli_fd);
-      }
-    else 
-    {
+
+// void Server::ReceiveNewData(int cli_fd)
+// {
+//     char buffer[1024]; 
+//     memset(buffer,0,sizeof(buffer));
+//     ssize_t size = recv(cli_fd,buffer,sizeof(buffer),0); //receive the data from the client
+//     if(size <= 0)
+//       {  
+//          printf("1its here/n");
+//         std::cout << "client Disconnected"<<cli_fd<<std::endl;
+//         close(cli_fd);
+//       }
+//     else 
+//     {
+//          printf("2its here/n");
+//         buffer[size] = '\0';
+//         std::cout<< "Client< "<< cli_fd << ">Data: "<< buffer;
         
-        buffer[size] = '\0';
-        std::cout<< "Client< "<< cli_fd << ">Data: "<< buffer;
-        
-    }
-}
+//     }
+//     if(buffer[0] == 'Q' && buffer[1] == 'U' && buffer[2] == 'I' && buffer[3] == 'T')
+//     {
+//         close(cli_fd);
+//         std::cout << "Client Disconnected"<<cli_fd<<std::endl;
+       
+//     }
+//     else
+//     {
+//         printf("3its here/n");
+//         std::string msg = "Server: ";
+//         msg += buffer;
+//         send(cli_fd,msg.c_str(),msg.size(),0);
+//     }
+ 
+// }
