@@ -21,6 +21,7 @@ class Command {
         bool isCommand(std::string command);
         bool isCommand(std::vector<std::string> commands);
         void execute();
+        void JoinCommand();
         // void execute();
 };
 

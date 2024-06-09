@@ -21,22 +21,13 @@ void Command::ParceCommand(std::string command) {
 }
 
 bool Command::isCommand(std::string command) {
-    return this->command == command;
+    return strcmp(this->command.c_str(), command.c_str());
 }
 
-bool Command::isCommand(std::vector<std::string> commands) {
-    int i = 0;
-    std::cout << commands[i] << std::endl;
-    if (strcmp(commands[i].c_str(),  "JOIN") || strcmp(commands[i].c_str(),  "INVITE") || strcmp(commands[i].c_str(),  "PART") || strcmp(commands[i].c_str(),  "MODE")
-    || strcmp(commands[i].c_str(),  "TOPIC") || strcmp(commands[i].c_str(),  "NAMES") || strcmp(commands[i].c_str(),  "LIST")
-    || strcmp(commands[i].c_str(),  "QUIT")
-    || strcmp(commands[i].c_str(),  "NICK") || strcmp(commands[i].c_str(),  "USER") || strcmp(commands[i].c_str(),  "OPER")
-    || strcmp(commands[i].c_str(),  "PASS") || strcmp(commands[i].c_str(),  "PING")
-    || strcmp(commands[i].c_str(),  "PRIVMSG") || strcmp(commands[i].c_str(),  "NOTICE") 
-    || strcmp(commands[i].c_str(),  "KILL") || strcmp(commands[i].c_str(),  "KICK" ) ) {
-        return true;
-    }
-    return false;
+void Command::JoinCommand() {
+    std::cout << "JOIN" << std::endl;
+    
+
 }
 void Command::execute() {
     if (isCommand("JOIN")) {
