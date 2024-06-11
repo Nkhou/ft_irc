@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:28:11 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/08 14:13:01 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/11 17:37:32 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,10 @@ void Server::Server_init(int port_num)
                    
                    clients.push_back(cli);
                    fds.push_back(fdpoll);
-                   std::cout << "<<< New Client Connected >>> " << cli_fd << std::endl;
+                   std::cout << GREEN << "<<< New Client Connected >>> " << cli_fd << std::endl;
                 }
                 else
                 {
-                    printf("abcdits here/n");
                     char buffer[1024]; 
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
@@ -119,21 +118,29 @@ void Server::Server_init(int port_num)
                          printf("2its here/n");
                         buffer[size] = '\0';
                         std::cout<< "Client< "<< fds[i].fd << ">Data: "<< buffer;
+                    
+                        
                         
                     }
-                    if(buffer[0] == 'Q' && buffer[1] == 'U' && buffer[2] == 'I' && buffer[3] == 'T')
+                    if (buffer[0] == 'Q' && buffer[1] == 'U' && buffer[2] == 'I' && buffer[3] == 'T')
                     {
                         close(fds[i].fd);
                         std::cout << "Client Disconnected"<<fds[i].fd<<std::endl;
                        
                     }
-                    else
+                    if (buffer[0] == 'N' && buffer[1] == 'I' && buffer[2] == 'C' && buffer[3] == 'K')
                     {
-                        printf("3its here/n");
                         std::string msg = "Server: ";
                         msg += buffer;
                         send(fds[i].fd,msg.c_str(),msg.size(),0);
                     }
+                    // else
+                    // {
+                    //     printf("3its here/n");
+                    //     std::string msg = "Server: ";
+                    //     msg += buffer;
+                    //     send(fds[i].fd,msg.c_str(),msg.size(),0);
+                    // }
                 }
             }
             i++;
