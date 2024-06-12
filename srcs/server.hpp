@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/11 17:36:25 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/12 14:43:38 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class Client
          std::string servername;
          std::string realname;
          std::string nickname;
+         std::string password;
     public:
         Client(){};
         void setIP(std::string ip){this->ip_addr = ip;};
@@ -43,6 +44,7 @@ class Client
         void setServerName(std::string servername){this->servername = servername;};
         void setRealName(std::string realname){this->realname = realname;};
         void setNickName(std::string nickname){this->nickname = nickname;};
+        void setPassword(std::string password){this->password = password;};
 };
 /*For Server*/
 class Server

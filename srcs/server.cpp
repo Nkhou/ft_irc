@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:28:11 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/11 17:37:32 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/12 15:41:33 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void Server::Server_init(int port_num)
     //creation du Server
      struct sockaddr_in addr;
      struct pollfd fdpoll;
+      char buffer[1024] ; 
    
         int pe = 1;
      addr.sin_family = AF_INET; // specifies IPV4(protocol for communication)
@@ -104,25 +105,22 @@ void Server::Server_init(int port_num)
                 }
                 else
                 {
-                    char buffer[1024]; 
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
                     if(size <= 0)
-                      {  
-                         printf("1its here/n");
-                        std::cout << "client Disconnected"<<fds[i].fd<<std::endl;
-                        close(fds[i].fd);
-                      }
+                    {  
+                       printf("1its here/n");
+                      std::cout << "client Disconnected"<<fds[i].fd<<std::endl;
+                      close(fds[i].fd);
+                    }
+                    
                     else 
                     {
-                         printf("2its here/n");
+                        printf("2its here\n");
                         buffer[size] = '\0';
                         std::cout<< "Client< "<< fds[i].fd << ">Data: "<< buffer;
-                    
-                        
-                        
                     }
-                    if (buffer[0] == 'Q' && buffer[1] == 'U' && buffer[2] == 'I' && buffer[3] == 'T')
+                    if (buffer[0] == 'Q' && buffer[1] == 'U' && buffer[2] == 'I' && buffer[3] == 'T' )
                     {
                         close(fds[i].fd);
                         std::cout << "Client Disconnected"<<fds[i].fd<<std::endl;
