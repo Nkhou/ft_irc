@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/13 23:18:26 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/13 23:47:47 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,14 @@ class Server
        static bool Signal;//for signals
        std::vector<Client> clients; // vector of client 
        std::vector<struct pollfd>fds; // vector for pollfds
-       std::string password_arg;
+       std::string password_arg; 
     public:
         Server(); //Default constructer 
         void Server_init(int port_num); // initialisation du server
         void Server_creation(); // Creation du server
         void AcceptNewclient(); // accept new client
         void ReceiveNewData(int fd); // receive new data
+        void setPassword(std::string password){this->password_arg=password;};
         
     
 };

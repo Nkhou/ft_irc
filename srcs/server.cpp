@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:28:11 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/13 23:10:51 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/13 23:50:20 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void Server::Server_init(int port_num)
     //creation du Server
      struct sockaddr_in addr;
      struct pollfd fdpoll;
+       Client cli;
      char buffer[1024]={0};
      std::vector<std::string>split;
      std::string msg;
@@ -76,7 +77,7 @@ void Server::Server_init(int port_num)
             {
                 if(fds[i].fd == ser_fd)
                 {
-                   Client cli;
+                 
                    struct sockaddr_in addr;
                    struct pollfd fdpoll;
                    socklen_t len = sizeof(addr);
@@ -114,18 +115,25 @@ void Server::Server_init(int port_num)
                       std::cout << "client Disconnected"<<fds[i].fd<<std::endl;
                       close(fds[i].fd);
                     }
-                    // split.push_back(buffer);
-                    // if(split[0] == "PASS")
-                    // {
-                    //     if(split.size() < 2)
-                    //     {
-                    //         printf("pass need more argument\n");
-                    //     }
-                    // }
+
                     else
                     {
                         buffer[size] = '\0';
-                        
+                        if(split[0] == "PASS")
+                        {
+
+                        }
+                        if(cli.setNickName("") || cli.setUserName(""))
+                        {
+                            if(split[0] == "NICK")
+                            {
+                                printf("a\n");
+                            }
+                            else if(split[0] == "USER")
+                            {
+                                printf("b\n");   
+                            }
+                        }
                         
                     }
                   
