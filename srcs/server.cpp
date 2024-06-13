@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 13:28:11 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/12 15:41:33 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/13 23:10:51 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,12 @@ void Server::Server_init(int port_num)
     //creation du Server
      struct sockaddr_in addr;
      struct pollfd fdpoll;
-      char buffer[1024] ; 
+     char buffer[1024]={0};
+     std::vector<std::string>split;
+     std::string msg;
+     std::string cmd;
    
-        int pe = 1;
+    int pe = 1;
      addr.sin_family = AF_INET; // specifies IPV4(protocol for communication)
      addr.sin_port = htons(port_num); // sets the port ,function htons:converting it to network byte order 
      addr.sin_addr.s_addr = INADDR_ANY; // sets the address to any interface on the server (bind to any ip address on the server)
@@ -38,7 +41,7 @@ void Server::Server_init(int port_num)
        std::cout << "Failed Socket Try Again"<<std::endl;
        exit(0);
     }
-    if(setsockopt(ser_fd, SOL_SOCKET, SO_REUSEADDR, &pe, sizeof(pe)) == -1) //-> set the socket option (SO_REUSEADDR) to reuse the address
+    if (setsockopt(ser_fd, SOL_SOCKET, SO_REUSEADDR, &pe, sizeof(pe)) == -1) //-> set the socket option (SO_REUSEADDR) to reuse the address
         throw(std::runtime_error("faild to set option (SO_REUSEADDR) on socket"));
 	if (fcntl(ser_fd, F_SETFL, O_NONBLOCK) == -1) //-> set the socket option (O_NONBLOCK) for non-blocking socket
 		throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
@@ -97,8 +100,7 @@ void Server::Server_init(int port_num)
                    cli.setHostName("");
                    cli.setServerName("");
                    cli.setRealName("");
-                   cli.setNickName("");
-                   
+                   cli.setNickName("");   
                    clients.push_back(cli);
                    fds.push_back(fdpoll);
                    std::cout << GREEN << "<<< New Client Connected >>> " << cli_fd << std::endl;
@@ -109,42 +111,30 @@ void Server::Server_init(int port_num)
                     ssize_t size = recv(fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
                     if(size <= 0)
                     {  
-                       printf("1its here/n");
                       std::cout << "client Disconnected"<<fds[i].fd<<std::endl;
                       close(fds[i].fd);
                     }
-                    
-                    else 
-                    {
-                        printf("2its here\n");
-                        buffer[size] = '\0';
-                        std::cout<< "Client< "<< fds[i].fd << ">Data: "<< buffer;
-                    }
-                    if (buffer[0] == 'Q' && buffer[1] == 'U' && buffer[2] == 'I' && buffer[3] == 'T' )
-                    {
-                        close(fds[i].fd);
-                        std::cout << "Client Disconnected"<<fds[i].fd<<std::endl;
-                       
-                    }
-                    if (buffer[0] == 'N' && buffer[1] == 'I' && buffer[2] == 'C' && buffer[3] == 'K')
-                    {
-                        std::string msg = "Server: ";
-                        msg += buffer;
-                        send(fds[i].fd,msg.c_str(),msg.size(),0);
-                    }
-                    // else
+                    // split.push_back(buffer);
+                    // if(split[0] == "PASS")
                     // {
-                    //     printf("3its here/n");
-                    //     std::string msg = "Server: ";
-                    //     msg += buffer;
-                    //     send(fds[i].fd,msg.c_str(),msg.size(),0);
+                    //     if(split.size() < 2)
+                    //     {
+                    //         printf("pass need more argument\n");
+                    //     }
                     // }
+                    else
+                    {
+                        buffer[size] = '\0';
+                        
+                        
+                    }
+                  
                 }
             }
             i++;
         }
          
-    }
+    }    
 } 
 
 

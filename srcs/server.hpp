@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/06/12 14:43:38 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/06/13 23:18:26 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class Client
          std::string servername;
          std::string realname;
          std::string nickname;
-         std::string password;
+        // bool password;
     public:
         Client(){};
         void setIP(std::string ip){this->ip_addr = ip;};
@@ -44,7 +44,7 @@ class Client
         void setServerName(std::string servername){this->servername = servername;};
         void setRealName(std::string realname){this->realname = realname;};
         void setNickName(std::string nickname){this->nickname = nickname;};
-        void setPassword(std::string password){this->password = password;};
+        // void setPassword(std::string password){this->password = password;};
 };
 /*For Server*/
 class Server
@@ -54,6 +54,7 @@ class Server
        static bool Signal;//for signals
        std::vector<Client> clients; // vector of client 
        std::vector<struct pollfd>fds; // vector for pollfds
+       std::string password_arg;
     public:
         Server(); //Default constructer 
         void Server_init(int port_num); // initialisation du server
