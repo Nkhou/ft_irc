@@ -1,7 +1,7 @@
 NAME = ircserv
 
 SRC = main.cpp \
-	  srcs/server.cpp \
+	  #srcs/server.cpp \
 
 CC = c++
 
