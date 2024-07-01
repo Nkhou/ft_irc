@@ -2,23 +2,39 @@
 #include<iostream>
 #include"srcs/server.hpp"
 
-std::vector<std::string>  split_string(std::string str)
-{
+std::string trim(const std::string& str) {
+    size_t start = str.find_first_not_of(' ');
+    size_t end = str.find_last_not_of(' ');
+
+    if (start == std::string::npos || end == std::string::npos) {
+        return "";
+    }
+
+    return str.substr(start, end - start + 1);
+}
+
+std::vector<std::string> split_string(const std::string& cmd) {
     std::vector<std::string> split;
+    std::istringstream iss(cmd) ;
     std::string word;
-    for (size_t i = 0; i < str.size(); i++)
-    {
-        if (str[i] == ' ')
-        {
+
+    while (iss >> word) {
+        if (word.find(':') != std::string::npos) {
+            size_t pos = word.find(':');
+            if (pos == 0) {
+                // if ':' is at the beginning of the word
+                split.push_back(word.substr(1));
+            } else {
+                // Split the word at ':'
+                split.push_back(word.substr(0, pos));
+                split.push_back(word.substr(pos + 1));
+            }
+            break;
+        } else {
             split.push_back(word);
-            word.clear();
-        }
-        else
-        {
-            word += str[i];
         }
     }
-    split.push_back(word);
+
     return split;
 }
 
@@ -33,6 +49,7 @@ int main(int argc,char **argv)
      char buffer[1024];
      std::vector<std::string>split;
      std::string msg;
+     std::string cmd;
      
    
     
@@ -144,46 +161,107 @@ int main(int argc,char **argv)
 
                     else
                     {
+                       std::vector<std::string> tmp_buffer;
                        buffer[size] = '\0';
-                       split = split_string(buffer);
-                       
                         
-                          if (split[0] == "PASS")
+                         
+                        msg += buffer;
+                        if (size < 2 || (buffer[size - 1] != '\n' && buffer[size - 2] != '\r'))
+                        {
+                            tmp_buffer.push_back(msg);
+                            continue;
+                        }
+
+                    // Check if the buffer doesn't end with '\n' or '\r'
+                     bool ends_with_newline = (buffer[size - 1] == '\n');
+                     bool ends_with_carriage_return = (size > 1 && buffer[size - 2] == '\r');
+                      
+                      if (!ends_with_newline && !ends_with_carriage_return)
+                      {
+                          tmp_buffer.push_back(buffer);
+                          continue;
+                      }
+                      
+                      // Null-terminate the buffer correctly
+                      if (ends_with_newline)
+                          buffer[size - 1] = '\0';
+                      if (ends_with_carriage_return)
+                          buffer[size - 2] = '\0';
+                      
+                      // Push the buffer to tmp_buffer
+                      tmp_buffer.push_back(buffer);
+                      
+                      // Concatenate all buffers in tmp_buffer into cmd
+                      for (size_t j = 0; j < tmp_buffer.size(); j++)
+                            cmd += tmp_buffer[j];
+                      
+                      // Clear tmp_buffer after concatenation
+                      tmp_buffer.clear();
+                      
+                      // Skip empty cmd
+                      cmd = trim(cmd);
+                      if (cmd.empty())
+                          continue;
+                       
+						split.clear();
+
+                        split = split_string(cmd);
+
+						if (split[0][0] == ':')
+							split.erase(split.begin());
+
+						cmd.clear();
+
+                           
+                        if ((split[0] == "PASS" || split[0] == "pass"))
                           {
-                                
-                                printf("%s\n",split[0].c_str());
-                                printf("%s\n",split[1].c_str());
-                            if (split[1] == "PASS")
-                            {
-                                 send(ser.fds[i].fd,"Welcome to the server",sizeof("Welcome to the server"),0);
-                                 ser.clients[i].setPassword_bool(true);
-                            }
-                            else
-                            {
-                                 send(ser.fds[i].fd,"Wrong Password",sizeof("Wrong Password"),0);
-                            }
+                               if (split.size() >= 2)
+                               {
+                                    if(split[1] == pass)
+                                    {
+                                         printf("Welcome im client \n");
+
+                                    }
+                                    else 
+                                     printf("wrong\n");
+                                    
+                               }
+                                else 
+                                    printf("need moree\n");
+                           
                           }
-                          else if (split[0] == "NICK")
+                          else if (split[0] == "NICK" || split[0] == "nick")
                           {
-                            ser.clients[i].nickname=split[1];
+                             if(split.size() >= 2)
+                             {
+
+                                     printf("%s\n",split[1].c_str());
+                                     ser.clients[i - 1].nickname= split[1];
+                             }
+                             else 
+                                printf("khas send hna \n");
                             
                           }
-                          else if (split[0] == "USER")
+                          else if (split[0] == "USER" || split[0] == "user")
                           {
-                            ser.clients[i].user_name = split[1];
-                            ser.clients[i].hostname = split[2];
-                            ser.clients[i].servername = split[3];
-                            ser.clients[i].realname = split[4];
+                            
+                            if(split.size() == 5)
+                            {
+                                 ser.clients[i - 1].user_name = split[1];
+                                 ser.clients[i - 1].hostname = split[2];
+                                 ser.clients[i - 1].servername = split[3];
+                                 ser.clients[i - 1].realname = split[4];
+                            }
+                            else
+                            { 
+                                // send
+                                send(ser.fds[i].fd,);
+                                printf("not enough argument\n");
+                            }
 
                           }
-                          else if (split[0] == "QUIT")
-                          {
-                            close(ser.fds[i].fd);
-                          }
-                        //   else
-                        //   {
-                        //     send(ser.fds[i].fd,"Invalid Command",sizeof("Invalid Command"),0);
-                        //   }
+                       
+                        
                     }
                   
                 }
