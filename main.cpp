@@ -213,24 +213,25 @@ int main(int argc,char **argv)
 						cmd.clear();
 
                            
-                        if ((split[0] == "PASS" || split[0] == "pass"))
-                          {
-                               if (split.size() >= 2)
-                               {
-                                    if(split[1] == pass)
-                                    {
-                                         printf("Welcome im client \n");
-
-                                    }
-                                    else 
-                                     printf("wrong\n");
-                                    
-                               }
-                                else 
-                                    printf("need moree\n");
-                           
-                          }
-                          else if (split[0] == "NICK" || split[0] == "nick")
+                       if(ser.clients[i - 1].password == false)
+                       { 
+                            if ((split[0] == "PASS" || split[0] == "pass"))
+                            {
+                                if(split.size() < 2)
+                                {
+                                    printf("need send\n");
+                                }
+                                else if(split[1] == pass)
+                                {
+                                    printf("correct\n");
+                                    ser.clients[i - 1].password = true;
+                                }
+                            }
+                            //  continue;
+                        }
+                         if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "") 
+                        {
+                          if (split[0] == "NICK" || split[0] == "nick")
                           {
                              if(split.size() >= 2)
                              {
@@ -238,34 +239,43 @@ int main(int argc,char **argv)
                                      printf("%s\n",split[1].c_str());
                                      ser.clients[i - 1].nickname= split[1];
                              }
-                             else 
-                                printf("khas send hna \n");
+                             else if(split.size() < 2)
+                             {
+                                printf("need send here \n");
+                             }
                             
                           }
-                          else if (split[0] == "USER" || split[0] == "user")
-                          {
-                            
-                            if(split.size() == 5)
-                            {
-                                 ser.clients[i - 1].user_name = split[1];
-                                 ser.clients[i - 1].hostname = split[2];
-                                 ser.clients[i - 1].servername = split[3];
-                                 ser.clients[i - 1].realname = split[4];
-                            }
-                            else
-                            { 
-                                // send
-                                send(ser.fds[i].fd,);
-                                printf("not enough argument\n");
-                            }
-
-                          }
-                       
-                        
+                         else if (split[0] == "USER" || split[0] == "user")
+                         {
+                             
+                             if(split.size() == 5)
+                             {
+                                  ser.clients[i - 1].user_name = split[1];
+                                  ser.clients[i - 1].hostname = split[2];
+                                  ser.clients[i - 1].servername = split[3];
+                                  ser.clients[i - 1].realname = split[4];
+                                  if(!(ser.clients[i - 1].nickname.empty()))
+                                  {
+                                      printf("need to send nickname\n");
+                                  }
+                                
+                             }
+                             else if(split.size() < 5)
+                             {
+                                 printf("need to send msg\n");
+                             }
+                         }
+                        //   continue;
+                        }
                     }
                   
                 }
             }
+            for (unsigned long i = 0; i< split.size(); i++)
+            {
+                std::cout << "Args: " << split[i] << std::endl;
+            }
+           
             i++;
         }
          
