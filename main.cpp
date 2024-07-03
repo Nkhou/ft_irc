@@ -229,7 +229,7 @@ int main(int argc,char **argv)
                                 }
                             }
                         }
-                         if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "") 
+                        if (ser.clients[i - 1].nickname == "" && ser.clients[i - 1].password == true) 
                         {
                           if (split[0] == "NICK" || split[0] == "nick")
                           {
@@ -237,15 +237,19 @@ int main(int argc,char **argv)
                              {
 
                                      printf("%s\n",split[1].c_str());
+                                     check_nickname(ser,split[1]);
                                      ser.clients[i - 1].nickname= split[1];
                              }
                              else if(split.size() < 2)
                              {
                                 printf("need send here \n");
-                                // continue;
+                             
                              }
                             
                           }
+                        }
+                        if(ser.clients[i - 1].user_name == ""  && ser.clients[i - 1].password == true)
+                        {
                          if (split[0] == "USER" || split[0] == "user")
                          {
                              
@@ -264,7 +268,7 @@ int main(int argc,char **argv)
                              else if(split.size() < 5)
                              {
                                  printf("need to send msg\n");
-                                // continue;
+                            
                              }
                          }
                         }
