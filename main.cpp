@@ -37,7 +37,27 @@ std::vector<std::string> split_string(const std::string& cmd) {
 
     return split;
 }
+int check_error_nickname(std::string nickname)
+{
+    if(nickname.size() > 9)
+    {
+        return 1;
+    }
+    std::string alpha ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    std::string alpha_find = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]\\^_`{}|";
 
+   
+        if(alpha.find(nickname[0]) == std::string::npos)
+        {
+            return 1;
+        }
+        if(nickname.find_first_not_of(alpha_find) != std::string::npos)
+        {
+            return 1;
+        }
+     
+    return 0;
+}
 int main(int argc,char **argv)
 {
    int port_num;
@@ -50,6 +70,7 @@ int main(int argc,char **argv)
      std::vector<std::string>split;
      std::string msg;
      std::string cmd;
+     int flag = 0;
      
    
     
@@ -219,14 +240,13 @@ int main(int argc,char **argv)
                             {
                                 if(split.size() < 2)
                                 {
-                                    printf("need send\n");
-                                    continue;
+                                    if(send(ser.clients[i - 1].fd, "Need to send password\n", 22, 0) < 0)
+                                    {
+                                        std::cout << "Failed Send Try Again"<<std::endl;
+                                    }
                                 }
                                 else if(split[1] == pass)
-                                {
-                                    printf("correct\n");
                                     ser.clients[i - 1].password = true;
-                                }
                             }
                         }
                         if (ser.clients[i - 1].nickname == "" && ser.clients[i - 1].password == true) 
@@ -235,10 +255,27 @@ int main(int argc,char **argv)
                           {
                              if(split.size() >= 2)
                              {
-
+                                    
                                      printf("%s\n",split[1].c_str());
-                                     check_nickname(ser,split[1]);
-                                     ser.clients[i - 1].nickname= split[1];
+                                      
+                                     if(check_error_nickname(split[1]))
+                                     {
+                                        if(send(ser.clients[i - 1].fd, "Error: Invalid nickname\n", 24, 0) < 0)
+                                        {
+                                            std::cout << "Failed Send Try Again"<<std::endl;
+                                        }
+                                       
+                                     }
+                                     if(ser.clients[i - 1].nickname != "")
+                                     {
+                                         flag = 1;
+                                        if(send(ser.clients[i - 1].fd, "Nickname is set\n", 16, 0) < 0)
+                                        {
+                                            std::cout << "Failed Send Try Again"<<std::endl;
+                                        }
+                                     }
+                                     if (flag == 0)
+                                        ser.clients[i - 1].nickname= split[1];
                              }
                              else if(split.size() < 2)
                              {
@@ -259,12 +296,7 @@ int main(int argc,char **argv)
                                   ser.clients[i - 1].hostname = split[2];
                                   ser.clients[i - 1].servername = split[3];
                                   ser.clients[i - 1].realname = split[4];
-                                  if(!(ser.clients[i - 1].nickname.empty()))
-                                  {
-                                      printf("need to send nickname\n");
-                                  }
-                                
-                             }  
+                              }  
                              else if(split.size() < 5)
                              {
                                  printf("need to send msg\n");
