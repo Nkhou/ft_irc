@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saboulal <saboulal@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/01 17:10:46 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:23:08 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct server
     std::vector<struct pollfd>fds; // vector for pollfds
     std::string password_arg;
     std::vector<struct client>clients; // vector of client 
-    void setPassword(std::string password){this->password_arg=password;};
+    std::string hostname;
     
   
 }ser;
@@ -56,5 +56,12 @@ typedef struct client
     std::string cmd; 
     bool password;
 }cli;
+
+std::string msg_err(std::string nick,std::string hostname);
+std::string msg_erroneusnickname(std::string nick,std::string hostname);
+std::string msg_welcome(std::string nick,std::string hostname);
+std::string msg_nonicknamegiven(std::string hostname);
+std::string msg_notregistered(std::string nick,std::string hostname);
+std::string msg_nicknameinuse(std::string nick,std::string hostname);
 
 #endif
