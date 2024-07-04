@@ -264,10 +264,9 @@ int main(int argc,char **argv)
                         if (ser.clients[i - 1].nickname == "" && ser.clients[i - 1].password == true) 
                         {
                           if (split[0] == "NICK")
-                                    printf("%s---------\n",split[1].c_str());
                           {
-                            //  if(split.size() >= 2)
-                            //  {
+                             if(split.size() >= 2)
+                             {
                                     
                                      printf("%s\n",split[1].c_str());
                                      if(check_error_nickname(split[1]) != 0)
@@ -283,7 +282,7 @@ int main(int argc,char **argv)
                                         ser.clients[i - 1].nickname= split[1];
                                     printf("****************%s\n",split[1].c_str());
                                     
-                            //  }
+                             }
                             // if(ser.clients[i - 1].user_name != "")
                             // {
         
