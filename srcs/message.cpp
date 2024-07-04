@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 11:06:05 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/04 13:25:30 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:45:41 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ std::string msg_erroneusnickname(std::string nick,std::string hostname)
 
 std::string msg_welcome(std::string nick,std::string hostname)
 {
-    std::string msg = ":" + hostname + " 001 " + nick + " :Welcome " + nick + " to the ft_irc network !\r\n";
+    std::string msg = ":" + hostname + " 001 " + nick + " Welcome to " + hostname + " Internet Relay Chat Network\r\n";
     return msg;
 }
 
