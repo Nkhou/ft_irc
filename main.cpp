@@ -77,7 +77,8 @@ int main(int argc,char **argv)
      //returns the standard host name for the current machine
      gethostname(hostname, 1023);
      ser.hostname = hostname;
-  
+      ser.flag = false;
+      ser.flag_cmd = false;
 
     //  int flag = 0;
     // int a = 0;
@@ -185,29 +186,17 @@ int main(int argc,char **argv)
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
                     if(size <= 0)
-                    {  
-                      std::cout << "client Disconnected"<<ser.fds[i].fd<<std::endl;
-                     
-                    }
-
+                     std::cout << "client Disconnected"<<ser.fds[i].fd<<std::endl;
                     else
                     {
                        buffer[size] = '\0';
-                        
-                         
-                        // msg += buffer;
-                        // if (size < 2 || (buffer[size - 1] != '\n' && buffer[size - 2] != '\r'))
-                        // {
-                        //     tmp_buffer.push_back(msg);
-                        //     continue;
-                        // }
                         if(size < 2)
                         {
                             tmp_buffer.push_back(buffer);
                             continue;
                         }
 
-                    printf("here\n");
+                  
                      // Check if the buffer doesn't end with '\n' or '\r'
                      bool ends_with_newline = (buffer[size - 1] == '\n');
                      bool ends_with_carriage_return = (size > 1 && buffer[size - 2] == '\r');
@@ -251,10 +240,9 @@ int main(int argc,char **argv)
                         for (size_t i = 0; i < split[0].length(); i++)
 							split[0][i] = std::toupper(split[0][i]);
                        if(ser.clients[i - 1].password == false)
-                       { 
+                       {
                             if (split[0] == "PASS")
                             {
-            
                                 if(split.size() < 2)
                                 {
                                     msg = msg_err(split[0], ser.hostname);
@@ -274,7 +262,7 @@ int main(int argc,char **argv)
                              if(split.size() >= 2)
                              {
                                     
-                                     printf("%s\n",split[1].c_str());
+    
                                      if(check_error_nickname(split[1]) != 0)
                                      {
                                         msg = msg_erroneusnickname(split[1],  ser.hostname);
@@ -325,7 +313,7 @@ int main(int argc,char **argv)
                                 }  
                                 else if(split.size() < 5)
                                 {
-                                      msg = msg_nonicknamegiven(ser.hostname);
+                                      msg = msg_err(split[0],ser.hostname);
                                          if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                             std::cout << "Failed Send Try Again"<<std::endl;
                                 }
@@ -334,14 +322,39 @@ int main(int argc,char **argv)
                         }
                        
                     }
-                     if(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true)
-                     {
-                         msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
-                         if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
-                         {
-                             std::cout << "Failed Send Try Again"<<std::endl;
-                         }
-                     }
+                    if(ser.flag == false)
+                    {
+
+                        if(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true)
+                        {
+                             msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
+                            if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
+                            {
+                                return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                            }
+                            ser.flag = true;
+                         
+                        }
+                    }
+                    // // if(ser.flag_cmd == false)
+                    // // {
+                    //     if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
+                    //     {
+                    //         printf("Not registered\n"); 
+                    //         if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "PRIVMSG" || split[0] == "MODE" || split[0] == "TOPIC")
+                    //         {
+                    //             msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
+                    //             if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
+                    //             {
+                    //                 std::cout << "Failed Send Try Again"<<std::endl;
+                    //             }
+                    //         }
+                    //         ser.flag_cmd = true;
+                    //     }
+                    // //     if
+                    // // }
+                    
+                       
                   
                 }
             }

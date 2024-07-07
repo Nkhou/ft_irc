@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/04 13:23:08 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/07 10:42:43 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ typedef struct server
     std::string password_arg;
     std::vector<struct client>clients; // vector of client 
     std::string hostname;
+    bool flag;
+    bool flag_cmd;
     
   
 }ser;
