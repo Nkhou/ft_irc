@@ -190,28 +190,38 @@ int main(int argc,char **argv)
                     else
                     {
                        buffer[size] = '\0';
-                        if(size < 2)
-                        {
-                            tmp_buffer.push_back(buffer);
-                            continue;
-                        }
+                       if (size < 2)
+						{
+							tmp_buffer.push_back(buffer);
+							continue;
+						}
+						if (buffer[size - 1] != '\n' && buffer[size - 2] != '\r')
+						{
+							tmp_buffer.push_back(buffer);
+							continue;
+						}
+
+						if (size > 1 && buffer[size - 1] == '\n')
+							buffer[size - 1] = '\0';
+						if (size > 2 && buffer[size - 2] == '\r')
+							buffer[size - 2] = '\0';
 
                   
                      // Check if the buffer doesn't end with '\n' or '\r'
-                     bool ends_with_newline = (buffer[size - 1] == '\n');
-                     bool ends_with_carriage_return = (size > 1 && buffer[size - 2] == '\r');
+                    //  bool ends_with_newline = (buffer[size - 1] == '\n');
+                    //  bool ends_with_carriage_return = (size > 1 && buffer[size - 2] == '\r');
                       
-                      if (!ends_with_newline && !ends_with_carriage_return)
-                      {
-                          tmp_buffer.push_back(buffer);
-                          continue;
-                      }
+                    //   if (!ends_with_newline && !ends_with_carriage_return)
+                    //   {
+                    //       tmp_buffer.push_back(buffer);
+                    //       continue;
+                    //   }
                       
-                      // Null-terminate the buffer correctly
-                      if (ends_with_newline)
-                          buffer[size - 1] = '\0';
-                      if (ends_with_carriage_return)
-                          buffer[size - 2] = '\0';
+                    //   // Null-terminate the buffer correctly
+                    //   if (ends_with_newline)
+                    //       buffer[size - 1] = '\0';
+                    //   if (ends_with_carriage_return)
+                    //       buffer[size - 2] = '\0';
                       
                       // Push the buffer to tmp_buffer
                       tmp_buffer.push_back(buffer);
@@ -252,7 +262,10 @@ int main(int argc,char **argv)
                                     }
                                 }
                                 else if(split[1] == pass)
+                                {
+                                    printf("Password is correct\n");
                                     ser.clients[i - 1].password = true;
+                                }
                             }
                         }
                         if (ser.clients[i - 1].nickname == "" && ser.clients[i - 1].password == true) 
