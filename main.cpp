@@ -65,6 +65,7 @@ int main(int argc,char **argv)
     server ser;
     std::string pass;
      struct sockaddr_in addr;
+     std::vector<std::string> tmp_buffer;
      struct pollfd fdpoll;
        client cli;
      char buffer[1024];
@@ -186,22 +187,27 @@ int main(int argc,char **argv)
                     if(size <= 0)
                     {  
                       std::cout << "client Disconnected"<<ser.fds[i].fd<<std::endl;
-                      close(ser.fds[i].fd);
+                     
                     }
 
                     else
                     {
-                       std::vector<std::string> tmp_buffer;
                        buffer[size] = '\0';
                         
                          
-                        msg += buffer;
-                        if (size < 2 || (buffer[size - 1] != '\n' && buffer[size - 2] != '\r'))
+                        // msg += buffer;
+                        // if (size < 2 || (buffer[size - 1] != '\n' && buffer[size - 2] != '\r'))
+                        // {
+                        //     tmp_buffer.push_back(msg);
+                        //     continue;
+                        // }
+                        if(size < 2)
                         {
-                            tmp_buffer.push_back(msg);
+                            tmp_buffer.push_back(buffer);
                             continue;
                         }
 
+                    printf("here\n");
                      // Check if the buffer doesn't end with '\n' or '\r'
                      bool ends_with_newline = (buffer[size - 1] == '\n');
                      bool ends_with_carriage_return = (size > 1 && buffer[size - 2] == '\r');
