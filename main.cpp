@@ -361,8 +361,7 @@ int main(int argc,char **argv)
                     }
                     if(ser.clients[i - 1].flag == false && split.size() > 0 )
                     {
-                        //  if(!(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true))
-                        //   { 
+                        
                             if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE"  || split[0] == "QUIT")
                             {
 
@@ -374,7 +373,6 @@ int main(int argc,char **argv)
                                  split.clear();
                             }
                             ser.clients[i - 1].flag_cmd = true;
-                        // }
                     }
 
                 
@@ -385,7 +383,7 @@ int main(int argc,char **argv)
             // {
             //     std::cout << "Args: " << split[i] << std::endl;
             // }
-           
+            // std::cout << "hihihihihi"<< std::endl;
             i++;
         }
          
