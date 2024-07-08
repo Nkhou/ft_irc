@@ -44,7 +44,7 @@ int check_error_nickname(std::string nickname)
     {
         return 1;
     }
-    std::string alpha ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    std::string alpha ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
     std::string alpha_find = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]\\^_`{}|";
 
    
@@ -359,15 +359,22 @@ int main(int argc,char **argv)
                          
                         }
                     }
-                    if(ser.clients[i - 1].flag == false && split.size() > 0)
+                    if(ser.clients[i - 1].flag == false && split.size() > 0 )
                     {
-                            msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
-                            if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
+                        //  if(!(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true))
+                        //   { 
+                            if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE"  || split[0] == "QUIT")
                             {
-                                std::cout << "Failed Send Try Again"<<std::endl;
+
+                                 msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
+                                 if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
+                                 {
+                                     std::cout << "Failed Send Try Again"<<std::endl;
+                                 }
+                                 split.clear();
                             }
                             ser.clients[i - 1].flag_cmd = true;
-                            split.clear();
+                        // }
                     }
 
                 
