@@ -7,7 +7,7 @@ std::string trim(const std::string& str) {
     size_t start = str.find_first_not_of(' ');
     size_t end = str.find_last_not_of(' ');
 
-    if (start == std::string::npos || end == std::string::npos) {
+    if (start == std::string::npos || end == std::string::npos ) {
         return "";
     }
 
@@ -77,8 +77,7 @@ int main(int argc,char **argv)
      //returns the standard host name for the current machine
      gethostname(hostname, 1023);
      ser.hostname = hostname;
-      ser.flag = false;
-      ser.flag_cmd = false;
+     
 
     //  int flag = 0;
     // int a = 0;
@@ -176,17 +175,28 @@ int main(int argc,char **argv)
                 cli.user_name = "";
                 cli.servername = "";
                 cli.password = false;
+                // ser.clients[i - 1].flag = false;
+                // ser.clients[i - 1].flag_cmd = false;
+
                
                    ser.clients.push_back(cli);
                    ser.fds.push_back(fdpoll);
-                   std::cout << GREEN << "<<< New Client Connected >>> " << cli_fd << std::endl;
+                   std::cout << "<<< New Client Connected >>> " << GREEN << cli_fd << std::endl;
                 }
                 else
                 {
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
-                    if(size <= 0)
-                     std::cout << "client Disconnected"<<ser.fds[i].fd<<std::endl;
+                    if(size < 0)
+                    {std::cout << ""<<std::endl;}
+                    else if(size == 0)
+                    {
+                        std::cout << "<<< Client Disconnected >>> " << ser.fds[i].fd << std::endl;
+                        close(ser.fds[i].fd);
+                        ser.fds.erase(ser.fds.begin() + i);
+                        ser.clients.erase(ser.clients.begin() + i - 1);
+                      
+                    }
                     else
                     {
                        buffer[size] = '\0';
@@ -335,7 +345,7 @@ int main(int argc,char **argv)
                         }
                        
                     }
-                    if(ser.flag == false)
+                    if(ser.clients[i - 1].flag == false)
                     {
 
                         if(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true)
@@ -345,36 +355,29 @@ int main(int argc,char **argv)
                             {
                                 return(std::cout << "Failed Send Try Again"<<std::endl,1);
                             }
-                            ser.flag = true;
+                            ser.clients[i - 1].flag = true;
                          
                         }
                     }
-                    // // if(ser.flag_cmd == false)
-                    // // {
-                    //     if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
-                    //     {
-                    //         printf("Not registered\n"); 
-                    //         if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "PRIVMSG" || split[0] == "MODE" || split[0] == "TOPIC")
-                    //         {
-                    //             msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
-                    //             if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                    //             {
-                    //                 std::cout << "Failed Send Try Again"<<std::endl;
-                    //             }
-                    //         }
-                    //         ser.flag_cmd = true;
-                    //     }
-                    // //     if
-                    // // }
-                    
-                       
-                  
-                }
+                    if(ser.clients[i - 1].flag == false && split.size() > 0)
+                    {
+                            msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
+                            if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
+                            {
+                                std::cout << "Failed Send Try Again"<<std::endl;
+                            }
+                            ser.clients[i - 1].flag_cmd = true;
+                            split.clear();
+                    }
+
+                
+
+}
             }
-            for (unsigned long i = 0; i< split.size(); i++)
-            {
-                std::cout << "Args: " << split[i] << std::endl;
-            }
+            // for (unsigned long i = 0; i< split.size(); i++)
+            // {
+            //     std::cout << "Args: " << split[i] << std::endl;
+            // }
            
             i++;
         }
