@@ -370,7 +370,7 @@ int main(int argc,char **argv)
                                  {
                                      std::cout << "Failed Send Try Again"<<std::endl;
                                  }
-                                 split.clear();
+                                //  split.clear();
                             }
                             ser.clients[i - 1].flag_cmd = true;
                     }
@@ -379,10 +379,10 @@ int main(int argc,char **argv)
 
 }
             }
-            // for (unsigned long i = 0; i< split.size(); i++)
-            // {
-            //     std::cout << "Args: " << split[i] << std::endl;
-            // }
+            for (unsigned long i = 0; i< split.size(); i++)
+            {
+                std::cout << "Args: " << split[i] << std::endl;
+            }
             // std::cout << "hihihihihi"<< std::endl;
             i++;
         }

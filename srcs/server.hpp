@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/08 12:30:46 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/10 09:21:09 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 #include <algorithm>
 #include <iterator>
 #define GREEN "\033[0;32m"
+
 typedef struct server
 {
     int ser_fd; //server socket file descriptor 
