@@ -175,8 +175,8 @@ int main(int argc,char **argv)
                 cli.user_name = "";
                 cli.servername = "";
                 cli.password = false;
-                // ser.clients[i - 1].flag = false;
-                // ser.clients[i - 1].flag_cmd = false;
+                cli.flag = false;
+               cli.flag_cmd = false;
 
                
                    ser.clients.push_back(cli);
