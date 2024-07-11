@@ -2,7 +2,7 @@
 
 void Command::ParceCommand(std::vector<std::string> command, int fd)
 {
-    for (unsigned long i = 0; i < command.size(); i++)
+    for (unsigned long i = 1; i < command.size(); i++)
     {
         unsigned long j = 0;
         while (j < command[i].size())
@@ -137,6 +137,8 @@ void Command::ModeCommand(server *ser)
         return;
     if (this->args.size() == 1)
     {
+    
+
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
             if (ser->channels[i].getName() == this->args[0])
@@ -162,6 +164,7 @@ void Command::ModeCommand(server *ser)
     }
     else if (this->args.size() == 2)
     {
+        
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
             if (ser->channels[i].getName() == this->args[0])
@@ -187,6 +190,7 @@ void Command::ModeCommand(server *ser)
     }
     else if (this->args.size() == 3)
     {
+        std::cout << "+++++++++++++++++++ "<< this->args[0]<< std::endl;
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
             if (ser->channels[i].getName() == this->args[0])
@@ -294,11 +298,14 @@ void Command::ModeCommand(server *ser)
 }
 void Command::ParceModeCommand(std::vector <std::string> splited, int client_fd)
 {
+    std::cout << "hello" << std::endl;
+    if (splited.size() < 3)
+        throw std::invalid_argument("Invalid argument*");
     for (unsigned long i = 1; i < splited.size(); i++)
     {
         if (splited[1][0] != '#' && splited[1][0] != '&' && splited[1][0] != '!')
         {
-            throw std::invalid_argument("Invalid argument****");
+            throw std::invalid_argument("Invalid argument--------------------------------------------");
         }
         if (i == 1)
         {
@@ -306,7 +313,7 @@ void Command::ParceModeCommand(std::vector <std::string> splited, int client_fd)
             {
                 if (!((splited[i][j] >= 'a' && splited[i][j] <= 'z') || (splited[i][j] >= 'A' && splited[i][j] <= 'Z')  || (splited[i][j] == '_')))
                 {
-                    throw std::invalid_argument("Invalid argument****");
+                    throw std::invalid_argument("Invalid argument++++++++++++++++++++++++++++++++++++++++++");
                 }
             }
             this->args.push_back(splited[i]);
@@ -321,7 +328,7 @@ void Command::ParceModeCommand(std::vector <std::string> splited, int client_fd)
                 }
                 else
                 {
-                    throw std::invalid_argument("Invalid argument****");
+                    throw std::invalid_argument("Invalid argument................................");
                 }
             }
         }
@@ -335,11 +342,15 @@ void Command::ParceModeCommand(std::vector <std::string> splited, int client_fd)
                 }
                 else
                 {
-                    throw std::invalid_argument("Invalid argument****");
+                    throw std::invalid_argument("Invalid argument~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 }
             }
         }
         else if (i == 4)
+        {
+            this->args.push_back(splited[i]);
+        }
+        else if (splited[i][0] == '#')
         {
             this->args.push_back(splited[i]);
         }
@@ -349,7 +360,7 @@ void Command::ParceModeCommand(std::vector <std::string> splited, int client_fd)
         }
         else
         {
-            throw std::invalid_argument("Invalid argument****");
+            throw std::invalid_argument("Invalid argument___________________________________________");
         }
     }
     this->fd = client_fd;
@@ -362,6 +373,7 @@ void Command::ParceTopic(std::vector <std::string> splited, int client_fd)
              throw std::invalid_argument("Invalid argument****");
         this->args.push_back(splited[i]);
     }
+    this->fd = client_fd;
 }
 void Command::TopicCommand(server *ser)
 {
@@ -416,6 +428,7 @@ void Command::ParceInvite(std::vector <std::string> splited, int client_fd)
         //      throw std::invalid_argument("Invalid argument****");
         this->args.push_back(splited[i]);
     }
+     this->fd = client_fd;
 }
 void Command::executecmd(server *server) {
     // kick, INVITE, getMode(), TOPIC, JOIN, 
@@ -434,17 +447,18 @@ void Command::executecmd(server *server) {
         ParceCommandkick(server->splited, server->client_fd, server->channels);
         KickCommand(server);
     }
-    else if (this->args[0] == "MODE")
+    else if (server->splited[0] == "MODE")
     {
         ParceModeCommand(server->splited, server->client_fd);
+        // std::cout << "hello --------------- " <<std::endl;
         ModeCommand(server);
     }
-    else if (this->args[0] == "TOPIC")
+    else if (server->splited[0] == "TOPIC")
     {
         ParceTopic(server->splited, server->client_fd);
         TopicCommand(server);
     }
-    else if (this->args[0] == "INVITE")
+    else if (server->splited[0] == "INVITE")
     {
         ParceInvite(server->splited, server->client_fd);
         InviteCommand(server);
@@ -462,15 +476,10 @@ void Command::addusertoChannel(server *server, std::string channel, int o) {
             {
                 if (server->clients[j].fd == server->client_fd)
                 {
-                    // std::cout << "++++++Client: " << server->clients[j].fd<< std::endl;
                     if ((server->channels[i].addUser(server->clients[j], o) == 1) || (server->channels[i].addUser(server->clients[j], o) == 2))
                     {
                         return;
                     }
-                    // else if (server->channels[i].addUser(server->clients[j], o) == 2)
-                    // {
-
-                    // }
                     server->channels[i].notifyUserJoin(server->clients[j].nickname);
                     return ;
                 }
@@ -494,7 +503,7 @@ void Command::JoinCommand(server *server) {
     {
         if (server->channels.size() == 0){
 
-            server->channels.push_back(Channel(this->args[0], 1));
+            server->channels.push_back(Channel(this->args[0]));
             if (this->keys.size() > 0)
                 server->channels[0].setKey(this->keys[0]);
         }

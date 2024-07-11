@@ -16,16 +16,16 @@ class Channel
         std::string key;
         int userCount;
         int operatorCount;
-        int maxUsers;
+        long unsigned int maxUsers;
     public:
         Channel(std::string name);
-        Channel(std::string name, int o);
+        Channel(std::string name, int o, int fd, std::vector<client> clients);
         int addUser(cli client, int o);
         void removeUser(std::string user);
         std::string getName();
         int getUserCount();
         int getOperatorCount();
-        int getMaxUsers();
+        // int getMaxUsers();
         int getChannelSize();
         void setuserCount(int userCount);
         void setoperatorCount(int operatorCount);
@@ -46,7 +46,7 @@ class Channel
         void createChannel(std::string name);
         void notifyUserJoin(std::string user);
         void setMaxUsers(int maxUsers);
-        int getMaxUsers();
+        long unsigned int getMaxUsers();
         void PrintTopic(int fd);
         // void executecmdJOIN(server *server);
         ~Channel();

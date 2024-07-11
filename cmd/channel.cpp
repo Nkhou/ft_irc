@@ -4,6 +4,16 @@ Channel::Channel(std::string name)
 {
     this->name = name;
 }
+
+Channel::Channel(std::string name, int o, int fd, std::vector<client> clients)
+{
+    this->name = name;
+    if (o)
+    {
+        operators.push_back(clients[fd]);
+    }
+}
+
 std::vector<std::string> Channel::getMode()
 {
     return mode;
@@ -62,10 +72,10 @@ void Channel::setMaxUsers(int max)
 {
     this->maxUsers = max;
 }
-int Channel::getMaxUsers()
-{
-    return maxUsers;
-}
+// int Channel::getMaxUsers()
+// {
+//     return maxUsers;
+// }
 void Channel::removeUser(std::string user)
 {
     for (unsigned long i = 0; i < users.size(); i++)
@@ -182,7 +192,7 @@ int Channel::getOperatorCount()
     return operators.size();
 }
 
-int Channel::getMaxUsers()
+long unsigned int Channel::getMaxUsers()
 {
     return maxUsers;
 }
