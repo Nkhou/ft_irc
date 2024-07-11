@@ -1,16 +1,29 @@
-NAME = ft_irc
-CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
-SRC = main.cpp \
-	command.cpp \
+NAME = ircserv
 
-OBJ = $(SRC:.cpp=.o)
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
-all: $(NAME)
-clean:
-	rm -f $(OBJ)
-fclean: clean
+SRC = main.cpp \
+	  	cmd/channel.cpp \
+		cmd/command.cpp \
+
+CC = c++
+
+FLAGS = -Wall -Wextra -Werror -std=c++98
+
+OBJ_DIR = $(SRC:.cpp=.o)
+
+all : $(NAME)
+
+%.o: %.cpp srcs/*.hpp cmd/*.hpp
+	$(CC) $(FLAGS) -c $< -o $@
+
+$(NAME) : $(OBJ_DIR)
+	$(CC) $(FLAGS) $^ -o $@
+
+clean :
+	rm -f $(OBJ_DIR)
+
+fclean : clean
 	rm -f $(NAME)
-re: fclean all
-.PHONY: all clean fclean re
+
+re : fclean all
+
+.PHONY : all clean fclean re
