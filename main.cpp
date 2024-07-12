@@ -65,7 +65,7 @@ int main(int argc,char **argv)
     server ser;
     std::string pass;
      struct sockaddr_in addr;
-     std::vector<std::string> tmp_buffer;
+     std::vector<std::string> buffer_stor;
      struct pollfd fdpoll;
        client cli;
      char buffer[1024];
@@ -202,46 +202,37 @@ int main(int argc,char **argv)
                        buffer[size] = '\0';
                        if (size < 2)
 						{
-							tmp_buffer.push_back(buffer);
+							buffer_stor.push_back(buffer);
 							continue;
 						}
-						if (buffer[size - 1] != '\n' && buffer[size - 2] != '\r')
-						{
-							tmp_buffer.push_back(buffer);
-							continue;
-						}
-
-						if (size > 1 && buffer[size - 1] == '\n')
-							buffer[size - 1] = '\0';
-						if (size > 2 && buffer[size - 2] == '\r')
-							buffer[size - 2] = '\0';
+						
 
                   
                      // Check if the buffer doesn't end with '\n' or '\r'
-                    //  bool ends_with_newline = (buffer[size - 1] == '\n');
-                    //  bool ends_with_carriage_return = (size > 1 && buffer[size - 2] == '\r');
+                     bool ends_with_newline = (buffer[size - 1] == '\n');
+                     bool ends_with_carriage_return = (size > 2 && buffer[size - 2] == '\r');
                       
-                    //   if (!ends_with_newline && !ends_with_carriage_return)
-                    //   {
-                    //       tmp_buffer.push_back(buffer);
-                    //       continue;
-                    //   }
+                      if (!ends_with_newline && buffer[size - 2] == '\r')
+                      {
+                          buffer_stor.push_back(buffer);
+                          continue;
+                      }
                       
                     //   // Null-terminate the buffer correctly
-                    //   if (ends_with_newline)
-                    //       buffer[size - 1] = '\0';
-                    //   if (ends_with_carriage_return)
-                    //       buffer[size - 2] = '\0';
+                      if (ends_with_newline)
+                          buffer[size - 1] = '\0';
+                      if (ends_with_carriage_return)
+                          buffer[size - 2] = '\0';
                       
-                      // Push the buffer to tmp_buffer
-                      tmp_buffer.push_back(buffer);
+                      // Push the buffer to buffer_stor
+                      buffer_stor.push_back(buffer);
                       
-                      // Concatenate all buffers in tmp_buffer into cmd
-                      for (size_t j = 0; j < tmp_buffer.size(); j++)
-                            cmd += tmp_buffer[j];
+                      // Concatenate all buffers in buffer_stor into cmd
+                      for (size_t j = 0; j < buffer_stor.size(); j++)
+                            cmd += buffer_stor[j];
                       
-                      // Clear tmp_buffer after concatenation
-                      tmp_buffer.clear();
+                      // Clear buffer_stor after concatenation
+                      buffer_stor.clear();
                       
                       // Skip empty cmd
                       cmd = trim(cmd);
@@ -364,15 +355,19 @@ int main(int argc,char **argv)
                         
                             if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE"  || split[0] == "QUIT")
                             {
+                                if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
+                                {
 
                                  msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
                                  if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                  {
                                      std::cout << "Failed Send Try Again"<<std::endl;
                                  }
-                                //  split.clear();
-                            }
+                                }
+                                split.clear();
                             ser.clients[i - 1].flag_cmd = true;
+                            }
+                         
                     }
 
                 

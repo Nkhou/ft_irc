@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/09 10:51:39 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/12 10:29:28 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int port_num;
    ser_ ser;
     std::string pass;
      struct sockaddr_in addr;
-     std::vector<std::string> tmp_buffer;
+     std::vector<std::string> buffer_stor;
      struct pollfd fdpoll;
      cli_ cli_client;
     //    client cli;
