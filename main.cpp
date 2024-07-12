@@ -334,7 +334,7 @@ int main(int argc,char **argv)
                                       ser.clients[i - 1].servername = split[3];
                                       ser.clients[i - 1].realname = split[4];
                                 }  
-                                else if(split.size() < 5)
+                                else if(split.size() < 5 || split.size() > 5)
                                 {
                                       msg = msg_err(split[0],ser.hostname);
                                          if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
