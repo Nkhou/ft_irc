@@ -3,6 +3,9 @@ NAME = ircserv
 
 SRC = main.cpp \
 	  srcs/message.cpp \
+	  cmd/channel.cpp \
+		cmd/command.cpp \
+
 	  #bonus/srcs/main_bonus.cpp \
 
 #SRC_BONUS = bonus/main_bonus.cpp
@@ -17,7 +20,7 @@ OBJ_DIR = $(SRC:.cpp=.o)
 
 all : $(NAME) #$(NAME_BONUS)
 
-%.o: %.cpp srcs/server.hpp #bonus/srcs/server.hpp
+%.o: %.cpp srcs/*.hpp cmd/*.hpp #bonus/srcs/server.hpp
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME) : $(OBJ_DIR) #$(OBJ_DIR_BONUS)

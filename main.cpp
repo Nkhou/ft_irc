@@ -1,6 +1,7 @@
 
 #include<iostream>
 #include"srcs/server.hpp"
+#include"./cmd/command.hpp"
 
 //for parsing buffer
 std::string trim(const std::string& str) {
@@ -365,7 +366,7 @@ int main(int argc,char **argv)
                                  }
                                 }
                                 split.clear();
-                            ser.clients[i - 1].flag_cmd = true;
+                             ser.clients[i - 1].flag_cmd = true;
                             }
                          
                     }
@@ -374,9 +375,19 @@ int main(int argc,char **argv)
 
 }
             }
-            for (unsigned long i = 0; i< split.size(); i++)
+            // for (unsigned long i = 0; i< split.size(); i++)
+            // {
+            //     std::cout << "Args: " << split[i] << std::endl;
+            // }
+            if (split.size() > 0)
             {
-                std::cout << "Args: " << split[i] << std::endl;
+                ser.splited = split;
+                ser.client_fd = ser.fds[i].fd;
+                // std::cout << "Client fd: " << ser.fds[i].fd << std::endl;
+                Command cmd;
+                cmd.execCommand(&ser);
+                split.clear();
+                ser.client_fd = 0;
             }
             // std::cout << "hihihihihi"<< std::endl;
             i++;

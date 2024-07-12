@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nkh <nkh@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 11:06:05 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/04 14:45:41 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/12 11:58:14 by nkh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
-std::string msg_err(std::string nick,std::string hostname)
+std::string msg_err(std::string nick, std::string hostname)
 {
    std::string msg = ":" + hostname + " 461 " +"* "+ nick + " :Not enough parameters\r\n";
     return msg;

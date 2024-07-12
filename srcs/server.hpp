@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nkh <nkh@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/10 09:21:09 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/12 11:02:30 by nkh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
+#include "../cmd/channel.hpp"
 #define GREEN "\033[0;32m"
 
 typedef struct server
@@ -40,28 +41,31 @@ typedef struct server
     std::string password_arg;
     std::vector<struct client>clients; // vector of client 
     std::string hostname;
+    std::vector<Channel>channels;
+    std::vector<std::string>splited;
+    int client_fd;
     // bool flag;
     // bool flag_cmd;
     
   
 }ser;
 
-typedef struct client
-{
-    int fd; //file descriptor clients
-    std::string ip_addr; // ip address for clients
-    std::string user_name;
-    std::string hostname;
-    std::string servername;
-    std::string realname;
-    std::string nickname;
-    std::string buff;
-    std::string cmd; 
-    bool password;
-    bool flag;
-    bool flag_cmd;
+// typedef struct client
+// {
+//     int fd; //file descriptor clients
+//     std::string ip_addr; // ip address for clients
+//     std::string user_name;
+//     std::string hostname;
+//     std::string servername;
+//     std::string realname;
+//     std::string nickname;
+//     std::string buff;
+//     std::string cmd; 
+//     bool password;
+//     bool flag;
+//     bool flag_cmd;
     
-}cli;
+// }cli;
 
 std::string msg_err(std::string nick,std::string hostname);
 std::string msg_erroneusnickname(std::string nick,std::string hostname);
