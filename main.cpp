@@ -91,7 +91,7 @@ int main(int argc,char **argv)
         std::cout <<"Error Try Again"<<std::endl;
         exit (0);
     }
-    port_num = atoi(argv[1]);
+    port_num = std::atoi(argv[1]);
     pass= argv[2];    
     if (port_num < 1024 || port_num > 65535)
     {
