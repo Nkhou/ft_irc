@@ -64,3 +64,10 @@ std::string msg_errpriv(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 401 " + nick + " :No such nick/channel\r\n";
     return msg;
 }
+std::string sendMessage(std::string nick, std::string hostname, std::string message)
+{
+    (void)hostname;
+    (void)nick;
+    std::string msg =  message ;
+    return msg;
+}

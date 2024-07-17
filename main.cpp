@@ -206,7 +206,7 @@ int main(int argc,char **argv)
 							buffer_stor.push_back(buffer);
 							continue;
 						}
-						 std::cout << "<<< " << buffer<< std::endl;
+						//  std::cout << "<<< " << buffer<< std::endl;
 
                   
                      // Check if the buffer doesn't end with '\n' or '\r'
@@ -325,6 +325,7 @@ int main(int argc,char **argv)
                                       ser.clients[i - 1].hostname = split[2];
                                       ser.clients[i - 1].servername = split[3];
                                       ser.clients[i - 1].realname = split[4];
+                                    
                                 }  
                                 else if(split.size() < 5 || split.size() > 5)
                                 {
@@ -375,10 +376,10 @@ int main(int argc,char **argv)
 
 }
             }
-            for (unsigned long i = 0; i< split.size(); i++)
-            {
-                std::cout << "Args: " << split[i] << std::endl;
-            }
+            // for (unsigned long i = 0; i< split.size(); i++)
+            // {
+            //     std::cout << "Args: " << split[i] << std::endl;
+            // }
             if (split.size() > 0)
             {
                 ser.splited = split;
