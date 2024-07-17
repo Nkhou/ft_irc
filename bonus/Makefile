@@ -1,4 +1,4 @@
-NAME = ircserv
+NAME = ircbot
 #NAME_BONUS = ircserv_bonus
 
 SRC = main_bonus.cpp \
