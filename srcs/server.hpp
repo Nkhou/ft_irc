@@ -60,5 +60,8 @@ std::string NotOPRT(std::string nick, std::string hostname);
 std::string msg_errpriv(std::string nick, std::string hostname);
 std::string sendMessage(std::string nick, std::string hostname, std::string message);
 std::string RPL_NOTOPIC(std::string nick, std::string hostname);
+std::string ERR_BADCHANNELKEY(std::string nick, std::string hostname);
+std::string ERR_INVITEONLYCHAN(std::string nick, std::string hostname);
+std::string ERR_NOSUCHCHANNEL(std::string nick, std::string hostname);
 
 #endif

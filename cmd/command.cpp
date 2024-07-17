@@ -195,7 +195,14 @@ void Command::ModeCommand(server *ser)
     if (this->args.size() == 0)
         return;
     if (ser->channels.size() == 0)
-        throw std::invalid_argument("Channel does not exist");
+    {
+        std::string msg = ChannelExist(args[0], ser->hostname);
+        if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+        {
+            std::cout << "Failed Send Try Again"<<std::endl;
+        }
+        return;
+    }
     if (this->args.size() == 1)
     {
         for (unsigned long i = 0; i < ser->channels.size(); i++)
@@ -227,7 +234,11 @@ void Command::ModeCommand(server *ser)
                 return;
             }
         }
-        throw std::invalid_argument("Channel does not exist");
+        std::string msg = ChannelExist(args[0], ser->hostname);
+        if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+        {
+            std::cout << "Failed Send Try Again"<<std::endl;
+        }
     }
     else if (this->args.size() == 2)
     {
@@ -809,7 +820,6 @@ int checkMode(std::vector<std::string> mode, std::string mode1) {
     return 0;
 }
 void Command::JoinCommand(server *server) {
-    // std::cout << "Args size: " << this->args.size() << std::endl;
     if (this->args.size() == 0)
         return;
     if (this->args.size() == 1)
@@ -834,69 +844,78 @@ void Command::JoinCommand(server *server) {
                         throw std::invalid_argument("Channel is invite only");
                         return ;
                     }
-                    else if (checkMode(server->channels[i].getMode(), "+k") == 1 && server->channels[i].getKey() != this->keys[0])
+                    else if (checkMode(server->channels[i].getMode(), "+k") == 1 && this->keys.size() > 0 && server->channels[i].getKey() != this->keys[0])
                     {
                         throw std::invalid_argument("Channel is key protectedddddddd");
                         return ;
                     }
-                    else if (server->channels[i].getKey().size() > 0 && server->channels[i].getKey() != this->keys[0])
-                    {
-                        throw std::invalid_argument("Channel is key protected!!!!!!!!!");
-                        return ;
-                    }
-                    else if (server->channels[i].getKey().size() > 0 && server->channels[i].getKey() == this->keys[0])
-                    {
-                        addusertoChannel(server, this->args[i], 0);
-                        return ;
-                    }
-                    else if (server->channels[i].getKey().size() == 0 && this->keys.size() == 0)
-                    {
-                        addusertoChannel(server, this->args[i], 0);
-                        return ;
-                    }
-                    else if (server->channels[i].getKey().size() == 0 && this->keys.size() > 0)
-                    {
-                        throw std::invalid_argument("Channel is key protected------");
-                        return ;
-                    }
                     else if (server->channels[i].getKey().size() > 0 && this->keys.size() == 0)
                     {
-                        throw std::invalid_argument("Channel is key protected+++++++++");
-                        return ;
-                    }
-                    else if (server->channels[i].getKey().size() > 0 && server->channels[i].getKey() != this->keys[0])
-                    {
-                        throw std::invalid_argument("Channel is key protected~~~~~~~~~~~~~~");
-                        return ;
-                    }
-                    else if (server->channels[i].getKey().size() == 0 && this->keys.size() > 0)
-                    {
-                        throw std::invalid_argument("Channel is key protected*****************");
-                        return ;
-                    }
-                    else if (server->channels[i].getKey().size() == 0 && this->keys.size() == 0)
-                    {
-                        addusertoChannel(server, this->args[i], 0);
-                        return ;
-                    }
-                    else if (server->channels[i].getKey().size() > 0 && this->keys.size() > 0)
-                    {
-                        if (server->channels[i].getKey() != this->keys[0])
+                        std::string msg = ERR_BADCHANNELKEY(args[0], server->hostname);
+                        if (send(fd, msg.c_str(), msg.length(), 0) < 0)
                         {
-                            throw std::invalid_argument("Channel is key protected[[[[]]]]");
-                            return ;
+                            std::cout << "Failed Send Try Again"<<std::endl;
                         }
-                    }
-                    else if (server->channels[i].getKey().size() == 0 && this->keys.size() > 0)
-                    {
-                        throw std::invalid_argument("Channel is key protected$$$$$$$$$$$$");
                         return ;
                     }
-                    else if (server->channels[i].getKey().size() > 0 && this->keys.size() == 0)
-                    {
-                        throw std::invalid_argument("Channel is key protected§§§§§§§§§§§§§§§§");
-                        return ;
-                    }
+                    // else if (server->channels[i].getKey().size() > 0 && server->channels[i].getKey() != this->keys[0])
+                    // {
+                    //     throw std::invalid_argument("Channel is key protected!!!!!!!!!");
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() > 0 && server->channels[i].getKey() == this->keys[0])
+                    // {
+                    //     addusertoChannel(server, this->args[i], 0);
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() == 0 && this->keys.size() == 0)
+                    // {
+                    //     addusertoChannel(server, this->args[i], 0);
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() == 0 && this->keys.size() > 0)
+                    // {
+                    //     throw std::invalid_argument("Channel is key protected------");
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() > 0 && this->keys.size() == 0)
+                    // {
+                    //     throw std::invalid_argument("Channel is key protected+++++++++");
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() > 0 && server->channels[i].getKey() != this->keys[0])
+                    // {
+                    //     throw std::invalid_argument("Channel is key protected~~~~~~~~~~~~~~");
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() == 0 && this->keys.size() > 0)
+                    // {
+                    //     throw std::invalid_argument("Channel is key protected*****************");
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() == 0 && this->keys.size() == 0)
+                    // {
+                    //     addusertoChannel(server, this->args[i], 0);
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() > 0 && this->keys.size() > 0)
+                    // {
+                    //     if (server->channels[i].getKey() != this->keys[0])
+                    //     {
+                    //         throw std::invalid_argument("Channel is key protected[[[[]]]]");
+                    //         return ;
+                    //     }
+                    // }
+                    // else if (server->channels[i].getKey().size() == 0 && this->keys.size() > 0)
+                    // {
+                    //     throw std::invalid_argument("Channel is key protected$$$$$$$$$$$$");
+                    //     return ;
+                    // }
+                    // else if (server->channels[i].getKey().size() > 0 && this->keys.size() == 0)
+                    // {
+                    //     throw std::invalid_argument("Channel is key protected§§§§§§§§§§§§§§§§");
+                    //     return ;
+                    // }
                     addusertoChannel(server, this->args[i], 0);
                     return ;
                 }

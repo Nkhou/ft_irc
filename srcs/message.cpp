@@ -76,3 +76,19 @@ std::string RPL_NOTOPIC(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 331 " + nick + " :No topic is set\r\n";
     return msg;
 }
+std::string ERR_BADCHANNELKEY(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 475 " + nick + " :Cannot join channel (+k)\r\n";
+    return msg;
+}
+
+std::string ERR_NOSUCHCHANNEL(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 403 " + nick + " :No such channel\r\n";
+    return msg;
+}
+std::string ERR_INVITEONLYCHAN(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 473 " + nick + " :Cannot join channel (+i)\r\n";
+    return msg;
+}
