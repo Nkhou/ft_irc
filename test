@@ -1,0 +1,30 @@
+pass nk // 1
+nick a // 3
+nick b // 5
+
+
+pass nk // 2
+nick a // 4
+:e3r8p12.1337.ma 433 a :Nickname is already in use !
+nick a // 6 (ERROR)
+:e3r8p12.1337.ma 433 a :Nickname is already in use !
+
+NICKNAME!~USER@HOSTNAME JOIN #ff
+:HOSTNAME 353 NICKNAME @ #ff :@NICKNAME
+:HOSTNAME MODE #ff +t
+:HOSTNAME 366 NICKNAME #ff :End of /NAMES list.
+
+NICKNAME!~HOSTNAME JOIN #ff
+:HOSTNAME 353 NICKNAME = #ff :NICKNAME @NICKNAME 
+:HOSTNAME 366 NICKNAME #ff :End of /NAMES list.
+
+./ircserv 4444 " nk"
+pass : nk
+
+./ircserv 4444 "" // enter the password f main n yemak
+
+user r r r r r // kadoz if ktar mn par
+
+:qweeew!~r@197.230.30.146 PRIVMSG #qwq :ee
+
+in channel name of channel join
