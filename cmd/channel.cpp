@@ -18,9 +18,29 @@ std::vector<std::string> Channel::getMode()
 {
     return mode;
 }
-
+void Channel::setInviteOnly(int inviteOnly)
+{
+    this->inviteOnly = inviteOnly;
+}
 void Channel::setMode(std::string mode)
 {
+    for (unsigned long i = 0; i < this->mode.size(); i++)
+    {
+        if (this->mode[i] == mode)
+        {
+            return;
+        }
+        else if (this->mode[i] == "+" + mode)
+        {
+            this->mode.erase(this->mode.begin() + i);
+            return;
+        }
+        else if (this->mode[i] == "-" + mode)
+        {
+            this->mode.erase(this->mode.begin() + i);
+            return;
+        }
+    }
     this->mode.push_back(mode);
 }
 void Channel::setTopic(std::string topic)

@@ -15,6 +15,7 @@ class Channel
         std::vector<std::string> mode;
         std::string key;
         int userCount;
+        int inviteOnly;
         int operatorCount;
         long unsigned int maxUsers;
     public:
@@ -48,6 +49,8 @@ class Channel
         void setMaxUsers(int maxUsers);
         long unsigned int getMaxUsers();
         void PrintTopic(int fd);
+        void PrintMode(int fd);
+        void setInviteOnly(int inviteOnly);
         // void executecmdJOIN(server *server);
         ~Channel();
 }; 

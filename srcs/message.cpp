@@ -92,3 +92,9 @@ std::string ERR_INVITEONLYCHAN(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 473 " + nick + " :Cannot join channel (+i)\r\n";
     return msg;
 }
+
+// std::strin noSUCHFILE(std::string nick, std::string hostname)
+// {
+//     std::string msg = ":" + hostname + " 492 " + nick + " :No such file or directory\r\n";
+//     return msg;
+// }
