@@ -192,7 +192,7 @@ int main(int argc,char **argv)
                     {std::cout << ""<<std::endl;}
                     else if(size == 0)
                     {
-                        std::cout << "<<< Client Disconnected >>> " << ser.fds[i].fd << std::endl;
+                        std::cout << "<<< Client Disconnected >>> " << buffer<< ser.fds[i].fd << std::endl;
                         close(ser.fds[i].fd);
                         ser.fds.erase(ser.fds.begin() + i);
                         ser.clients.erase(ser.clients.begin() + i - 1);
@@ -206,7 +206,7 @@ int main(int argc,char **argv)
 							buffer_stor.push_back(buffer);
 							continue;
 						}
-						
+						 std::cout << "<<< " << buffer<< std::endl;
 
                   
                      // Check if the buffer doesn't end with '\n' or '\r'
@@ -375,10 +375,10 @@ int main(int argc,char **argv)
 
 }
             }
-            // for (unsigned long i = 0; i< split.size(); i++)
-            // {
-            //     std::cout << "Args: " << split[i] << std::endl;
-            // }
+            for (unsigned long i = 0; i< split.size(); i++)
+            {
+                std::cout << "Args: " << split[i] << std::endl;
+            }
             if (split.size() > 0)
             {
                 ser.splited = split;

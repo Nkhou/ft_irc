@@ -622,6 +622,7 @@ void Command::PrivmsgCommand(server *ser)
                     // std::cout << "args size: " << this->args.size() << std::endl;
                     for (unsigned long l = 1; l < this->args.size(); l++)
                     {
+                        
                         write(ser->clients[j].fd, this->args[l].c_str(), this->args[l].size());
                         if (l < this->args.size() - 1)
                             write(ser->clients[j].fd, " ", 1);
