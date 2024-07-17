@@ -17,7 +17,7 @@ class Command {
     public:  
         Command(){};
         // Command(Command const &command);
-        void ParceCommand(std::vector<std::string> command, int fd);
+        void ParceCommand(std::vector<std::string> command, int fd, std::string hostname);
         ~Command(){};
         // std::string getCommand() { return command; }
         std::vector<std::string> getArgs() { return args; }
@@ -31,7 +31,7 @@ class Command {
         void execCommand( server *ser);
         void addusertoChannel(server *server, std::string channel, int o);
         void KickCommand(server *ser);
-        void ParceCommandkick(std::vector<std::string> command, int fd, std::vector<Channel>channel);
+        void   ParceCommandkick(std::vector<std::string> command, int fd, std::vector<Channel>channel, std::string hostname);
         void ModeCommand(server *ser);
         // void ParceModeCommand(std::vector <std::string> splited, int client_fd);
         void ParceTopic(std::vector <std::string> splited, int client_fd);
@@ -40,6 +40,8 @@ class Command {
         void ParceInvite(std::vector <std::string> splited, int client_fd);
         void InviteCommand(server *ser);
         void ParceModeCommand(std::vector <std::string> splited, int client_fd);
+        void ParcePrivmsg(std::vector <std::string> splited, int client_fd);
+        void PrivmsgCommand(server *ser);
 };
 
 #endif

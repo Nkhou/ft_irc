@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
+/*   server_bonus.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkh <nkh@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/16 11:36:46 by nkh              ###   ########.fr       */
+/*   Created: 2024/07/09 09:21:15 by saboulal          #+#    #+#             */
+/*   Updated: 2024/07/09 10:39:13 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
-# define SERVER_HPP
+#define SERVER_HPP
+
 #include <iostream>
 #include <vector> //-> for vector
 #include <sys/socket.h> //-> for socket()
@@ -31,32 +32,35 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
-#include "../cmd/channel.hpp"
-#define GREEN "\033[0;32m"
 
 typedef struct server
 {
     int ser_fd; //server socket file descriptor 
     std::vector<struct pollfd>fds; // vector for pollfds
     std::string password_arg;
-    std::vector<struct client>clients; // vector of client 
+    // std::vector<struct client>clients; // vector of client 
     std::string hostname;
-    std::vector<Channel>channels;
-    std::vector<std::string>splited;
-    int client_fd;
- 
-  
-}ser;
+    // bool flag;
+    // bool flag_cmd;
+    
+}ser_;
 
-
-std::string msg_err(std::string nick,std::string hostname);
-std::string msg_erroneusnickname(std::string nick,std::string hostname);
-std::string msg_welcome(std::string nick,std::string hostname);
-std::string msg_nonicknamegiven(std::string hostname);
-std::string msg_notregistered(std::string nick,std::string hostname);
-std::string msg_nicknameinuse(std::string nick,std::string hostname);
-std::string ChannelExist(std::string channel, std::string hostname);
-std::string NotOPRT(std::string nick, std::string hostname);
-std::string msg_errpriv(std::string nick, std::string hostname);
-
+typedef struct client
+{
+    int fd; //file descriptor clients
+    std::string ip_addr; // ip address for clients
+    std::string user_name;
+    std::string hostname;
+    std::string servername;
+    std::string realname;
+    std::string nickname;
+    std::string buff;
+    std::string cmd; 
+    bool password;
+    bool flag;
+    bool flag_cmd;
+    struct sockaddr_in addr;
+    std::vector<std::string> split;
+    char buffer[1024];
+}cli_;
 #endif

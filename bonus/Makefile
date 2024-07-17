@@ -17,7 +17,7 @@ OBJ_DIR = $(SRC:.cpp=.o)
 
 all : $(NAME) #$(NAME_BONUS)
 
-%.o: %.cpp srcs/server.hpp #bonus/srcs/server.hpp
+%.o: %.cpp srcs/server_bonus.hpp #bonus/srcs/server.hpp
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME) : $(OBJ_DIR) #$(OBJ_DIR_BONUS)

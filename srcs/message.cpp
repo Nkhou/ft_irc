@@ -6,7 +6,7 @@
 /*   By: nkh <nkh@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 11:06:05 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/12 11:58:14 by nkh              ###   ########.fr       */
+/*   Updated: 2024/07/16 11:36:15 by nkh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,22 @@ std::string msg_notregistered(std::string nick,std::string hostname)
 std::string msg_nicknameinuse(std::string nick,std::string hostname)
 {
     std::string msg = ":" + hostname + " 433 " + nick + " :Nickname is already in use !\r\n";
+    return msg;
+}
+
+std::string ChannelExist(std::string channel, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 403 " + channel + " :No such channel\r\n";
+    return msg;
+}
+
+std::string NotOPRT(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 482 " + nick + " :You're not channel operator\r\n";
+    return msg;
+}
+std::string msg_errpriv(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 401 " + nick + " :No such nick/channel\r\n";
     return msg;
 }

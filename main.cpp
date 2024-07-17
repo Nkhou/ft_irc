@@ -31,7 +31,7 @@ std::vector<std::string> split_string(const std::string& cmd) {
                 split.push_back(word.substr(0, pos));
                 split.push_back(word.substr(pos + 1));
             }
-            break;
+            // break;
         } else {
             split.push_back(word);
         }
@@ -397,4 +397,3 @@ int main(int argc,char **argv)
 
     return (0);
 }
-
