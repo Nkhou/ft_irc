@@ -71,3 +71,8 @@ std::string sendMessage(std::string nick, std::string hostname, std::string mess
     std::string msg =  message ;
     return msg;
 }
+std::string RPL_NOTOPIC(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 331 " + nick + " :No topic is set\r\n";
+    return msg;
+}
