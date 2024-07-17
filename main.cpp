@@ -15,11 +15,19 @@ std::string trim(const std::string& str) {
     return str.substr(start, end - start + 1);
 }
 
-std::vector<std::string> split_string(const std::string& cmd) {
+std::vector<std::string> split_string(std::string cmd) {
     std::vector<std::string> split;
-    std::istringstream iss(cmd) ;
     std::string word;
-
+    // std::string line;
+    size_t pos = 0;
+    // std::istringstream iss;
+    if (cmd[0]== ':')
+    {
+       
+        pos = cmd.find(' ',pos);
+        cmd = cmd.substr(pos + 1); 
+    }
+    std::istringstream iss(cmd);
     while (iss >> word) {
         if (word.find(':') != std::string::npos) {
             size_t pos = word.find(':');
@@ -30,6 +38,10 @@ std::vector<std::string> split_string(const std::string& cmd) {
                 // Split the word at ':'
                 split.push_back(word.substr(0, pos));
                 split.push_back(word.substr(pos + 1));
+            }
+            std::cout << "split[0]: " << split[0] << std::endl;
+            if (split[0] == "USER" || split[0] == "user") {
+                break;
             }
             // break;
         } else {
