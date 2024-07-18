@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/17 10:09:43 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:41:41 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 {
 // int port_num;
    ser_ ser;
-    std::string pass;
+    int pass_bonus;
     //  struct sockaddr_in addr;
      std::vector<std::string> buffer_stor;
     //  struct pollfd fdpoll;
@@ -45,13 +45,19 @@ int main(int argc, char **argv)
     }
     int socket_fd = socket(AF_INET,SOCK_STREAM,0);
     int port_bonus;
-
+    
     if (std::atoi(argv[1]) < 1024 || std::atoi(argv[1]) > 65535)
     {
         std::cout <<"Error Failed"<<std::endl;
         return(1);
     } 
-    port_bonus = std::atoi(argv[2]);
+    port_bonus = std::atoi(argv[1]);
+    pass_bonus = argv[2];
+    if (pass_bonus.empty())
+    {
+        std::cout <<"Password is Empty!"<<std::endl;
+        return(1);
+    }
     if(socket_fd == -1)
     {
         std::cout <<"Error Failed"<<std::endl;
@@ -70,6 +76,10 @@ int main(int argc, char **argv)
         std::cout <<"failed errortt"<<std::endl;
         return(1);
      }
-     while(1){}
+     //authentication
+     while(1)
+     {
+        
+     }
 
 }
