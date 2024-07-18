@@ -731,7 +731,7 @@ void Command::PrivmsgCommand(server *ser)
                 {
                     std::string msg;
                     if (this->args[2][0] != ':')
-                         msg = ":" + getClientByFd(ser, this->fd)->nickname + " PRIVMSG " + ser->clients[j].nickname + " :";
+                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name+"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
                     for (unsigned long l = 1; l < this->args.size(); l++)
                     {
                         msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->args[l]);
@@ -761,7 +761,7 @@ void Command::PrivmsgCommand(server *ser)
             {
                     std::string msg;
                     if (this->args[2][0] != ':')
-                         msg = ":" + getClientByFd(ser, this->fd)->nickname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :";
+                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :";
                     for (unsigned long l = 1; l < this->args.size(); l++)
                     {
                         msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->args[l]);
@@ -896,7 +896,16 @@ void Command::executecmd(server *server) {
     }
     else if (server->splited[0] == "PRIVMSG")
     {
-        if (server->splited.size() < 3)
+        if (server->splited.size() == 1)
+        {
+            std::string msg = msg_errsend(server->splited[0], server->hostname);
+            if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
+            {
+                std::cout << "Failed Send Try Again"<<std::endl;
+            }
+            return;
+        }
+        else if (server->splited.size() == 2)
         {
             std::string msg = msg_err(server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)

@@ -389,15 +389,7 @@ int main(int argc,char **argv)
                             }
                          
                     }
-                    if(split[0] == "QUIT")
-                    {
-                        std::cout << "<<< Client Disconnected >>> " << ser.clients[i - 1].nickname << std::endl;
-                        close(ser.fds[i].fd);
-                        ser.fds.erase(ser.fds.begin() + i);
-                        ser.clients.erase(ser.clients.begin() + i - 1);
-                    }
-
-                
+                 
 
 }
             }
@@ -405,16 +397,16 @@ int main(int argc,char **argv)
             // {
             //     std::cout << "Args: " << split[i] << std::endl;
             // }
-            if (split.size() > 0)
-            {
-                ser.splited = split;
-                ser.client_fd = ser.fds[i].fd;
-                // std::cout << "Client fd: " << ser.fds[i].fd << std::endl;
-                Command cmd;
-                cmd.execCommand(&ser);
-                split.clear();
-                ser.client_fd = 0;
-            }
+            // if (split.size() > 0)
+            // {
+            //     ser.splited = split;
+            //     ser.client_fd = ser.fds[i].fd;
+            //     // std::cout << "Client fd: " << ser.fds[i].fd << std::endl;
+            //     Command cmd;
+            //     cmd.execCommand(&ser);
+            //     split.clear();
+            //     ser.client_fd = 0;
+            // }
             // std::cout << "hihihihihi"<< std::endl;
             i++;
         }

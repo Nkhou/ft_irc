@@ -126,24 +126,6 @@ void Channel::printUsers()
     }
 }
 
-// bool Channel::userExists(cli *client, int fd)
-// {
-//     for (unsigned long i = 0; i < client.size(); i++)
-//     {
-//         if (clients[i].fd == fd)
-//         {
-//             for (unsigned long j = 0; j < users.size(); j++)
-//             {
-//                 if (users[j] == client[i].nickname)
-//                 {
-//                     return true;
-//                 }
-//             }
-//         }
-//     }
-//     return false;
-// }
-
 
 void Channel::clearUsers()
 {
@@ -155,36 +137,10 @@ Channel::~Channel()
     users.clear();
 }
 
-// void Channel::sendMessage(std::string message)
-// {
-//     for (unsigned long i = 0; i < users.size(); i++) 
-//     {
-//         std::cout << users[i]. << ": " << message << std::endl;
-//     }
-// }
-
-// void Channel::joinChannel(cli *client, int client_fd)
-// {
-//     if (!userExists(client, client_fd))
-//     {
-//         addUser(client->getNickName());
-//         notifyUserJoin(client->getNickName());
-//     }
-// }
-
 void Channel::createChannel(std::string name)
 {
     this->name = name;
 }
-
-// void Channel::createChannel(std::string name, int o)
-// {
-//     this->name = name;
-//     if (o)
-//     {
-//         operators.push_back(name);
-//     }
-// }
 
 void Channel::addOperator(cli user)
 {
@@ -212,31 +168,16 @@ void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
                 // unsigned long k = 0;
                 for (unsigned long j = 0; j < operators.size(); j++)
                 {
-                    // k = j;
-                    // std::cout << "users[i].nickname: " << users[i].nickname << std::endl;
-                    // std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
                     if (users[i].nickname != operators[j].nickname.substr(1))
                     {
                         std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
-                        // msg +=  "@" + users[i].nickname + " ";
                         msg += users[i].nickname + " ";
-                        // continue ;
                     }
                 }
-                // std::cout << "k: " << k << std::endl;
-                // std::cout << "operators.size(): " << operators.size() << std::endl;
-                // if (k == operators.size())
-                
              }
              for (unsigned long j = 0; j < operators.size(); j++)
                 {
-                    // k = j;
                     msg += operators[j].nickname + " ";
-                    // if (users[i].nickname == operators[j].nickname.substr(1))
-                    // {
-                        // msg +=  "@" + users[i].nickname + " ";
-                    //     break;
-                    // }
                 }
             msg += "\n";
         }
@@ -254,11 +195,6 @@ void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
         {
             perror("send");
         }
-        // write(users[i].fd, ":", 1);
-        // write(users[i].fd, user.c_str(), user.length());
-        // write(users[i].fd, " JOIN ", 6);
-        // write(users[i].fd, name.c_str(), name.length());
-        // write(users[i].fd, "\n", 1);
         }
     }
 }

@@ -9,14 +9,6 @@ nick a // 4
 nick a // 6 (ERROR)
 :e3r8p12.1337.ma 433 a :Nickname is already in use !>>> done 
 
-NICKNAME!~USER@HOSTNAME JOIN #ff
-:HOSTNAME 353 NICKNAME @ #ff :@NICKNAME
-:HOSTNAME MODE #ff +t
-:HOSTNAME 366 NICKNAME #ff :End of /NAMES list.
-
-NICKNAME!~HOSTNAME JOIN #ff
-:HOSTNAME 353 NICKNAME = #ff :NICKNAME @NICKNAME 
-:HOSTNAME 366 NICKNAME #ff :End of /NAMES list.
 
 ./ircserv 4444 " nk"
 pass : nk
@@ -25,6 +17,5 @@ pass : nk
 
 user r r r r r // kadoz if ktar mn par >>>>>done 
 
-:qweeew!~r@197.230.30.146 PRIVMSG #qwq :ee
 
 in channel name of channel join
