@@ -104,7 +104,12 @@ int main(int argc,char **argv)
         exit (0);
     }
     port_num = std::atoi(argv[1]);
-    pass= argv[2];    
+    pass= argv[2];  
+    if(pass.empty())
+    {
+        std::cout <<"Error Password empty"<<std::endl;
+        exit (0);
+    }
     if (port_num < 1024 || port_num > 65535)
     {
         std::cout <<"Error Try Again"<<std::endl;
@@ -219,7 +224,7 @@ int main(int argc,char **argv)
 							continue;
 						}
 						//  std::cout << "<<< " << buffer<< std::endl;
-
+            
                   
                      // Check if the buffer doesn't end with '\n' or '\r'
                      bool ends_with_newline = (buffer[size - 1] == '\n');
@@ -282,10 +287,11 @@ int main(int argc,char **argv)
                                 }
                             }
                         }
-                        if (ser.clients[i - 1].nickname == "" && ser.clients[i - 1].password == true) 
+                        if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
                         {
                           if (split[0] == "NICK")
                           {
+                            std::cout << "Nickname: " << split[1] << std::endl;
                              if(split.size() >= 2)
                              {
                                     
@@ -331,7 +337,7 @@ int main(int argc,char **argv)
                              if (split[0] == "USER")
                             {
                                  
-                                if(split.size() == 5)
+                                if(split.size() == 5 || split.size() > 5)
                                 {
                                       ser.clients[i - 1].user_name = split[1];
                                       ser.clients[i - 1].hostname = split[2];
@@ -339,7 +345,7 @@ int main(int argc,char **argv)
                                       ser.clients[i - 1].realname = split[4];
                                     
                                 }  
-                                else if(split.size() < 5 || split.size() > 5)
+                                else if(split.size() < 5)
                                 {
                                       msg = msg_err(split[0],ser.hostname);
                                          if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
@@ -367,7 +373,7 @@ int main(int argc,char **argv)
                     if(ser.clients[i - 1].flag == false && split.size() > 0 )
                     {
                         
-                            if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE"  || split[0] == "QUIT")
+                            if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE" )
                             {
                                 if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
                                 {
@@ -382,6 +388,13 @@ int main(int argc,char **argv)
                              ser.clients[i - 1].flag_cmd = true;
                             }
                          
+                    }
+                    if(split[0] == "QUIT")
+                    {
+                        std::cout << "<<< Client Disconnected >>> " << ser.clients[i - 1].nickname << std::endl;
+                        close(ser.fds[i].fd);
+                        ser.fds.erase(ser.fds.begin() + i);
+                        ser.clients.erase(ser.clients.begin() + i - 1);
                     }
 
                 

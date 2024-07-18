@@ -1,4 +1,4 @@
-pass nk // 1
+>>>>pass nk // 1
 nick a // 3
 nick b // 5
 
@@ -7,7 +7,7 @@ pass nk // 2
 nick a // 4
 :e3r8p12.1337.ma 433 a :Nickname is already in use !
 nick a // 6 (ERROR)
-:e3r8p12.1337.ma 433 a :Nickname is already in use !
+:e3r8p12.1337.ma 433 a :Nickname is already in use !>>> done 
 
 NICKNAME!~USER@HOSTNAME JOIN #ff
 :HOSTNAME 353 NICKNAME @ #ff :@NICKNAME
@@ -21,9 +21,9 @@ NICKNAME!~HOSTNAME JOIN #ff
 ./ircserv 4444 " nk"
 pass : nk
 
-./ircserv 4444 "" // enter the password f main n yemak
+./ircserv 4444 "" // enter the password f main n yemak >>>>done
 
-user r r r r r // kadoz if ktar mn par
+user r r r r r // kadoz if ktar mn par >>>>>done 
 
 :qweeew!~r@197.230.30.146 PRIVMSG #qwq :ee
 
