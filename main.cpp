@@ -3,64 +3,129 @@
 #include"srcs/server.hpp"
 #include"./cmd/command.hpp"
 
-std::vector<std::string> split_string(std::string cmd) {
-    std::vector<std::string> split;
-    std::string word;
+int find_first_space(std::string str)
+{
+	size_t i = 0;
+  while(i < str.length())
+    {
+        if(str[i] != ' ')
+        {
+            return i;
+        }
+        if (str[i] != '\n')
+		        break;
+
+        i++;
+    
+    }
+	return 0;
+}
+
+int find_last_space(std::string str)
+{
+  size_t i = str.length() - 1;
+   while(i > 0)
+    {
+        if(str[i] != ' ')
+        {
+            return i;
+        }
+        i--;
+    }
+	return INT_MAX;
+}
+std::vector<std::string> split_string(std::string cmd,std::vector<std::string> split) 
+{
+    size_t start = find_first_space(cmd);
+						size_t end = find_last_space(cmd);
+						cmd = cmd.substr(start, end + 1);
+                        std::cout << "*******" << cmd << std::endl;
+						std::string word = "";
+						 std::cout << "------" << word << std::endl;
+						for(size_t i = 0; i < cmd.length(); i++)
+						{
+							if (cmd[i] == ' ')
+							{
+								while (cmd[i] == ' ')
+									i++;
+								i--;
+								split.push_back(word);
+								word = "";
+							}
+							else if (i != 0 && cmd[i - 1] == ' ' && cmd[i] == ':')
+							{
+
+								word = cmd.substr(i + 1, cmd.length() - 1);
+								split.push_back(word);
+								word = "";
+								break;
+							}
+							else
+								word += cmd[i];
+
+						}
+						if (word != "")
+							split.push_back(word);
     // std::string line;
     
     // std::istringstream iss;
-    std::istringstream iss(cmd);
-    while (iss >> word) 
-    {
+    // std::istringstream iss(cmd);
+    // while (iss >> word) 
+    // {
         
-        if (word.find(':') != std::string::npos) {
-            size_t pos = word.find(':');
-            if (pos == 0) {
-                // if ':' is at the beginning of the word
-                std::cout  << "hello" << std::endl;
-                // split.push_back(word.substr(pos - 1, word.length() - 1 ));
-                std::string line = word.substr(1);
-                while (iss >> word) 
-                {
-                    line += word;
-                    std::cout <<word<< std::endl;
-                    // split.push_back(word);
-                }
-                std::cout << "line: " << line << std::endl;
-                split.push_back(line);
-             } 
-            // delete : from the word like :hello -> hello
-            else
-            {
-                std::cout  << "hello" << std::endl;
-                // split.push_back(word.substr(pos - 1, word.length() - 1 ));
-                std::string line = word.substr(pos - 1, word.length() - 1 );
-                while (iss >> word) 
-                {
-                    line += word;
-                    std::cout <<word<< std::endl;
-                    // split.push_back(word);
-                }
-                std::cout << "line: " << line << std::endl;
-                split.push_back(line);
-            }
-            std::cout << "split[0]: " << split[0] << std::endl;
-            std::cout << "split[1]: " << split[1] << std::endl;
-            if (split[0] == "USER" || split[0] == "user") {
-                break; 
-            }
-        } 
-        else {
-            std::cout <<word<< std::endl;
-            split.push_back(word);
-        }
-    }
+    //     if (word.find(':') != std::string::npos) {
+    //         size_t pos = word.find(':');
+    //         if (pos == 0) {
+    //             // if ':' is at the beginning of the word and dont remove space 
+                
+    //             std::cout  << "hello" << std::endl;
+    //             // split.push_back(word.substr(pos - 1, word.length() - 1 ));
+    //             std::string line = word.substr(1);
+    //             while (iss >> word) 
+    //             {
+    //                 line += word;
+    //                 std::cout <<word<< std::endl;
+    //                 // split.push_back(word);
+    //             }
+    //             std::cout << "line: " << line << std::endl;
+    //             split.push_back(line);
+    //          } 
+    //         // delete : from the word like :hello -> hello
+    //         else
+    //         {
+    //             std::cout  << "hello" << std::endl;
+    //             // split.push_back(word.substr(pos - 1, word.length() - 1 ));
+    //             std::string line = word.substr(pos - 1, word.length() - 1 );
+    //             while (iss >> word) 
+    //             {
+    //                 line += word ;
+    //                 std::cout <<word<< std::endl;
+    //                 // split.push_back(word);
+    //             }
+    //             std::cout << "line: " << line << std::endl;
+    //             split.push_back(line);
+    //         }
+    //         std::cout << "split[0]: " << split[0] << std::endl;
+    //         std::cout << "split[1]: " << split[1] << std::endl;
+    //         if (split[0] == "USER" || split[0] == "user") {
+    //             break; 
+    //         }
+    //     } 
+    //     else {
+    //         std::cout <<word<< std::endl;
+    //         split.push_back(word);
+    //     }
+    // }
 
     return split;
 }
 int check_error_nickname(std::string nickname)
 {
     if(nickname.size() > 9)
+    {
+        return 1;
+    }
+    if(nickname.size() == 1)
     {
         return 1;
     }
@@ -264,7 +329,12 @@ int main(int argc,char **argv)
                        
 						split.clear();
 
-                        split = split_string(cmd);
+                        split = split_string(cmd, split);
+                        if (split.size() == 0)
+                        {
+                            cmd.clear();
+                            continue;
+                        }
                         
 						if (split[0][0] == ':')
 							split.erase(split.begin());
