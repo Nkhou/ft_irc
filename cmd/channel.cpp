@@ -13,7 +13,16 @@ Channel::Channel(std::string name, int o, int fd, std::vector<client> clients)
         operators.push_back(clients[fd]);
     }
 }
-
+void Channel::sendMessage(std::string message)
+{
+    for (unsigned long i = 0; i < users.size(); i++)
+    {
+        if (send(users[i].fd, message.c_str(), message.length(), 0) == -1)
+        {
+            perror("send");
+        }
+    }
+}
 std::vector<std::string> Channel::getMode()
 {
     return mode;

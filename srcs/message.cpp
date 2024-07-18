@@ -102,3 +102,14 @@ std::string NotMode(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 472 " + nick + " :is unknown mode char to me\r\n";
     return msg;
 }
+std::string notfyMessage(std::string nick, std::string hostname, std::string message, std::string name)
+{
+    std::string msg = ":" + nick + "!~" + name + hostname + " " + message + "\r\n";
+    return msg;
+}
+
+std::string notenghparam(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 461 " + nick + " :Not enough parameters\r\n";
+    return msg;
+}

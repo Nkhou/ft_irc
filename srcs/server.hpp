@@ -65,5 +65,7 @@ std::string ERR_INVITEONLYCHAN(std::string nick, std::string hostname);
 std::string ERR_NOSUCHCHANNEL(std::string nick, std::string hostname);
 std::string msg_errsend(std::string nick, std::string hostname);
 std::string NotMode(std::string nick, std::string hostname);
+std::string notfyMessage(std::string nick, std::string hostname, std::string message, std::string name);
+std::string notenghparam(std::string nick, std::string hostname);
 
 #endif
