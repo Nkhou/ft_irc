@@ -3,30 +3,12 @@
 #include"srcs/server.hpp"
 #include"./cmd/command.hpp"
 
-//for parsing buffer
-std::string trim(const std::string& str) {
-    size_t start = str.find_first_not_of(' ');
-    size_t end = str.find_last_not_of(' ');
-
-    if (start == std::string::npos || end == std::string::npos ) {
-        return "";
-    }
-
-    return str.substr(start, end - start + 1);
-}
-
 std::vector<std::string> split_string(std::string cmd) {
     std::vector<std::string> split;
     std::string word;
     // std::string line;
-    size_t pos = 0;
+    
     // std::istringstream iss;
-    if (cmd[0]== ':')
-    {
-       
-        pos = cmd.find(' ',pos);
-        cmd = cmd.substr(pos + 1); 
-    }
     std::istringstream iss(cmd);
     while (iss >> word) {
         if (word.find(':') != std::string::npos) {
@@ -34,16 +16,17 @@ std::vector<std::string> split_string(std::string cmd) {
             if (pos == 0) {
                 // if ':' is at the beginning of the word
                 split.push_back(word.substr(1));
-            } else {
-                // Split the word at ':'
-                split.push_back(word.substr(0, pos));
-                split.push_back(word.substr(pos + 1));
+             } 
+            // delete : from the word like :hello -> hello
+            else if(word.find(':') != std::string::npos)
+            {
+                split.push_back(word.substr(pos - 1, word.length() - 1 ));
             }
             std::cout << "split[0]: " << split[0] << std::endl;
+            std::cout << "split[1]: " << split[1] << std::endl;
             if (split[0] == "USER" || split[0] == "user") {
-                break;
+                break; 
             }
-            // break;
         } else {
             split.push_back(word);
         }
@@ -251,16 +234,14 @@ int main(int argc,char **argv)
                       
                       // Clear buffer_stor after concatenation
                       buffer_stor.clear();
-                      
-                      // Skip empty cmd
-                      cmd = trim(cmd);
                       if (cmd.empty())
                           continue;
+
                        
 						split.clear();
 
                         split = split_string(cmd);
-
+                        
 						if (split[0][0] == ':')
 							split.erase(split.begin());
 
@@ -393,10 +374,10 @@ int main(int argc,char **argv)
 
 }
             }
-            // for (unsigned long i = 0; i< split.size(); i++)
-            // {
-            //     std::cout << "Args: " << split[i] << std::endl;
-            // }
+            for (unsigned long i = 0; i< split.size(); i++)
+            {
+                std::cout << "Args: " << split[i] << std::endl;
+            }
             // if (split.size() > 0)
             // {
             //     ser.splited = split;
