@@ -97,3 +97,8 @@ std::string msg_errsend(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + "412" + nick + " :No text to send\r\n";
     return msg;
 }
+std::string NotMode(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 472 " + nick + " :is unknown mode char to me\r\n";
+    return msg;
+}

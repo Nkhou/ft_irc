@@ -64,5 +64,6 @@ std::string ERR_BADCHANNELKEY(std::string nick, std::string hostname);
 std::string ERR_INVITEONLYCHAN(std::string nick, std::string hostname);
 std::string ERR_NOSUCHCHANNEL(std::string nick, std::string hostname);
 std::string msg_errsend(std::string nick, std::string hostname);
+std::string NotMode(std::string nick, std::string hostname);
 
 #endif
