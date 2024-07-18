@@ -938,7 +938,7 @@ void Command::addusertoChannel(server *server, std::string channel, int o) {
                     {
                         return;
                     }
-                    server->channels[i].notifyUserJoin(server->clients[j].nickname);
+                    server->channels[i].notifyUserJoin(server->clients[j].nickname, server->hostname, o);
                     return ;
                 }
             } 

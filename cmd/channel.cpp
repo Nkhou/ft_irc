@@ -190,15 +190,76 @@ void Channel::addOperator(cli user)
 {
     operators.push_back(user);
 }
-void Channel::notifyUserJoin(std::string user)
+void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
 {
     for (unsigned long i = 0; i < users.size(); i++)
     {
-        write(users[i].fd, ":", 1);
-        write(users[i].fd, user.c_str(), user.length());
-        write(users[i].fd, " JOIN ", 6);
-        write(users[i].fd, name.c_str(), name.length());
-        write(users[i].fd, "\n", 1);
+        std::string msg = ":" + user + "!~" + users[i].user_name + "@" + hostname + " JOIN " + name + "\n";
+        if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
+        {
+            perror("send");
+        }
+        if (users[i].nickname == user)
+        {
+    
+        if (o)
+            msg = ":" + hostname + " 353 " + user + " @ " + name + " :" + "@" + user + "\n";
+        else
+        {
+            msg = ":" + hostname + " 353 " + user + " = " + name + " :";
+            for (unsigned long i = 0; i < users.size(); i++)
+            {
+                // unsigned long k = 0;
+                for (unsigned long j = 0; j < operators.size(); j++)
+                {
+                    // k = j;
+                    // std::cout << "users[i].nickname: " << users[i].nickname << std::endl;
+                    // std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
+                    if (users[i].nickname != operators[j].nickname.substr(1))
+                    {
+                        std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
+                        // msg +=  "@" + users[i].nickname + " ";
+                        msg += users[i].nickname + " ";
+                        // continue ;
+                    }
+                }
+                // std::cout << "k: " << k << std::endl;
+                // std::cout << "operators.size(): " << operators.size() << std::endl;
+                // if (k == operators.size())
+                
+             }
+             for (unsigned long j = 0; j < operators.size(); j++)
+                {
+                    // k = j;
+                    msg += operators[j].nickname + " ";
+                    // if (users[i].nickname == operators[j].nickname.substr(1))
+                    // {
+                        // msg +=  "@" + users[i].nickname + " ";
+                    //     break;
+                    // }
+                }
+            msg += "\n";
+        }
+        if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
+        {
+            perror("send");
+        }
+        msg = ":" + hostname + " MODE " + name + " +t " + "\n";
+        if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
+        {
+            perror("send");
+        }
+        msg = ":" + hostname + " 366 " + user + " " + name + " :End of /NAMES list\n";
+        if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
+        {
+            perror("send");
+        }
+        // write(users[i].fd, ":", 1);
+        // write(users[i].fd, user.c_str(), user.length());
+        // write(users[i].fd, " JOIN ", 6);
+        // write(users[i].fd, name.c_str(), name.length());
+        // write(users[i].fd, "\n", 1);
+        }
     }
 }
  

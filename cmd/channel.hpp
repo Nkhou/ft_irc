@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "../srcs/client.hpp"
+// #include "../srcs/server.hpp"
 class Channel
 {
     private:
@@ -45,7 +46,7 @@ class Channel
         void sendMessage(std::string message);
         bool userExists(cli *client, int fd);
         void createChannel(std::string name);
-        void notifyUserJoin(std::string user);
+        void notifyUserJoin(std::string user, std::string hostname, int o);
         void setMaxUsers(int maxUsers);
         long unsigned int getMaxUsers();
         void PrintTopic(int fd);
