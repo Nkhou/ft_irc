@@ -130,13 +130,6 @@ int main(int argc,char **argv)
      gethostname(hostname, 1023);
      ser.hostname = hostname;
      
-
-    //  int flag = 0;
-    // int a = 0;
-     
-   
-    
-    //  and 65535 are reserved ports
     if (argc != 3)
     {
         std::cout <<"Error Try Again"<<std::endl;
@@ -262,10 +255,8 @@ int main(int argc,char **argv)
 							buffer_stor.push_back(buffer);
 							continue;
 						}
-						//  std::cout << "<<< " << buffer<< std::endl;
             
-                  
-                     // Check if the buffer doesn't end with '\n' or '\r'
+                    // Check if the buffer doesn't end with '\n' or '\r'
                      bool ends_with_newline = (buffer[size - 1] == '\n');
                      bool ends_with_carriage_return = (size > 2 && buffer[size - 2] == '\r');
                       
@@ -323,17 +314,13 @@ int main(int argc,char **argv)
                                     }
                                 }
                                 else if(split[1] == pass)
-                                {
-                                    printf("Password is correct\n");
                                     ser.clients[i - 1].password = true;
-                                }
-                            }
+                        }
                         }
                         if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
                         {
                           if (split[0] == "NICK")
                           {
-                            std::cout << "Nickname: " << split[1] << std::endl;
                              if(split.size() >= 2)
                              {
                                     
@@ -449,7 +436,6 @@ int main(int argc,char **argv)
                 split.clear();
                 ser.client_fd = 0;
             }
-            // std::cout << "hihihihihi"<< std::endl;
             i++;
         }
          
