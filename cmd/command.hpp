@@ -16,7 +16,6 @@ class Command {
         std::string message;
     public:  
         Command(){};
-        // Command(Command const &command);
         void ParceCommand(std::vector<std::string> command, int fd, std::string hostname);
         ~Command(){};
         // std::string getCommand() { return command; }

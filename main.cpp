@@ -435,10 +435,10 @@ int main(int argc,char **argv)
 
 }
             }
-            for (unsigned long i = 0; i< split.size(); i++)
-            {
-                std::cout << "Args: " << split[i] << "-------"<<std::endl;
-            }
+            // for (unsigned long i = 0; i< split.size(); i++)
+            // {
+            //     std::cout << "Args: " << split[i] << "-------"<<std::endl;
+            // }
             if (split.size() > 0)
             {
                 ser.splited = split;
