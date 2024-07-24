@@ -309,7 +309,6 @@ void Command::ModeCommand(server *ser)
                         {
                             std::cout << "hhhhhhhhh" << std::endl;
                             ser->channels[i].setMode(this->args[1]);
-                            // ser->channels[i].setKey(this->args[2]);
                             std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->args[1] + " " + this->args[2]) + "\r\n";
                             ser->channels[i].sendMessage(msg);
                             return;
@@ -429,7 +428,7 @@ void Command::ModeCommand(server *ser)
                         {
                             ser->channels[i].setMode(this->args[1]);
                             ser->channels[i].setMaxUsers(-1);
-                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->args[1] + " " + this->args[2]) + "\r\n";
+                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] ) + "\r\n";
                             ser->channels[i].sendMessage(msg);
                             return;
                         }
@@ -437,7 +436,7 @@ void Command::ModeCommand(server *ser)
                         {
                             ser->channels[i].setMode(this->args[1]);
                             ser->channels[i].setTopic(this->args[2]);
-                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->args[1] + " " + this->args[2]) + "\r\n";
+                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + this->args[2]) + "\r\n";
                             ser->channels[i].sendMessage(msg);
                             return;
                         }
@@ -445,7 +444,7 @@ void Command::ModeCommand(server *ser)
                         {
                             ser->channels[i].setMode(this->args[1]);
                             ser->channels[i].setTopic("\0");
-                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->args[1] + " " + this->args[2]) + "\r\n";
+                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] )+ "\r\n";
                             ser->channels[i].sendMessage(msg);
                             return;
                         }
@@ -453,7 +452,7 @@ void Command::ModeCommand(server *ser)
                         {
                             ser->channels[i].setMode(this->args[1]);
                             ser->channels[i].setKey(this->args[2]);
-                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] +   "\r\n";
+                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] )+   "\r\n";
                             ser->channels[i].sendMessage(msg); 
                             return;
                         }
@@ -461,7 +460,7 @@ void Command::ModeCommand(server *ser)
                         {
                             ser->channels[i].setMode(this->args[1]);
                             ser->channels[i].setKey("\0");
-                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0]   + "\r\n");
+                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0]  ) + "\r\n";
                             ser->channels[i].sendMessage(msg);
                             return;
                         }

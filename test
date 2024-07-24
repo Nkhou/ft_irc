@@ -24,6 +24,3 @@ ircserv(98429,0x10da8bdc0) malloc: can't allocate region
 :*** mach_vm_map(size , flags: 100) failed (error code=3)
 ircserv(98429,0x10da8bdc0) malloc: *** set a breakpoint in malloc_error_break to debug
 std::bad_alloc
-
-mode #ff +k
-pla!~a@e3r9p15.1337.ma MODE #ff +k la!~a@e3r9p15.1337.ma MODE pla!~a@e3r9p15.1337.ma MO

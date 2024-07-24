@@ -33,6 +33,7 @@ void Channel::setInviteOnly(int inviteOnly)
 }
 void Channel::setMode(std::string mode)
 {
+    std::cout << "mode: " << mode << std::endl;
     for (unsigned long i = 0; i < this->mode.size(); i++)
     {
         if (this->mode[i] == mode)
@@ -42,11 +43,13 @@ void Channel::setMode(std::string mode)
         else if (this->mode[i] == "+" + mode)
         {
             this->mode.erase(this->mode.begin() + i);
+            this->mode.push_back(mode);
             return;
         }
         else if (this->mode[i] == "-" + mode)
         {
             this->mode.erase(this->mode.begin() + i);
+            this->mode.push_back(mode);
             return;
         }
     }
