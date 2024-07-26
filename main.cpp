@@ -439,7 +439,7 @@ int main(int argc,char **argv)
             // {
             //     std::cout << "Args: " << split[i] << "-------"<<std::endl;
             // }
-            if (split.size() > 0)
+            if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].flag_cmd == true)
             {
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
