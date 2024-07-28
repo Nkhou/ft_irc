@@ -271,3 +271,15 @@ void Channel::setoperatorCount(int operatorCount)
 {
     this->operatorCount = operatorCount;
 }
+
+int Channel::checkModeexist(Channel channel, std::string mode)
+{
+    for (unsigned long i = 0; i < channel.getMode().size(); i++)
+    {
+        if (channel.getMode()[i] == mode)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}

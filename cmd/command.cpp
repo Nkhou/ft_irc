@@ -297,7 +297,7 @@ void Command::ModeCommand(server *ser)
                             ser->channels[i].sendMessage(msg);
                             return;
                         }
-                        else if (this->args[1] == "-k")
+                        else if (this->args[1] == "-k" && ser->channels[i].checkModeexist(ser->channels[i], "+k"))
                         {
                             ser->channels[i].setMode(this->args[1]); // need to add mode if not existe
                             ser->channels[i].setKey("\0");
@@ -305,6 +305,8 @@ void Command::ModeCommand(server *ser)
                             ser->channels[i].sendMessage(msg);
                             return;
                         }
+                        else if (this->args[1] == "-k")
+                            return ;
                         else if (this->args[1] == "+k")
                         {
                             std::cout << "hhhhhhhhh" << std::endl;
@@ -448,12 +450,12 @@ void Command::ModeCommand(server *ser)
                             ser->channels[i].sendMessage(msg);
                             return;
                         }
-                        if (this->args[1] == "+k") //delete key
+                        if (this->args[1] == "+k" && this->args.size() >= 3 ) //delete key
                         {
-                            // ser->channels[i].setMode(this->args[1]);
-                            // ser->channels[i].setKey(this->args[2]);
-                            // std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] )+   "\r\n";
-                            // ser->channels[i].sendMessage(msg); 
+                            ser->channels[i].setMode(this->args[1]);
+                            ser->channels[i].setKey(this->args[2]);
+                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] )+   "\r\n";
+                            ser->channels[i].sendMessage(msg); 
                             return;
                         }
                         else if (this->args[1] == "-k")

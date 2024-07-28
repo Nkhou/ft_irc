@@ -42,6 +42,7 @@ class Command {
         void ParcePrivmsg(std::vector <std::string> splited, int client_fd);
         void PrivmsgCommand(server *ser);
         client *getClientByFd(server *ser, int fd);
+        
 };
 
 #endif
