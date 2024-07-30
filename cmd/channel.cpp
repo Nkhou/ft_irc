@@ -33,7 +33,7 @@ void Channel::setInviteOnly(int inviteOnly)
 }
 void Channel::setMode(std::string mode)
 {
-    std::cout << "mode: " << mode << std::endl;
+    // std::cout << "mode: " << mode << std::endl;
     for (unsigned long i = 0; i < this->mode.size(); i++)
     {
         if (this->mode[i] == mode)
@@ -182,7 +182,7 @@ void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
                 {
                     if (users[i].nickname != operators[j].nickname.substr(1))
                     {
-                        std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
+                        // std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
                         msg += users[i].nickname + " ";
                     }
                 }

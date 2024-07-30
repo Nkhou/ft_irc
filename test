@@ -17,10 +17,5 @@ pass : nk
 
 user r r r r r // kadoz if ktar mn par >>>>>done 
 
-//need to change mode print
 check +k
-
-mode #ff +k 123
-
-
 

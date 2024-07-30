@@ -333,7 +333,7 @@ int main(int argc,char **argv)
                         {
                           if (split[0] == "NICK")
                           {
-                            std::cout << "Nickname: " << split[1] << std::endl;
+                            // std::cout << "Nickname: " << split[1] << std::endl;
                              if(split.size() >= 2)
                              {
                                     
