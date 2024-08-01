@@ -33,6 +33,7 @@ void Channel::setInviteOnly(int inviteOnly)
 }
 void Channel::setMode(std::string mode)
 {
+    // std::cout << "mode: " << mode << std::endl;
     for (unsigned long i = 0; i < this->mode.size(); i++)
     {
         if (this->mode[i] == mode)
@@ -42,11 +43,13 @@ void Channel::setMode(std::string mode)
         else if (this->mode[i] == "+" + mode)
         {
             this->mode.erase(this->mode.begin() + i);
+            this->mode.push_back(mode);
             return;
         }
         else if (this->mode[i] == "-" + mode)
         {
             this->mode.erase(this->mode.begin() + i);
+            this->mode.push_back(mode);
             return;
         }
     }
@@ -179,7 +182,7 @@ void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
                 {
                     if (users[i].nickname != operators[j].nickname.substr(1))
                     {
-                        std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
+                        // std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
                         msg += users[i].nickname + " ";
                     }
                 }
@@ -194,7 +197,16 @@ void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
         {
             perror("send");
         }
-        msg = ":" + hostname + " MODE " + name + " +t " + "\n";
+        msg = ":" + hostname + " MODE " + name;
+        for (unsigned long j = 0; j < mode.size(); j++)
+        {
+            msg += mode[j];
+            // if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
+            // {
+            //     perror("send");
+            // }
+        }
+        msg += "\n";
         if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
         {
             perror("send");
@@ -258,4 +270,16 @@ void Channel::setuserCount(int userCount)
 void Channel::setoperatorCount(int operatorCount)
 {
     this->operatorCount = operatorCount;
+}
+
+int Channel::checkModeexist(Channel channel, std::string mode)
+{
+    for (unsigned long i = 0; i < channel.getMode().size(); i++)
+    {
+        if (channel.getMode()[i] == mode)
+        {
+            return 1;
+        }
+    }
+    return 0;
 }

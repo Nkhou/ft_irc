@@ -16,7 +16,6 @@ class Command {
         std::string message;
     public:  
         Command(){};
-        // Command(Command const &command);
         void ParceCommand(std::vector<std::string> command, int fd, std::string hostname);
         ~Command(){};
         // std::string getCommand() { return command; }
@@ -43,6 +42,7 @@ class Command {
         void ParcePrivmsg(std::vector <std::string> splited, int client_fd);
         void PrivmsgCommand(server *ser);
         client *getClientByFd(server *ser, int fd);
+        
 };
 
 #endif

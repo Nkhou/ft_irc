@@ -113,3 +113,8 @@ std::string notenghparam(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 461 " + nick + " :Not enough parameters\r\n";
     return msg;
 }
+std::string unknowncommand(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 421 " + nick + " :Unknown command\r\n";
+    return msg;
+}

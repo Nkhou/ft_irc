@@ -422,11 +422,11 @@ int main(int argc,char **argv)
 
 }
             }
-            for (unsigned long i = 0; i< split.size(); i++)
-            {
-                std::cout << "Args: " << split[i] << "-------"<<std::endl;
-            }
-            if (split.size() > 0)
+            // for (unsigned long i = 0; i< split.size(); i++)
+            // {
+            //     std::cout << "Args: " << split[i] << "-------"<<std::endl;
+            // }
+            if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
@@ -437,7 +437,7 @@ int main(int argc,char **argv)
                 ser.client_fd = 0;
             }
             i++;
-        }
+        } 
          
     }    
 

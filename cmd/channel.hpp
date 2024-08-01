@@ -53,6 +53,7 @@ class Channel
         void PrintMode(int fd);
         void setInviteOnly(int inviteOnly);
         void notfyMessageinChannel(std::string message);
+        int checkModeexist(Channel channel, std::string mode);
         // void sendMessage(std::string message);
         // void executecmdJOIN(server *server);
         ~Channel();
