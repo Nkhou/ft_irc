@@ -2,6 +2,8 @@ NAME = ircbot
 #NAME_BONUS = ircserv_bonus
 
 SRC = main_bonus.cpp \
+	cmd/channel.cpp \
+		cmd/command.cpp \
 	  #srcs/message.cpp \
 	  #bonus/srcs/main_bonus.cpp \
 
