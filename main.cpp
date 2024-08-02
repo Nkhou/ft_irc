@@ -428,6 +428,10 @@ int main(int argc,char **argv)
             // }
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
+                if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER")
+                {
+                std::cout << split[0] << std::endl;
+                std::cout << "3liya kat9alab"<< std::endl;
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
                 // std::cout << "Client fd: " << ser.fds[i].fd << std::endl;
@@ -435,6 +439,7 @@ int main(int argc,char **argv)
                 cmd.execCommand(&ser);
                 split.clear();
                 ser.client_fd = 0;
+                }
             }
             i++;
         } 
