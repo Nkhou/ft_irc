@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 
      //connection to server
 
-     if (connect(socket_fd,(struct sockaddr *)&cr_server,sizeof(cr_server) == -1))
+     if (connect(socket_fd,(struct sockaddr *)&cr_server,sizeof(cr_server) )== -1)
      {
         std::cout <<"failed errortt"<<std::endl;
         return(1);
