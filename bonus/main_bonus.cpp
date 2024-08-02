@@ -44,7 +44,7 @@ int main(int argc, char **argv)
         exit (0);
     }
     int socket_fd = socket(AF_INET,SOCK_STREAM,0);
-    int port_bonus;
+    int port_bonus = -1;
     
     if (std::atoi(argv[1]) < 1024 || std::atoi(argv[1]) > 65535)
     {
@@ -52,8 +52,8 @@ int main(int argc, char **argv)
         return(1);
     } 
     port_bonus = std::atoi(argv[1]);
-    pass_bonus = argv[2];
-    if (pass_bonus.empty())
+    pass_bonus = std::atoi(argv[2]);
+    if (pass_bonus == -1)
     {
         std::cout <<"Password is Empty!"<<std::endl;
         return(1);
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 
      //connection to server
 
-     if(connect(socket_fd,(struct sockaddr *)&cr_server,sizeof(cr_server) == -1))
+     if (connect(socket_fd,(struct sockaddr *)&cr_server,sizeof(cr_server) == -1))
      {
         std::cout <<"failed errortt"<<std::endl;
         return(1);
