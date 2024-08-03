@@ -6,16 +6,17 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/18 17:41:41 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/03 10:25:56 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"srcs/server_bonus.hpp"
+#define GREEN "\033[0;32m"
 int main(int argc, char **argv)
 {
 // int port_num;
    ser_ ser;
-    int pass_bonus;
+   std::string pass_bonus;
     //  struct sockaddr_in addr;
      std::vector<std::string> buffer_stor;
     //  struct pollfd fdpoll;
@@ -44,23 +45,23 @@ int main(int argc, char **argv)
         exit (0);
     }
     int socket_fd = socket(AF_INET,SOCK_STREAM,0);
-    int port_bonus = -1;
-    
+ 
+    if(socket_fd == -1)
+    {
+        std::cout <<"Error Failed"<<std::endl;
+        return(1);
+    }
     if (std::atoi(argv[1]) < 1024 || std::atoi(argv[1]) > 65535)
     {
         std::cout <<"Error Failed"<<std::endl;
         return(1);
     } 
-    port_bonus = std::atoi(argv[1]);
-    pass_bonus = std::atoi(argv[2]);
-    if (pass_bonus == -1)
+    
+    int port_bonus = std::atoi(argv[1]);
+    pass_bonus = argv[2];
+    if (pass_bonus.empty())
     {
         std::cout <<"Password is Empty!"<<std::endl;
-        return(1);
-    }
-    if(socket_fd == -1)
-    {
-        std::cout <<"Error Failed"<<std::endl;
         return(1);
     }
     struct sockaddr_in cr_server;
@@ -76,7 +77,32 @@ int main(int argc, char **argv)
         std::cout <<"failed errortt"<<std::endl;
         return(1);
      }
+    
      //authentication
+    std::string pass = "PASS " + pass_bonus + "\r\n";
+    if (send(socket_fd, pass.c_str(), pass.length(), 0) == -1)
+        return (std::cerr << "Error: send failed" << std::endl, 1);
+     
+    sleep(1);
+    std::string user = "USER UsernameBot 0 * RealnameBot\r\n";
+    if (send(socket_fd, user.c_str(), user.length(), 0) == -1)
+        return (std::cerr << "Error: send failed" << std::endl, 1);
+
+    sleep(1);
+
+    std::string nick = "NICK booot\r\n";
+    if (send(socket_fd, nick.c_str(), nick.length(), 0) == -1)
+        return (std::cerr << "Error: send failed" << std::endl, 1);
+        char buffer[1024];  
+        std::memset(buffer,0,1024);
+         ssize_t bytes = recv(socket_fd,buffer,1024,0);
+        if (bytes == -1)
+        {
+            std::cout <<"Error Failed"<<std::endl;
+            return(1);
+        }
+        std::cout << buffer << std::endl;
+   
      while(1)
      {
         

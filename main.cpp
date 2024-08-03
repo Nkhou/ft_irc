@@ -182,7 +182,7 @@ int main(int argc,char **argv)
     fdpoll.fd = ser.ser_fd;
     fdpoll.events = POLLIN;
     ser.fds.push_back(fdpoll);
-    std::cout << "Server is Ready to Accept a Connection...."<<std::endl;
+    std::cout <<GREEN<< "Server is Ready to Accept a Connection...."<<std::endl;
     // infinite loop
     while(1) 
     {
@@ -237,9 +237,7 @@ int main(int argc,char **argv)
                 {
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
-                    if(size < 0)
-                    {std::cout << ""<<std::endl;}
-                    else if(size == 0)
+                    if(size == 0)
                     {
                         std::cout << "<<< Client Disconnected >>> " << buffer<< ser.fds[i].fd << std::endl;
                         close(ser.fds[i].fd);
@@ -255,7 +253,7 @@ int main(int argc,char **argv)
 							buffer_stor.push_back(buffer);
 							continue;
 						}
-            
+                       
                     // Check if the buffer doesn't end with '\n' or '\r'
                      bool ends_with_newline = (buffer[size - 1] == '\n');
                      bool ends_with_carriage_return = (size > 2 && buffer[size - 2] == '\r');
@@ -315,17 +313,18 @@ int main(int argc,char **argv)
                                 }
                                 else if(split[1] == pass)
                                     ser.clients[i - 1].password = true;
-                        }
+                            
+                            }
+                           continue;
                         }
                         if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
                         {
                           if (split[0] == "NICK")
                           {
+                         
                              if(split.size() >= 2)
                              {
-                                    
-    
-                                     if(check_error_nickname(split[1]) != 0)
+                                if(check_error_nickname(split[1]) != 0)
                                      {
                                         msg = msg_erroneusnickname(split[1],  ser.hostname);
                                         if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length() ,0) < 0)
@@ -387,10 +386,9 @@ int main(int argc,char **argv)
                     }
                     if(ser.clients[i - 1].flag == false)
                     {
-
                         if(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true)
                         {
-                             msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
+                            msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
                             if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
                             {
                                 return(std::cout << "Failed Send Try Again"<<std::endl,1);
@@ -422,10 +420,6 @@ int main(int argc,char **argv)
 
 }
             }
-            // for (unsigned long i = 0; i< split.size(); i++)
-            // {
-            //     std::cout << "Args: " << split[i] << "-------"<<std::endl;
-            // }
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
                 if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER" && split[0] != "PONG")
@@ -434,7 +428,6 @@ int main(int argc,char **argv)
                 std::cout << "3liya kat9alab"<< std::endl;
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
-                // std::cout << "Client fd: " << ser.fds[i].fd << std::endl;
                 Command cmd;
                 cmd.execCommand(&ser);
                 split.clear();
