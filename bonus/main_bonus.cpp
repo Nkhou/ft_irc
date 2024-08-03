@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/03 10:25:56 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/03 12:06:09 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int main(int argc, char **argv)
    
     
     //  and 65535 are reserved ports
-   if(argc != 3)
     {
+   if(argc != 3)
         std::cout <<"Error Try Again"<<std::endl;
         exit (0);
     }
@@ -74,10 +74,9 @@ int main(int argc, char **argv)
 
      if (connect(socket_fd,(struct sockaddr *)&cr_server,sizeof(cr_server) )== -1)
      {
-        std::cout <<"failed errortt"<<std::endl;
+        std::cout <<"failed Error"<<std::endl;
         return(1);
      }
-    
      //authentication
     std::string pass = "PASS " + pass_bonus + "\r\n";
     if (send(socket_fd, pass.c_str(), pass.length(), 0) == -1)
@@ -90,7 +89,7 @@ int main(int argc, char **argv)
 
     sleep(1);
 
-    std::string nick = "NICK booot\r\n";
+    std::string nick = "NICK bot\r\n";
     if (send(socket_fd, nick.c_str(), nick.length(), 0) == -1)
         return (std::cerr << "Error: send failed" << std::endl, 1);
         char buffer[1024];  
@@ -102,10 +101,10 @@ int main(int argc, char **argv)
             return(1);
         }
         std::cout << buffer << std::endl;
-   
+     
      while(1)
      {
-        
+       std::vector<std::string> split;
+      
      }
-
 }
