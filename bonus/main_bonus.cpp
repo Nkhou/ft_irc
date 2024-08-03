@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/03 12:15:54 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/03 12:31:53 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ int main(int argc, char **argv)
         return (std::cerr << "Error: send failed" << std::endl, 1);
 
     sleep(1);
-
     std::string nick = "NICK bot\r\n";
     if (send(socket_fd, nick.c_str(), nick.length(), 0) == -1)
         return (std::cerr << "Error: send failed" << std::endl, 1);
@@ -104,7 +103,12 @@ int main(int argc, char **argv)
      
      while(1)
      {
-       std::vector<std::string> split;
-      
+        ssize_t bytes = recv(socket_fd,buffer,1024,0);
+        if (bytes == -1)
+        {
+            std::cout <<"Error Failed"<<std::endl;
+            return(1);
+        }
+        
      }
 }
