@@ -296,9 +296,12 @@ int main(int argc,char **argv)
 							split.erase(split.begin());
 
 						cmd.clear();
-
-                        for (size_t i = 0; i < split[0].length(); i++)
-							split[0][i] = std::toupper(split[0][i]);
+                        if(split[0] == "pass" || split[0] == "nick" || split[0] == "user")
+                        {
+                            for (size_t i = 0; i < split[0].length(); i++)
+							    split[0][i] = std::toupper(split[0][i]);
+                        }
+                        std::cout << "Command: " << split[0] << std::endl;
                        if(ser.clients[i - 1].password == false)
                        {
                             if (split[0] == "PASS")
