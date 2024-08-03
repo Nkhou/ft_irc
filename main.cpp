@@ -237,6 +237,7 @@ int main(int argc,char **argv)
                 {
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
+
                     if(size == 0)
                     {
                         std::cout << "<<< Client Disconnected >>> " << buffer<< ser.fds[i].fd << std::endl;
@@ -260,6 +261,7 @@ int main(int argc,char **argv)
                       
                       if (!ends_with_newline && buffer[size - 2] == '\r')
                       {
+                        std::cout << buffer <<"*********"<< std::endl;
                           buffer_stor.push_back(buffer);
                           continue;
                       }
@@ -269,6 +271,22 @@ int main(int argc,char **argv)
                           buffer[size - 1] = '\0';
                       if (ends_with_carriage_return)
                           buffer[size - 2] = '\0';
+
+                    // if (size < 2)
+					// {
+					// 	buffer_stor.push_back(buffer);
+					// 	continue;
+					// }
+					// if (buffer[size - 1] != '\n' && buffer[size - 2] != '\r')
+					// {
+					// 	buffer_stor.push_back(buffer);
+					// 	continue;
+					// }
+					// if (size > 1 && buffer[size - 1] == '\n')
+					// 	buffer[size - 1] = '\0';
+					// if (size > 2 && buffer[size - 2] == '\r')
+					// 	buffer[size - 2] = '\0';
+
                       
                       // Push the buffer to buffer_stor
                       buffer_stor.push_back(buffer);
@@ -296,12 +314,12 @@ int main(int argc,char **argv)
 							split.erase(split.begin());
 
 						cmd.clear();
-                        if(split[0] == "pass" || split[0] == "nick" || split[0] == "user")
+                        if(split[0] == "pass" || split[0] == "nick" || split[0] == "user" || split[0] == "join" || split[0] == "kick" || split[0] == "topic" || split[0] == "privmsg" || split[0] == "mode")
                         {
                             for (size_t i = 0; i < split[0].length(); i++)
 							    split[0][i] = std::toupper(split[0][i]);
                         }
-                        std::cout << "Command: " << split[0] << std::endl;
+                        std::cout << "Command: " << split[0] <<"**********"<< std::endl;
                        if(ser.clients[i - 1].password == false)
                        {
                             if (split[0] == "PASS")
@@ -318,6 +336,7 @@ int main(int argc,char **argv)
                                     ser.clients[i - 1].password = true;
                             
                             }
+                            continue;
 
                         }
                         if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
