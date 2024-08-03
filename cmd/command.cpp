@@ -998,7 +998,7 @@ void Command::executecmd(server *server) {
     }
     else if (server->splited[0] != "PASS" && server->splited[0] != "NICK" && server->splited[0] != "USER")
     {
-        std::string  msg =  unknowncommand(server->splited[0], server->hostname);
+        std::string  msg =  unknowncommand(server->splited[0], server->client_cmd,server->hostname);
         if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
         {
             std::cout << "Failed Send Try Again"<<std::endl;

@@ -315,7 +315,7 @@ int main(int argc,char **argv)
                                     ser.clients[i - 1].password = true;
                             
                             }
-                           continue;
+
                         }
                         if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
                         {
@@ -430,6 +430,7 @@ int main(int argc,char **argv)
                 std::cout << "3liya kat9alab"<< std::endl;
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
+                ser.client_cmd = ser.clients[i - 1];
                 Command cmd;
                 cmd.execCommand(&ser);
                 split.clear();
