@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/03 12:06:09 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/03 12:15:54 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int main(int argc, char **argv)
    
     
     //  and 65535 are reserved ports
-    {
    if(argc != 3)
+    {
         std::cout <<"Error Try Again"<<std::endl;
         exit (0);
     }

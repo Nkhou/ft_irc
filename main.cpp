@@ -319,6 +319,7 @@ int main(int argc,char **argv)
                         }
                         if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
                         {
+        
                           if (split[0] == "NICK")
                           {
                          
