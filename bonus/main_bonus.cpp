@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include"srcs/server_bonus.hpp"
+#include "bot.hpp"
 #define GREEN "\033[0;32m"
 int main(int argc, char **argv)
 {
@@ -89,9 +90,9 @@ int main(int argc, char **argv)
 
     sleep(1);
 
-    // srand((unsigned int)time(0));
-    // std::string n = std::to_string(rand() % 2);
-    std::string nick = "NICK bot\r\n";
+    srand((unsigned int)time(0));
+    std::string n = std::to_string(rand() / 10000);
+    std::string nick = "NICK bot"+n+"\r\n";
     if (send(socket_fd, nick.c_str(), nick.length(), 0) == -1)
         return (std::cerr << "Error: send failed" << std::endl, 1);
         char buffer[1024];  
@@ -103,7 +104,8 @@ int main(int argc, char **argv)
             return(1);
         }
         std::cout << buffer << std::endl;
-     
+        std::memset(buffer,0,1024);
+     Bot bot = Bot("bot"+n);
      while(1)
      {
         ssize_t bytes = recv(socket_fd,buffer,1024,0);
@@ -112,6 +114,8 @@ int main(int argc, char **argv)
             std::cout <<"Error Failed"<<std::endl;
             return(1);
         }
-        
+        bot.parcingBuffer(buffer);
+        std::vector<std::string> msg = bot.getMessage();
+        bot.execbot();
      }
 }

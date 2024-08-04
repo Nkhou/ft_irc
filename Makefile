@@ -8,7 +8,8 @@ SRC = main.cpp \
 
 	  #bonus/srcs/main_bonus.cpp \
 
-SRC_BONUS = bonus/main_bonus.cpp
+SRC_BONUS = bonus/main_bonus.cpp \
+			bonus/bot.cpp
 
 
 CC = c++
@@ -23,7 +24,7 @@ all : $(NAME) #$(NAME_BONUS)
 bonus : $(NAME_BONUS) $(NAME)
 
 
-%.o: %.cpp srcs/*.hpp cmd/*.hpp #bonus/srcs/server.hpp
+%.o: %.cpp srcs/*.hpp cmd/*.hpp bonus/srcs/server.hpp bonus/bot.hpp
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME) : $(OBJ_DIR) #$(OBJ_DIR_BONUS)
@@ -36,7 +37,7 @@ clean :
 	rm -f $(OBJ_DIR) $(OBJ_DIR_BONUS)
 
 fclean : clean
-	rm -f $(NAME) 
+	rm -f $(NAME) $(NAME_BONUS)
 
 re : fclean all
 
