@@ -88,6 +88,9 @@ int main(int argc, char **argv)
         return (std::cerr << "Error: send failed" << std::endl, 1);
 
     sleep(1);
+
+    // srand((unsigned int)time(0));
+    // std::string n = std::to_string(rand() % 2);
     std::string nick = "NICK bot\r\n";
     if (send(socket_fd, nick.c_str(), nick.length(), 0) == -1)
         return (std::cerr << "Error: send failed" << std::endl, 1);
