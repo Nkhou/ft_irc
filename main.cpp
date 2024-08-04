@@ -104,11 +104,11 @@ int check_error_nickname(std::string nickname)
     {
         return 1;
     }
-    std::string alpha ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
-    std::string alpha_find = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]\\^_`{}|";
+    std::string alpha ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+    std::string alpha_find = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]\\^_`{}|0123456789";
 
    
-        if(alpha.find(nickname[0]) == std::string::npos)
+        if(alpha.find(nickname[0]) == std::string::npos )
         {
             return 1;
         }
