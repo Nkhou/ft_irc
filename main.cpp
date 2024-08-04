@@ -3,21 +3,40 @@
 #include"srcs/server.hpp"
 #include"./cmd/command.hpp"
 
+// int find_first_space(std::string str)
+// {
+// 	size_t i = 0;
+//   while(i < str.length())
+//     {
+//         if(str[i] != ' ')
+//         {
+//             return i;
+//         }
+//         if (str[i] != '\n')
+// 		        break;
+
+//         i++;
+    
+//     }
+// 	return 0;
+// }
+
 int find_first_space(std::string str)
 {
-	size_t i = 0;
-  while(i < str.length())
-    {
-        if(str[i] != ' ')
-        {
-            return i;
-        }
-        if (str[i] != '\n')
-		        break;
+	size_t i;
 
-        i++;
-    
-    }
+	for (i = 0; i < str.length(); i++)
+	{
+		if (str[i] != '\n')
+			break;
+	}
+
+	for (; i < str.length(); i++)
+	{
+		if (str[i] != ' ')
+			return i;
+	}
+
 	return 0;
 }
 
@@ -256,38 +275,53 @@ int main(int argc,char **argv)
 						}
                        
                     // Check if the buffer doesn't end with '\n' or '\r'
-                     bool ends_with_newline = (buffer[size - 1] == '\n');
-                     bool ends_with_carriage_return = (size > 2 && buffer[size - 2] == '\r');
+                    //  bool ends_with_newline = (buffer[size - 1] == '\n');
+                    //  bool ends_with_carriage_return = (size > 2 && buffer[size - 2] == '\r');
                       
-                      if (!ends_with_newline && buffer[size - 2] == '\r')
-                      {
-                        std::cout << buffer <<"*********"<< std::endl;
-                          buffer_stor.push_back(buffer);
-                          continue;
-                      }
+                    //   if (!ends_with_newline && buffer[size - 2] == '\r')
+                    //   {
+                    //     std::cout << buffer <<"*********"<< std::endl;
+                    //       buffer_stor.push_back(buffer);
+                    //       continue;
+                    //   }
                       
-                    //   // Null-terminate the buffer correctly
-                      if (ends_with_newline)
-                          buffer[size - 1] = '\0';
-                      if (ends_with_carriage_return)
-                          buffer[size - 2] = '\0';
+                    // //   // Null-terminate the buffer correctly
+                    //   if (ends_with_newline)
+                    //       buffer[size - 1] = '\0';
+                    //   if (ends_with_carriage_return)
+                    //       buffer[size - 2] = '\0';
 
-                    // if (size < 2)
-					// {
-					// 	buffer_stor.push_back(buffer);
-					// 	continue;
-					// }
-					// if (buffer[size - 1] != '\n' && buffer[size - 2] != '\r')
-					// {
-					// 	buffer_stor.push_back(buffer);
-					// 	continue;
-					// }
-					// if (size > 1 && buffer[size - 1] == '\n')
-					// 	buffer[size - 1] = '\0';
-					// if (size > 2 && buffer[size - 2] == '\r')
-					// 	buffer[size - 2] = '\0';
+                    if (size < 2)
+					{
+						buffer_stor.push_back(buffer);
+						continue;
+					}
+					if (buffer[size - 1] != '\n' && buffer[size - 2] != '\r')
+					{
+						buffer_stor.push_back(buffer);
+						continue;
+					}
+					if (size > 1 && buffer[size - 1] == '\n')
+						buffer[size - 1] = '\0';
+					if (size > 2 && buffer[size - 2] == '\r')
+						buffer[size - 2] = '\0';
 
                       
+						// if (valread < 2)
+						// {
+						// 	tmp_buffer.push_back(buffer);
+						// 	continue;
+						// }
+						// if (buffer[valread - 1] != '\n' && buffer[valread - 2] != '\r')
+						// {
+						// 	tmp_buffer.push_back(buffer);
+						// 	continue;
+						// }
+
+						// if (valread > 1 && buffer[valread - 1] == '\n')
+						// 	buffer[valread - 1] = '\0';
+						// if (valread > 2 && buffer[valread - 2] == '\r')
+						// 	buffer[valread - 2] = '\0';
                       // Push the buffer to buffer_stor
                       buffer_stor.push_back(buffer);
                       
