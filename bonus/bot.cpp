@@ -138,29 +138,29 @@ int Bot::checkDateparcing(std::string date)
         return -1;
     return 0;
 }
-void Bot::execbot()
-{
-    if (messages[2] == "age")
-    {
-        if (checkDate(messages[3]) != 0 messages.size())
-        {
-            notenghparam(messages[0], messages[1]);
-        }
-        checkDateparcing(messages[3]);
-    }
-    // else if (messages[2] == "LIST")
-    // {
-    //     //list of user in server
-    // }
-    // else if (messages[2] == "commands")
-    // {
-    //     //list all commands
-    // }
-    // else if (messages[2] == "jock")
-    // {
+// void Bot::execbot()
+// {
+//     if (messages[2] == "age")
+//     {
+//         if (checkDate(messages[3]) != 0 messages.size())
+//         {
+//             notenghparam(messages[0], messages[1]);
+//         }
+//         checkDateparcing(messages[3]);
+//     }
+//     // else if (messages[2] == "LIST")
+//     // {
+//     //     //list of user in server
+//     // }
+//     // else if (messages[2] == "commands")
+//     // {
+//     //     //list all commands
+//     // }
+//     // else if (messages[2] == "jock")
+//     // {
 
-    // } 
-}
+//     // } 
+// }
 std::vector<std::string> Bot::getMessage()
 {
     return messages;

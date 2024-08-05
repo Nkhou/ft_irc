@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/03 12:31:53 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/05 11:20:00 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,9 @@ int main(int argc, char **argv)
             std::cout <<"Error Failed"<<std::endl;
             return(1);
         }
+        std::cout << buffer << std::endl;
         bot.parcingBuffer(buffer);
         std::vector<std::string> msg = bot.getMessage();
-        bot.execbot();
+        // bot.execbot();
      }
 }
