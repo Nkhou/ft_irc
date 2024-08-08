@@ -19,15 +19,34 @@ void  splited(std::string str, std::vector<std::string> *split)
     // std::vector<std::string> split;
     for (int i = 0; i < str.length(); i++)
     {
-        if (str[i] == ' ')
+        if (str[i] == ':' && i < str.length() - 1 && str[i + 1] == ' ')
+        {
+            i ++;
+            while (i < str.length() && str[i] == ' ')
+            {
+                i++;
+            }
+            if (i < str.length())
+                str = str.substr(i, str.length());
+            i = 0;
+        }
+        if (i < str.length() && str[i] == ' ')
         {
             split->push_back(str.substr(0, i));
+
             str = str.substr(i + 1, str.length());
             i = 0;
         }
     }
+    int i = 0;
+    // std::cout << "str: " << str << std::endl;
+    while (i < str.length() && (str[i] != ' ' && str[i] != '\n' && str[i] != '\r'))
+    {
+        i++;
+    }
+
+                str = str.substr(0, i);
     split->push_back(str);
-    // return split;
 }
 std::ostream& operator<< (std::ostream& os, const std::vector<std::string>& v) {
     for (int i = 0; i < v.size(); i++)
@@ -36,6 +55,7 @@ std::ostream& operator<< (std::ostream& os, const std::vector<std::string>& v) {
     }
     return os;
 }
+
 int main(int argc, char **argv)
 {
 // int port_num;
@@ -129,6 +149,10 @@ int main(int argc, char **argv)
         std::cout <<buffer << std::endl;
         std::memset(buffer,0,1024);
      Bot bot = Bot("bot"+n);
+     if (bot.getJocks().empty())
+     {
+         bot.addjocks();
+     }
      while(1)
      {
         ssize_t bytes = recv(socket_fd,buffer,1024,0);
@@ -138,12 +162,15 @@ int main(int argc, char **argv)
             return(1);
         }
         std::string  str = buffer;
-        std::cout << str << std::endl;
+        // std::cout << str << std::endl;
         // std::cout << GREEN << str << std::endl;
         std::vector<std::string> split ;
          splited(str, &split);
-
-
+        // for (int i = 0; i < split.size(); i++)
+        // {
+        //     std::cout << "i  = " << i << " " << split[i] << std::endl;
+        // }
+        
         bot.parcingBuffer(split);
         // for (int i = 0; i < bot.getMessage().size(); i++)
         // {
@@ -159,7 +186,7 @@ int main(int argc, char **argv)
         //     std::cerr << e.what() << '\n';
         // }
         bot.execbot(socket_fd);
-        std::memset(buffer,0,1024);
+        std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
         msg.clear();
         split.clear();
      }

@@ -119,6 +119,7 @@ int check_error_nickname(std::string nickname)
      
     return 0;
 }
+
 int main(int argc,char **argv)
 {
    int port_num;
@@ -191,6 +192,7 @@ int main(int argc,char **argv)
     fdpoll.events = POLLIN;
     ser.fds.push_back(fdpoll);
     std::cout <<GREEN<< "Server is Ready to Accept a Connection...."<<std::endl;
+    // std::vector<std::string> jocks=addjocke();
     // infinite loop
     while(1) 
     {
@@ -257,7 +259,7 @@ int main(int argc,char **argv)
                     else
                     {
                        buffer[size] = '\0';
-                       std::cout << "<<< Received Data From Client >>> " << buffer << std::endl;
+                    //    std::cout << "<<< Received Data From Client >>> " << buffer << std::endl;
                        if (size < 2)
 						{
 							buffer_stor.push_back(buffer);
@@ -342,7 +344,7 @@ int main(int argc,char **argv)
                             for (size_t i = 0; i < split[0].length(); i++)
 							    split[0][i] = std::toupper(split[0][i]);
                         }
-                        std::cout << "Command: " << split[0] <<"**********"<< std::endl;
+                        // std::cout << "Command: " << split[0] <<"**********"<< std::endl;
                        if(ser.clients[i - 1].password == false)
                        {
                             if (split[0] == "PASS")
@@ -467,23 +469,23 @@ int main(int argc,char **argv)
 }
 
             }
-            for (size_t i = 0; i < split.size(); i++)
-            {
-                std::cout << "size split: " << split[i].size() << std::endl;
-               std::cout << "split**************: " << split[i]<< std::endl;
-            }
+            // for (size_t i = 0; i < split.size(); i++)
+            // {
+            //     std::cout << "size split: " << split[i].size() << std::endl;
+            //    std::cout << "split**************: " << split[i]<< std::endl;
+            // }
              
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
                 if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER" && split[0] != "PONG")
                 {
-                std::cout << split[0] << std::endl;
+                // std::cout << split[0] << std::endl;
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
                 ser.client_cmd = ser.clients[i - 1];
                 Command cmd;
                 cmd.execCommand(&ser);
-                std::cout << "3liya kat9alab"<< std::endl;
+                // std::cout << "3liya kat9alab"<< std::endl;
                 split.clear();
                 ser.client_fd = 0;
                 }

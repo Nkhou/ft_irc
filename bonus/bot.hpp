@@ -7,6 +7,7 @@
 #include <string>
 #include <sys/socket.h>
 #include"srcs/server_bonus.hpp"
+#include <ctime>
 // #include "../srcs/server.hpp"
 typedef struct date
 {
@@ -20,6 +21,7 @@ typedef struct date
 class Bot {
     private:
         std::string name;
+        std::vector<std::string> jocks;
         int age;
         t_date date1;
         std::vector<std::string> messages;
@@ -33,6 +35,8 @@ class Bot {
         void execbot(int fd);
         int checkDate(std::string date);
         int checkDateparcing(std::string date, std::string nick, std::string hostname);
+        std::vector<std::string>  getJocks();
+        void addjocks();
         // int getYear();
         // int getMonth();
         // int getDay();
