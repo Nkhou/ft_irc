@@ -6,13 +6,36 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/05 11:20:00 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/03 12:31:53 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"srcs/server_bonus.hpp"
 #include "bot.hpp"
 #define GREEN "\033[0;32m"
+
+void  splited(std::string str, std::vector<std::string> *split)
+{
+    // std::vector<std::string> split;
+    for (int i = 0; i < str.length(); i++)
+    {
+        if (str[i] == ' ')
+        {
+            split->push_back(str.substr(0, i));
+            str = str.substr(i + 1, str.length());
+            i = 0;
+        }
+    }
+    split->push_back(str);
+    // return split;
+}
+std::ostream& operator<< (std::ostream& os, const std::vector<std::string>& v) {
+    for (int i = 0; i < v.size(); i++)
+    {
+        os << v[i] << std::endl;
+    }
+    return os;
+}
 int main(int argc, char **argv)
 {
 // int port_num;
@@ -103,7 +126,7 @@ int main(int argc, char **argv)
             std::cout <<"Error Failed"<<std::endl;
             return(1);
         }
-        std::cout << buffer << std::endl;
+        std::cout <<buffer << std::endl;
         std::memset(buffer,0,1024);
      Bot bot = Bot("bot"+n);
      while(1)
@@ -114,9 +137,30 @@ int main(int argc, char **argv)
             std::cout <<"Error Failed"<<std::endl;
             return(1);
         }
-        std::cout << buffer << std::endl;
-        bot.parcingBuffer(buffer);
+        std::string  str = buffer;
+        std::cout << str << std::endl;
+        // std::cout << GREEN << str << std::endl;
+        std::vector<std::string> split ;
+         splited(str, &split);
+
+
+        bot.parcingBuffer(split);
+        // for (int i = 0; i < bot.getMessage().size(); i++)
+        // {
+        //     std::cout <<"i  = " <<i <<" "<<bot.getMessage()[i] << std::endl;
+        // }
         std::vector<std::string> msg = bot.getMessage();
-        // bot.execbot();
+        // try 
+        // {
+        //     bot.execbot(socket_fd);
+        // }
+        // catch(const std::exception& e)
+        // {
+        //     std::cerr << e.what() << '\n';
+        // }
+        bot.execbot(socket_fd);
+        std::memset(buffer,0,1024);
+        msg.clear();
+        split.clear();
      }
 }

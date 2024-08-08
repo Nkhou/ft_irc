@@ -2,8 +2,11 @@
 #define BOT_HPP
 
 #include <iostream>
+#include <iostream>
 #include <vector>
 #include <string>
+#include <sys/socket.h>
+#include"srcs/server_bonus.hpp"
 // #include "../srcs/server.hpp"
 typedef struct date
 {
@@ -25,11 +28,11 @@ class Bot {
         Bot(std::string name);
         ~Bot();
         void parce_command(std::string buffer);
-        void parcingBuffer(std::string buffer);
+        void parcingBuffer(std::vector<std::string> buffer);
         std::vector<std::string> getMessage();
-        void execbot();
+        void execbot(int fd);
         int checkDate(std::string date);
-        int checkDateparcing(std::string date);
+        int checkDateparcing(std::string date, std::string nick, std::string hostname);
         // int getYear();
         // int getMonth();
         // int getDay();

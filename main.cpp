@@ -257,6 +257,7 @@ int main(int argc,char **argv)
                     else
                     {
                        buffer[size] = '\0';
+                       std::cout << "<<< Received Data From Client >>> " << buffer << std::endl;
                        if (size < 2)
 						{
 							buffer_stor.push_back(buffer);
@@ -464,6 +465,12 @@ int main(int argc,char **argv)
                  
 
 }
+
+            }
+            for (size_t i = 0; i < split.size(); i++)
+            {
+                std::cout << "size split: " << split[i].size() << std::endl;
+               std::cout << "split**************: " << split[i]<< std::endl;
             }
              
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
@@ -471,12 +478,12 @@ int main(int argc,char **argv)
                 if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER" && split[0] != "PONG")
                 {
                 std::cout << split[0] << std::endl;
-                std::cout << "3liya kat9alab"<< std::endl;
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
                 ser.client_cmd = ser.clients[i - 1];
                 Command cmd;
                 cmd.execCommand(&ser);
+                std::cout << "3liya kat9alab"<< std::endl;
                 split.clear();
                 ser.client_fd = 0;
                 }

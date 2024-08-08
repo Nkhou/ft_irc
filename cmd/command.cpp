@@ -732,7 +732,7 @@ void Command::InviteCommand(server *ser)
                 {
                     if (ser->channels[i].getOperators()[j].fd == this->fd)
                     {
-                        std::cout << "args: " << this->args[0] << std::endl;
+                        // std::cout << "args: " << this->args[0] << std::endl;
                         for (unsigned long l = 0; l < ser->clients.size(); l++)
                         {
                             if (this->args[0] == ser->clients[l].nickname)
@@ -780,6 +780,8 @@ void Command::ParcePrivmsg(std::vector <std::string> splited, int client_fd)
      this->fd = client_fd;
     for (unsigned long i = 1; i < splited.size(); i++) 
     {
+        // std::cout << "splited[i]: " << splited[i] << std::endl;
+        // std::cout << "size: " << splited[].size() << std::endl;
         this->args.push_back(splited[i]);
     }
      this->fd = client_fd;
@@ -804,8 +806,15 @@ void Command::PrivmsgCommand(server *ser)
                 if (ser->clients[j].nickname == this->args[0])
                 {
                     std::string msg;
-                    if (this->args[2][0] != ':')
-                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name+"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
+                    // std::cout << "hello"<<this->args[2].size() << std::endl;
+                    // std::cout << "args: "<<getClientByFd(ser, this->fd)->nickname  << std::endl;
+                    // std::cout << " getClientByFd(ser, this->fd)->user: " << getClientByFd(ser, this->fd)->user_name << std::endl;
+                    // std::cout <<  "ser->clients[j].nickname: " << ser->clients[j].nickname << std::endl;
+                    // std::cout << 
+
+                    if (this->args.size() >= 2 && this->args[1][0] != ':')
+                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
+                    // std::cout << "args: " << std::endl;
                     for (unsigned long l = 1; l < this->args.size(); l++)
                     {
                         msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->args[l]);
@@ -834,7 +843,7 @@ void Command::PrivmsgCommand(server *ser)
             for (unsigned long j = 0; j < ser->channels[i].getUsers().size(); j++)
             {
                     std::string msg;
-                    if (this->args[2][0] != ':')
+                    if (this->args.size() > 2 &&  this->args[1][0] != ':')
                          msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :";
                     for (unsigned long l = 1; l < this->args.size(); l++)
                     {
@@ -990,6 +999,7 @@ void Command::executecmd(server *server) {
         }
         // std::cout << "PRIVMSG" << std::endl;
         ParcePrivmsg(server->splited, server->client_fd);
+        
         // for (unsigned long i = 0; i < this->args.size(); i++)
         // {
         //     std::cout << "Args: " << this->args[i] << std::endl;
@@ -1174,3 +1184,4 @@ void Command::JoinCommand(server *server) {
         }
     }
 }
+  
