@@ -812,7 +812,7 @@ void Command::PrivmsgCommand(server *ser)
                     // std::cout <<  "ser->clients[j].nickname: " << ser->clients[j].nickname << std::endl;
                     // std::cout << 
 
-                    if (this->args.size() >= 2 && this->args[1][0] != ':')
+                    if (this->args.size() > 1 && this->args[1][0] != ':')
                          msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
                     // std::cout << "args: " << std::endl;
                     for (unsigned long l = 1; l < this->args.size(); l++)
@@ -843,7 +843,7 @@ void Command::PrivmsgCommand(server *ser)
             for (unsigned long j = 0; j < ser->channels[i].getUsers().size(); j++)
             {
                     std::string msg;
-                    if (this->args.size() > 2 &&  this->args[1][0] != ':')
+                    if (this->args.size() > 1 && this->args[1][0] != ':')
                          msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :";
                     for (unsigned long l = 1; l < this->args.size(); l++)
                     {
@@ -874,16 +874,18 @@ void Command::PrivmsgCommand(server *ser)
             // {
             //     std::cout << "Failed Send Try Again"<<std::endl;
             // }
+            return ;
         }
-        else
-        {
+    }
+    for (unsigned long i = 0; i < ser->channels.size(); i++)
+    {
             
             for (unsigned long j = 0; j < ser->clients.size(); j++)
             {
                 if (ser->clients[j].nickname == this->args[0])
                 {
                     std::string msg;
-                    if (this->args[2][0] != ':')
+                    if (this->args.size() > 0 && this->args[1][0] != ':')
                          msg = ":" + getClientByFd(ser, this->fd)->nickname + " PRIVMSG " + ser->clients[j].nickname + " :";
                     for (unsigned long l = 1; l < this->args.size(); l++)
                     {
@@ -906,7 +908,6 @@ void Command::PrivmsgCommand(server *ser)
             }
 
         }
-    }
 }
 void Command::executecmd(server *server) {
     if (server->splited[0] == "JOIN") // need to check nickename exist befor need to check if channel have keys

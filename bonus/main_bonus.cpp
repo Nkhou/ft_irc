@@ -44,8 +44,9 @@ void  splited(std::string str, std::vector<std::string> *split)
     {
         i++;
     }
-
-                str = str.substr(0, i);
+    if (i != 0)
+        str = str.substr(0, i);
+    // std::cout << "str: " << str << std::endl;
     split->push_back(str);
 }
 std::ostream& operator<< (std::ostream& os, const std::vector<std::string>& v) {
@@ -162,7 +163,7 @@ int main(int argc, char **argv)
             return(1);
         }
         std::string  str = buffer;
-        // std::cout << str << std::endl;
+        std::cout << str << std::endl;
         // std::cout << GREEN << str << std::endl;
         std::vector<std::string> split ;
          splited(str, &split);

@@ -44,6 +44,7 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
     std::string str;
 
 
+    // std::cout << "hello" << std::endl;
     if (buffer[3][0] == ':' && buffer[3].length() > 1)
     {
         int j = 0;
@@ -62,7 +63,6 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
 
     // }
         str = buffer[4];
-    // std::cout << str << std::endl;
     messages.push_back(str.substr(0 , str.length()));
     // std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
     std::string str1;
@@ -277,12 +277,13 @@ void Bot::addjocks()
 }
 void Bot::execbot(int fd )
 {
+    // std::cout << "hello" <<messages.size()<< std::endl;
     // for (int i = 0; i < messages.size(); i++)
     // {
     //     std::cout << "i  = " << i << " " << messages[i] << std::endl;
     // }
-    
-    if (messages[2] == "age")
+
+    if (messages.size() >= 1 && messages[2] == "age")
     {
         if (checkDate(messages[3]) != 0)
         {
@@ -315,8 +316,11 @@ void Bot::execbot(int fd )
     }
     else if (messages[2] == "cmds")
     {
+        // std::cout << "hello" << std::endl;
+        // std::cout << "msg: " << messages[0] << std::endl;
         std::string msg = "privmsg " + messages[0] +  " :!age <date> - to get your age\r\n" + "privmsg " + messages[0] +  " :!jock - to get a jock\r\n" + "privmsg " + messages[0] +  " :!cmds - to get all commands\r\n" + "privmsg " + messages[0] +  " :!LIST - to get all user in server\r\n" + "privmsg " + messages[0] +  " :!JOIN <#channel> - to join a channel\r\n" 
         + "privmsg " + messages[0] +  " :!KICK <#channel> <user> - to kick a user from a channel\r\n" + "privmsg " + messages[0] +  " :!TOPIC <#channel> <topic> - to change the topic of a channel\r\n" + "privmsg " + messages[0] +  " :!MSG <user> <message> - to send a private message to a user\r\n" + "privmsg " + messages[0] +  " :!QUIT - to quit the server\r\n";
+        // std::cout << "msg: " << msg << std::endl;
         if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
             // std::cerr << "Send failed: " << strerror(errno) << std::endl;
             return;
