@@ -310,13 +310,10 @@ void Bot::execbot(int fd )
             return;
         }
     }
-    else if (messages[2] == "LIST")
+    else if (messages[2] == "cmds")
     {
-        //list of user in server
-    }
-    else if (messages[2] == "commands")
-    {
-        std::string msg = "privmsg " + messages[0] +  " :!age <date> - to get your age\r\n" + "privmsg " + messages[0] +  " :!jock - to get a jock\r\n" + "privmsg " + messages[0] +  " :!commands - to get all commands\r\n" + "privmsg " + messages[0] +  " :!LIST - to get all user in server\r\n";
+        std::string msg = "privmsg " + messages[0] +  " :!age <date> - to get your age\r\n" + "privmsg " + messages[0] +  " :!jock - to get a jock\r\n" + "privmsg " + messages[0] +  " :!cmds - to get all commands\r\n" + "privmsg " + messages[0] +  " :!LIST - to get all user in server\r\n" + "privmsg " + messages[0] +  " :!JOIN <#channel> - to join a channel\r\n" 
+        + "privmsg " + messages[0] +  " :!KICK <#channel> <user> - to kick a user from a channel\r\n" + "privmsg " + messages[0] +  " :!TOPIC <#channel> <topic> - to change the topic of a channel\r\n" + "privmsg " + messages[0] +  " :!MSG <user> <message> - to send a private message to a user\r\n" + "privmsg " + messages[0] +  " :!QUIT - to quit the server\r\n";
         if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
             // std::cerr << "Send failed: " << strerror(errno) << std::endl;
             return;
