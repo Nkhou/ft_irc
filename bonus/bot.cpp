@@ -305,6 +305,9 @@ void Bot::execbot(int fd )
         std::time_t currentTime = std::time(NULL);
         int age = parcedate(std::ctime(&currentTime), &date1);
         std::string msg = "privmsg " + messages[0] +  " :Your age is " + std::to_string(age) + "\r\n";
+        date1.year = 0;
+        date1.month = 0;
+        date1.day = 0;
         if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
             // std::cerr << "Send failed: " << strerror(errno) << std::endl;
             return;
