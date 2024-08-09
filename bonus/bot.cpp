@@ -36,7 +36,9 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
         i++;
     }
      c = i + 1;
-    while (buffer[0][i] != ' ' && i < buffer[0].length())
+    std::cout << "c :" <<buffer[0] << std::endl;
+    std::cout << buffer[0][c] <<std::endl;
+    while (i < buffer[0].length() && buffer[0][i] != ' ' && i < buffer[0].length())
     {
         i++;
     }
@@ -45,10 +47,10 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
 
 
     // std::cout << "hello" << std::endl;
-    if (buffer[3][0] == ':' && buffer[3].length() > 1)
+    if ( buffer[3].length() > 1 &&  buffer[3][0] == ':' )
     {
         int j = 0;
-        while (buffer[3][j] == ' ')
+        while (j < buffer[3].length() && buffer[3][j] == ' ')
         {
             j++;
         }
@@ -282,6 +284,10 @@ void Bot::execbot(int fd )
     // {
     //     std::cout << "i  = " << i << " " << messages[i] << std::endl;
     // }
+    if (messages.size() < 3)
+    {
+        return;
+    }
 
     if (messages.size() >= 1 && messages[2] == "age")
     {
@@ -292,15 +298,19 @@ void Bot::execbot(int fd )
             // std::cout << "msg: " << msg << std::endl;
             // std::cout << fd << std::endl;
             if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
+                messages.clear();
                 // std::cerr << "Send failed: " << strerror(errno) << std::endl;
                 return;
             }
             return;
+            sleep(1);
+            messages.clear();
         }
             // sleep(1);
         checkDateparcing(messages[3],messages[0], messages[1]);
         if (checkDateparcing(messages[3],messages[0], messages[1]) == -1)
         {
+            messages.clear();
             return;
         }
         std::time_t currentTime = std::time(NULL);
@@ -310,9 +320,12 @@ void Bot::execbot(int fd )
         date1.month = 0;
         date1.day = 0;
         if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
+            messages.clear();
             // std::cerr << "Send failed: " << strerror(errno) << std::endl;
             return;
         }
+        sleep(1);
+        messages.clear();
     }
     else if (messages[2] == "cmds")
     {
@@ -322,9 +335,12 @@ void Bot::execbot(int fd )
         + "privmsg " + messages[0] +  " :!KICK <#channel> <user> - to kick a user from a channel\r\n" + "privmsg " + messages[0] +  " :!TOPIC <#channel> <topic> - to change the topic of a channel\r\n" + "privmsg " + messages[0] +  " :!MSG <user> <message> - to send a private message to a user\r\n" + "privmsg " + messages[0] +  " :!QUIT - to quit the server\r\n";
         // std::cout << "msg: " << msg << std::endl;
         if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
+            messages.clear();
             // std::cerr << "Send failed: " << strerror(errno) << std::endl;
             return;
         }
+        sleep(1);
+        messages.clear();
     }
     else if (messages[2] == "jock")
     {
@@ -332,9 +348,12 @@ void Bot::execbot(int fd )
         std::string msg = "privmsg " + messages[0] +  " :" + jocks[i] + "\r\n";
         // std::string msg = "privmsg " + messages[0] +  " :Why did the scarecrow win an award? Because he was outstanding in his field.\r\n";
         if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
+            messages.clear();
             // std::cerr << "Send failed: " << strerror(errno) << std::endl;
             return;
         }
+        sleep(1);
+        messages.clear();
     } 
 }
 std::vector<std::string> Bot::getMessage()

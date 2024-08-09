@@ -163,16 +163,18 @@ int main(int argc, char **argv)
             std::cout <<"Error Failed"<<std::endl;
             return(1);
         }
-        std::string  str = buffer;
+        std::string  str = static_cast<std::string>(buffer);
+        // buffer;
         std::cout << str << std::endl;
         // std::cout << GREEN << str << std::endl;
         std::vector<std::string> split ;
-         splited(str, &split);
-        for (int i = 0; i < split.size(); i++)
-        {
-            std::cout << "i  = " << i << " " << split[i] << std::endl;
-        }
+        splited(str, &split);
+        // for (int i = 0; i < split.size(); i++)
+        // {
+        //     std::cout << "i  = " << i << " " << split[i] << std::endl;
+        // }
         
+        // std::cout << "hello" << std::endl;
         bot.parcingBuffer(split);
         // for (int i = 0; i < bot.getMessage().size(); i++)
         // {
@@ -188,7 +190,7 @@ int main(int argc, char **argv)
         //     std::cerr << e.what() << '\n';
         // }
         bot.execbot(socket_fd);
-        std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
+        // std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
         msg.clear();
         split.clear();
      }

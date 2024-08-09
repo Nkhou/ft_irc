@@ -469,11 +469,11 @@ int main(int argc,char **argv)
 }
 
             }
-            // for (size_t i = 0; i < split.size(); i++)
-            // {
-            //     std::cout << "size split: " << split[i].size() << std::endl;
-            //    std::cout << "split**************: " << split[i]<< std::endl;
-            // }
+            for (size_t i = 0; i < split.size(); i++)
+            {
+                std::cout << "size split: " << split[i].size() << std::endl;
+               std::cout << "split**************: " << split[i]<< std::endl;
+            }
              
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
