@@ -3,3 +3,5 @@ QUIT should be handle
 :e3r10p15.1337.ma MODE #nkhoudro+k need to delete
 INVITE #nkhoudro other
 :e3r10p15.1337.ma 401 other :No such nick/channel
+privmsg nkhoudro : good mor
+:nkhoudro!~nkhoudro@e3r10p15.1337.ma PRIVMSG sas :privmsg sas : good >> show send error 
