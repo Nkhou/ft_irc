@@ -17,11 +17,12 @@
 void  splited(std::string str, std::vector<std::string> *split)
 {
     // std::vector<std::string> split;
+            std::cout << "str: " << str << std::endl;
     for (int i = 0; i < str.length(); i++)
     {
-        if (str[i] == ':' && i < str.length() - 1 && str[i + 1] == ' ')
+        if (str[i] == ':' && i < str.length()&& str[i + 1] == ' ')
         {
-            i ++;
+            i++;
             while (i < str.length() && str[i] == ' ')
             {
                 i++;
@@ -167,10 +168,10 @@ int main(int argc, char **argv)
         // std::cout << GREEN << str << std::endl;
         std::vector<std::string> split ;
          splited(str, &split);
-        // for (int i = 0; i < split.size(); i++)
-        // {
-        //     std::cout << "i  = " << i << " " << split[i] << std::endl;
-        // }
+        for (int i = 0; i < split.size(); i++)
+        {
+            std::cout << "i  = " << i << " " << split[i] << std::endl;
+        }
         
         bot.parcingBuffer(split);
         // for (int i = 0; i < bot.getMessage().size(); i++)
