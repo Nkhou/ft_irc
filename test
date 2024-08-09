@@ -1,24 +1,5 @@
->>>>pass nk // 1
-nick a // 3
-nick b // 5
-
-
-pass nk // 2
-nick a // 4
-:e3r8p12.1337.ma 433 a :Nickname is already in use !
-nick a // 6 (ERROR)
-:e3r8p12.1337.ma 433 a :Nickname is already in use !>>> done 
-
-
-./ircserv 4444 " nk"
-pass : nk
-
-./ircserv 4444 "" // enter the password f main n yemak >>>>done
-
-user r r r r r // kadoz if ktar mn par >>>>>done 
-
-check +k
-
-
-e3r9p17.1337.ma 421 
-FDF :Unknown command
+QUIT should be handle
+: in limechat is not supported
+:e3r10p15.1337.ma MODE #nkhoudro+k need to delete
+INVITE #nkhoudro other
+:e3r10p15.1337.ma 401 other :No such nick/channel
