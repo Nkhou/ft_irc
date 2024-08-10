@@ -1,4 +1,3 @@
-
 #include<iostream>
 #include"srcs/server.hpp"
 #include"./cmd/command.hpp"
@@ -358,10 +357,17 @@ int main(int argc,char **argv)
 							split.erase(split.begin());
 
 						cmd.clear();
-                        if(split[0] == "pass" || split[0] == "nick" || split[0] == "user" || split[0] == "join" || split[0] == "kick" || split[0] == "topic" || split[0] == "privmsg" || split[0] == "mode")
+                        if(split[0] == "pass" || split[0] == "nick" || split[0] == "user" || split[0] == "join" || split[0] == "kick" || split[0] == "topic" || split[0] == "privmsg" || split[0] == "mode" ||  split[0] == "invite" || split[0] == "quit")
                         {
                             for (size_t i = 0; i < split[0].length(); i++)
 							    split[0][i] = std::toupper(split[0][i]);
+                        }
+                        if (split[0] == "QUIT")
+                        {
+                            close(ser.fds[i].fd);
+                            ser.fds.erase(ser.fds.begin() + i);
+                            ser.clients.erase(ser.clients.begin() + i - 1);
+                            // continue;
                         }
                         // std::cout << "Command: " << split[0] <<"**********"<< std::endl;
                        if(ser.clients[i - 1].password == false)
@@ -373,14 +379,14 @@ int main(int argc,char **argv)
                                     msg = msg_err(split[0], ser.hostname);
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                     {
-                                        std::cout << "Failed Send Try Again"<<std::endl;
+                                        std::cout << "Failed Send Try AgainEEEE"<<std::endl;
                                     }
                                 }
                                 else if(split[1] == pass)
                                     ser.clients[i - 1].password = true;
                             
                             }
-                            continue;
+                            // continue;
 
                         }
                         if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
@@ -396,7 +402,7 @@ int main(int argc,char **argv)
                                         msg = msg_erroneusnickname(split[1],  ser.hostname);
                                         if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length() ,0) < 0)
                                         {
-                                            std::cout << "Failed Send Try Again"<<std::endl;
+                                            std::cout << "Failed Send Try AgainUUUUUU"<<std::endl;
                                         }
                                        
                                      }
@@ -411,7 +417,7 @@ int main(int argc,char **argv)
                                                 msg = msg_nicknameinuse(split[1], ser.hostname);
                                                if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                                 {
-                                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                                    std::cout << "Failed Send Try AgainFFFFFFF"<<std::endl;
                                                 }
                                             }
                                         }
@@ -423,7 +429,7 @@ int main(int argc,char **argv)
                              {
                                     msg = msg_nonicknamegiven(ser.hostname);
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                                        std::cout << "Failed Send Try Again"<<std::endl;
+                                        std::cout << "Failed Send Try AgainTTTTT"<<std::endl;
                              }
                             }
                         }
@@ -444,7 +450,7 @@ int main(int argc,char **argv)
                                 {
                                       msg = msg_err(split[0],ser.hostname);
                                          if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                                            std::cout << "Failed Send Try Again"<<std::endl;
+                                            std::cout << "Failed Send Try AgainQQQQ"<<std::endl;
                                 }
                             }
                            
@@ -458,7 +464,7 @@ int main(int argc,char **argv)
                             msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
                             if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
                             {
-                                return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                return(std::cout << "Failed Send Try AgainGRGFGG"<<std::endl,1);
                             }
                             ser.clients[i - 1].flag = true;
                          
@@ -467,7 +473,7 @@ int main(int argc,char **argv)
                     if(ser.clients[i - 1].flag == false && split.size() > 0 )
                     {
                         
-                            if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE" )
+                            if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE" || split[0] == "INVITE")
                             {
                                 if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
                                 {
@@ -475,7 +481,7 @@ int main(int argc,char **argv)
                                  msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
                                  if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                  {
-                                     std::cout << "Failed Send Try Again"<<std::endl;
+                                     std::cout << "Failed Send Try AgainBBBBB"<<std::endl;
                                  }
                                 }
                                 split.clear();

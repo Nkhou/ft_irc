@@ -165,7 +165,7 @@ int main(int argc, char **argv)
         }
         std::string  str = static_cast<std::string>(buffer);
         // buffer;
-        std::cout << str << std::endl;
+        std::cout << "---------------------  " << str << std::endl;
         // std::cout << GREEN << str << std::endl;
         std::vector<std::string> split ;
         splited(str, &split);

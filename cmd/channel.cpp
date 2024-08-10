@@ -27,6 +27,18 @@ std::vector<std::string> Channel::getMode()
 {
     return mode;
 }
+void Channel::notifieusers(Channel channel,std::string nickname, std::string message, std::string hostname)
+{
+    for (unsigned long i = 0; i < channel.getUsers().size(); i++)
+    {
+        //need to modifier the message
+        std::string msg = ":" + nickname + "!" + channel.getUsers()[i].nickname + "@" + hostname + " " + channel.getName() + " :" + message + "\n";
+        if (send(channel.getUsers()[i].fd, msg.c_str(), msg.length(), 0) == -1)
+        {
+            perror("send");
+        }
+    }
+}
 void Channel::setInviteOnly(int inviteOnly)
 {
     this->inviteOnly = inviteOnly;

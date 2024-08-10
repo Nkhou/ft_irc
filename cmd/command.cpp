@@ -807,6 +807,7 @@ void Command::PrivmsgCommand(server *ser)
 {
     if (this->args.size() == 0)
         return ;
+    // std::cout << "args[0]: " << this->args[0] << std::endl; 
     if (ser->channels.size() == 0)
     {
         for (unsigned long j = 0; j < ser->clients.size(); j++)
@@ -846,7 +847,7 @@ void Command::PrivmsgCommand(server *ser)
             }
             return ;
     }
-    std::cout << "args[0]: " << this->args[0] << std::endl;
+    // std::cout << "args[0]: " << this->args[0] << std::endl;
     if (this->args.size() == 0)
         return ;
     if (this->args[0][0] == '#')
@@ -931,6 +932,42 @@ void Command::PrivmsgCommand(server *ser)
         // }
 }
 void Command::executecmd(server *server) {
+    if (server->splited[0] == "QUIT")
+    {
+        std::cout << "QUIT" << std::endl;
+        for (unsigned long i = 0; i < server->clients.size(); i++)
+        {
+            if (server->clients[i].fd == server->client_fd)
+            {
+                server->clients.erase(server->clients.begin() + i);
+                break;
+            }
+        }
+        for (unsigned long i = 0; i < server->channels.size(); i++)
+        {
+            for (unsigned long j = 0; j < server->channels[i].getUsers().size(); j++)
+            {
+                if (server->channels[i].getUsers()[j].fd == server->client_fd)
+                {
+                    server->channels[i].removeUser(server->channels[i].getUsers()[j].nickname);
+                    break;
+                }
+            }
+        }
+        for (unsigned long i = 0; i < server->channels.size(); i++)
+        {
+            for (unsigned long j = 0; j < server->channels[i].getOperators().size(); j++)
+            {
+                if (server->channels[i].getOperators()[j].fd == server->client_fd)
+                {
+                    server->channels[i].removeOperator(server->channels[i].getOperators()[j].nickname);
+                    break;
+                }
+            }
+        }
+        close(server->client_fd);
+        return;
+    }
 
     if (server->splited[0] == "JOIN") // need to check nickename exist befor need to check if channel have keys
     {
