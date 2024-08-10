@@ -4,6 +4,25 @@
 #include"./cmd/command.hpp"
 
 
+int checkschannels(server &ser)
+{
+    for (size_t i = 0; i < ser.channels.size(); i++)
+    {
+        if (ser.channels[i].getUsers().size() == 0)
+            return 1;
+    }
+    return 0;
+}
+void deletechannels(server &ser)
+{
+    for (size_t i = 0; i < ser.channels.size(); i++)
+    {
+        if (ser.channels[i].getUsers().size() == 0)
+        {
+            ser.channels.erase(ser.channels.begin() + i);
+        }
+    }
+}
 int find_first_space(std::string str)
 {
 	size_t i;
@@ -469,14 +488,9 @@ int main(int argc,char **argv)
 }
 
             }
-            // for (size_t i = 0; i < split.size(); i++)
-            // {
-            //     std::cout << "size split: " << split[i].size() << std::endl;
-            //    std::cout << "split**************: " << split[i]<< std::endl;
-            // }
-            for (size_t i = 0; i < split.size(); i++)
+            if (checkschannels(ser) == 1)
             {
-               std::cout << "split**************: " << split[i]<< std::endl;
+                deletechannels(ser);
             }
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
