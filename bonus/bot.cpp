@@ -9,7 +9,7 @@ Bot::Bot()
 }
 void Bot::parcingBuffer(std::vector<std::string> buffer)
 {
-    int i = 0;
+    int i = 1;
     int c = 0;
 
     // for (int i = 0; i < buffer.size(); i++)
@@ -28,7 +28,7 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
         i++;
     }
     messages.push_back(buffer[0].substr(1, i - 1));
-    c = i + 1;
+    c = i + 2;
     while(i < buffer[0].length())
     {   
         if (buffer[0][i] == '@' )
@@ -36,13 +36,14 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
         i++;
     }
      c = i + 1;
-    std::cout << "c :" <<buffer[0] << std::endl;
-    std::cout << buffer[0][c] <<std::endl;
+    // std::cout << "c :" <<buffer[0] << std::endl;
+    // std::cout << buffer[0][c] <<std::endl;
     while (i < buffer[0].length() && buffer[0][i] != ' ' && i < buffer[0].length())
     {
         i++;
     }
     messages.push_back(buffer[0].substr(c, i - 1));
+    // std::cout << "i :" <<messages[1] << std::endl;
     std::string str;
 
 
@@ -50,21 +51,21 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
     if ( buffer[3].length() > 1 &&  buffer[3][0] == ':' )
     {
         int j = 0;
-        while (j < buffer[3].length() && buffer[3][j] == ' ')
+        while (j < buffer[3].length())
         {
             j++;
         }
-        str = buffer[3].substr(j , buffer[3].length());
+        str = buffer[3].substr(1 , buffer[3].length());
     }
     else
     {
-        str = buffer[3];
+        // str = buffer[3];
+        str = buffer[4];
     }
     // else
     // {
-
+        // std::cout << "str  fdd: " << str << std::endl;
     // }
-        str = buffer[4];
     messages.push_back(str.substr(0 , str.length()));
     // std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
     std::string str1;
@@ -80,6 +81,10 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
     // std::cout << "i: " << std::endl;
         messages.push_back(str1.substr(0 , str1.length() - 1));
     }
+    // for (int i = 0; i < messages.size(); i++)
+    // {
+    //     std::cout << "i  = " << i << " " << messages[i] << std::endl;
+    // }
 }
 int Bot::checkDate(std::string date)
 {
