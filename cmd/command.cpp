@@ -73,6 +73,15 @@ void Command::execCommand(server *server) {
 
 void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::vector<Channel>channel, std::string hostname)
 {
+    if (command.size() < 3)
+    {
+        std::string msg = kickerr(command[0], hostname);
+        if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+        {
+            std::cout << "Failed Send Try Again"<<std::endl;
+        }
+        return;
+    }
     for (unsigned long i = 1; i < command.size(); i++)
     {
         for (unsigned long j = 0; j < command[i].size(); j++)
@@ -86,68 +95,107 @@ void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::ve
                     args.push_back(command[i].substr(j, k));
                 else if (i == 2)
                     keys.push_back(command[i].substr(j, k));
-                else if (i == 3)
-                    message = message + " " + command[i].substr(j,k);
+                // else if (i == 3)
+                //     message = message + " " + command[i].substr(j,k);
             }
         }
     }
-    for (unsigned long i = 1; i < channel.size(); i++)
-    {        if (channel[i].getName() == command[1])
-
-        {
-            for (unsigned long j = 0; j < channel[i].getOperators().size(); j++)
-            {
-                if (channel[i].getOperators()[j].fd == fd)
-                {
-                    // channel[i] = 
-                    return ;
-                }
-            }
-            std::string msg = NotOPRT(args[0], hostname);
-                if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-                {
-                    std::cout << "Failed Send Try Again"<<std::endl;
-                }
+    if (command.size() == 4)
+    {
+        if (command[3][0] == ':')
+            this->message = command[3].substr(1);
+        else
+            this->message = command[3];
+    }
+    // for (unsigned long i = 1; i < channel.size(); i++)
+    // {
+    //     if (channel[i].getName() == command[1])
+    //     {
+    //         for (unsigned long j = 0; j < channel[i].getOperators().size(); j++)
+    //         {
+    //             if (channel[i].getOperators()[j].fd == fd)
+    //             {
+    //                 // channel[i] = 
+    //                 return ;
+    //             }
+    //         }
+    //         std::string msg = NotOPRT(args[0], hostname);
+    //         if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+    //         {
+    //             std::cout << "Failed Send Try Again"<<std::endl;
+    //         }
         
-        }
-    }
+    //     }
+    // }
     this->fd = fd;
 }
 void Command::KickCommand(server *ser)
 {
+    if (this->args.size() == 0)
+        return;
     for (unsigned long i = 0; i < ser->channels.size(); i++)
     {
-        if (ser->channels[i].getName() == this->args[0])
+        for (size_t l = 0; l < this->args.size() ; l++)
+        {
+
+        if (ser->channels[i].getName() == this->args[l])
         {
             for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
             {
                 if (ser->channels[i].getOperators()[j].fd == this->fd)
                 {
-                    for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
-                    {
-                        if (ser->channels[i].getUsers()[l].nickname == this->keys[0])
+                        for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
                         {
-                            ser->channels[i].removeUser(this->args[2]);
-                            
-                            std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) + " KICK " + this->args[0] + " " + this->keys[0] + " " + this->message + "\r\n";
-                            if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                            // std::cout << this->keys[0] << std::endl;
+                            for (size_t c = 0; c <this->keys.size(); c++)
                             {
-                                std::cout << "Failed Send Try Again"<<std::endl;
+                                if (ser->channels[i].getUsers()[l].nickname == this->keys[c])
+                                {
+
+                                    std::string msg = ":" +ser->channels[i].getOperators()[j].nickname.substr(1) + "~!"+ ser->channels[i].getOperators()[j].user_name +"@" + ser->hostname +" KICK " + this->args[l] + " " + this->keys[c];
+                                    if (this->message != "")
+                                        msg = msg + " :" + this->message + "\r\n";
+                                    else
+                                        msg = msg + "\r\n";
+                                    + " " + this->message + "\r\n";
+                                    for (size_t k = 0; k < ser->channels[i].getUsers().size(); k++)
+                                    {
+                                        // if (ser->channels[i].getUsers()[k].nickname == this->keys[0])
+                                        // {
+                                            if (send(ser->channels[i].getUsers()[k].fd, msg.c_str(), msg.length(), 0) < 0)
+                                            {
+                                                std::cout << "Failed Send Try Again"<<std::endl;
+                                            }
+                                            // ser->channels[i].removeUser(this->keys[0]);
+                                            // return;
+                                        // }
+                                    }
+                                    // if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                    // {
+                                    //     std::cout << "Failed Send Try Again"<<std::endl;
+                                    // }
+                                    ser->channels[i].removeUser(this->keys[c]);
+                                    // return;
+                                }
                             }
-                            return;
                         }
+                        // return;
                     }
-                    return;
+                    }
+                std::string msg = NotOPRT(args[0], ser->hostname);
+                if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                {
+                    std::cout << "Failed Send Try Again //////"<<std::endl;
                 }
+                return;
             }
-            std::string msg = NotOPRT(args[0], ser->hostname);
-            if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-            {
-                std::cout << "Failed Send Try Again //////"<<std::endl;
-            }
-            return;
         }
     }
+    // std::string msg = ERR_NOSUCHCHANNEL(args[0], ser->hostname);
+    // if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+    // {
+    //     std::cout << "Failed Send Try Again"<<std::endl;
+    // }
 }
 void Command::ModeCommand(server *ser)
 {
@@ -751,11 +799,22 @@ void Command::InviteCommand(server *ser)
                                 }
                                 ser->channels[i].addUser(ser->clients[l], 0);
                                 std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " INVITE " + this->args[0] + " " + this->args[1] + "\r\n";
-                                // std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) + " INVITE " + this->args[0] + " " + this->args[1] + "\r\n";
-                                if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                for (size_t k = 0; k < ser->channels[i].getUsers().size(); k++)
                                 {
-                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                    if (ser->channels[i].getUsers()[k].nickname == ser->channels[i].getOperators()[j].nickname)
+                                    {
+                                        if (send(ser->channels[i].getUsers()[k].fd, msg.c_str(), msg.length(), 0) < 0)
+                                        {
+                                            std::cout << "Failed Send Try Again"<<std::endl;
+                                        }
+                                        return ;
+                                    }
                                 }
+                                // std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) + " INVITE " + this->args[0] + " " + this->args[1] + "\r\n";
+                                // if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                // {
+                                //     std::cout << "Failed Send Try Again"<<std::endl;
+                                // }
                                 return ;
                             }
                         }

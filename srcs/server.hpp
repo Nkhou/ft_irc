@@ -68,5 +68,6 @@ std::string NotMode(std::string nick, std::string hostname);
 std::string notfyMessage(std::string nick, std::string hostname, std::string message, std::string name);
 std::string notenghparam(std::string nick, std::string hostname);
 std::string unknowncommand(std::string nick, cli client ,std::string hostname);
+std::string kickerr(std::string nick, std::string hostname);
 
 #endif

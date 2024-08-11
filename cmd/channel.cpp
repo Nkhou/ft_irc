@@ -130,6 +130,14 @@ void Channel::removeUser(std::string user)
             return;
         }
     }
+    for (unsigned long i = 0; i < operators.size(); i++)
+    {
+        if (operators[i].nickname == user)
+        {
+            operators.erase(operators.begin() + i);
+            return;
+        }
+    }
 }
 
 std::string Channel::getName()
