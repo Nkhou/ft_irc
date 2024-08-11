@@ -131,27 +131,31 @@ void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::ve
 }
 void Command::KickCommand(server *ser)
 {
+    int existchannel = 0;
+    int exist = 0;
     if (this->args.size() == 0)
         return;
+    for (size_t l = 0; l < this->args.size() ; l++)
+    {
+        existchannel = 0;
     for (unsigned long i = 0; i < ser->channels.size(); i++)
     {
-        for (size_t l = 0; l < this->args.size() ; l++)
-        {
 
         if (ser->channels[i].getName() == this->args[l])
         {
+            existchannel = 1;
             for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
             {
                 if (ser->channels[i].getOperators()[j].fd == this->fd)
                 {
+                        for (size_t c = 0; c <this->keys.size(); c++)
+                        {
                         for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
                         {
                             // std::cout << this->keys[0] << std::endl;
-                            for (size_t c = 0; c <this->keys.size(); c++)
-                            {
                                 if (ser->channels[i].getUsers()[l].nickname == this->keys[c])
                                 {
-
+                                    exist = 1;
                                     std::string msg = ":" +ser->channels[i].getOperators()[j].nickname.substr(1) + "~!"+ ser->channels[i].getOperators()[j].user_name +"@" + ser->hostname +" KICK " + this->args[l] + " " + this->keys[c];
                                     if (this->message != "")
                                         msg = msg + " :" + this->message + "\r\n";
@@ -175,13 +179,32 @@ void Command::KickCommand(server *ser)
                                     //     std::cout << "Failed Send Try Again"<<std::endl;
                                     // }
                                     ser->channels[i].removeUser(this->keys[c]);
+                                    break;
                                     // return;
                                 }
                             }
+                            if (exist == 0)
+                            {
+                                std::string msg = ":" + ser->hostname + " 441 " + ser->channels[i].getOperators()[j].nickname.substr(1) + " " + this->keys[0] + " " + this->args[l] + " :They aren't on that channel\r\n";
+                                if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                {
+                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                }
+                                return;
+                            }
                         }
                         // return;
-                    }
-                    }
+                }
+            }
+            // if (existchannel == 0)
+            // {
+            //     std::string msg = NotOPRT(args[l], ser->hostname);
+            //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+            //     {
+            //         std::cout << "Failed Send Try Again"<<std::endl;
+            //     }
+            //     return;
+            // }
                 // std::string msg = NotOPRT(args[0], ser->hostname);
                 // if(send(fd, msg.c_str(), msg.length(), 0) < 0)
                 // {
