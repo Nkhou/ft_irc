@@ -1095,6 +1095,7 @@ void Command::executecmd(server *server) {
             {
                 std::cout << "Failed Send Try Again"<<std::endl;
             }
+            return;
         }
         ParceCommand(server->splited, server->client_fd, server->hostname);
 
@@ -1104,11 +1105,24 @@ void Command::executecmd(server *server) {
     {
         if (server->splited.size() < 3)
         {
-            std::string msg = msg_err(server->splited[0], server->hostname);
-            if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
+            for (unsigned long i = 0; i < server->clients.size(); i++)
             {
-                std::cout << "Failed Send Try Again"<<std::endl;
+                if (server->clients[i].fd == server->client_fd)
+                {
+                    std::string msg = kickerr(server->clients[i].nickname, server->hostname);
+                    if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
+                    {
+                        std::cout << "Failed Send Try Again"<<std::endl;
+                    }
+                    return;
+                }
             }
+            // std::string msg = kickerr(server->splited[0], server->hostname);
+            // if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
+            // {
+            //     std::cout << "Failed Send Try Again"<<std::endl;
+            // }
+            return;
         }
         ParceCommandkick(server->splited, server->client_fd, server->channels, server->hostname);
         KickCommand(server);

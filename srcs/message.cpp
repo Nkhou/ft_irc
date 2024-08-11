@@ -121,6 +121,6 @@ std::string unknowncommand(std::string nick, cli client ,std::string hostname)
 
 std::string kickerr(std::string nick, std::string hostname)
 {
-    std::string msg = ":" + hostname + " 461 " + nick + " :Not enough parameters\r\n";
+    std::string msg = ":" + hostname + " 461 " + nick+  " KICK :Not enough parameters\r\n";
     return msg;
 }
