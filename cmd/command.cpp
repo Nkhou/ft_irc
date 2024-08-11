@@ -95,11 +95,16 @@ void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::ve
                     args.push_back(command[i].substr(j, k));
                 else if (i == 2)
                     keys.push_back(command[i].substr(j, k));
+                j = k;
                 // else if (i == 3)
                 //     message = message + " " + command[i].substr(j,k);
             }
         }
     }
+    // for (size_t i = 0 ; i < this->args.size(); i++ )
+    //     std::cout << "ha anna kant3awd  "<<this->args[i] << std::endl;
+    // for (size_t i = 0 ; i < this->keys.size(); i++ )
+    //     std::cout << "ha anna kant3awd keys "<<this->keys[i] << std::endl;
     if (command.size() == 4)
     {
         if (command[3][0] == ':')
@@ -132,28 +137,39 @@ void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::ve
 void Command::KickCommand(server *ser)
 {
     int existchannel = 0;
+    int op = 0;
     int exist = 0;
     if (this->args.size() == 0)
         return;
+
+    // for (int o = 0; o < this->args.size(); o++)
+    // {
+    //     std::cout << "|" << args[o] << "|" << std::endl;
+    // }
+
+    // std::cout <<"hello     "<<this->args.size()  << std::endl;
     for (size_t l = 0; l < this->args.size() ; l++)
     {
         existchannel = 0;
-    for (unsigned long i = 0; i < ser->channels.size(); i++)
-    {
-
-        if (ser->channels[i].getName() == this->args[l])
+        for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
-            existchannel = 1;
-            for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
+            // std::cout << "hello     "  << std::endl;
+            op = 0;
+
+            if (ser->channels[i].getName() == this->args[l])
             {
-                if (ser->channels[i].getOperators()[j].fd == this->fd)
+                existchannel = 1;
+                for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
                 {
+                    if (ser->channels[i].getOperators()[j].fd == this->fd)
+                    {
+                        op = 1;
                         for (size_t c = 0; c <this->keys.size(); c++)
                         {
-                        for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
-                        {
-                            // std::cout << this->keys[0] << std::endl;
-                                if (ser->channels[i].getUsers()[l].nickname == this->keys[c])
+                            for (unsigned long o = 1; o < ser->channels[i].getUsers().size(); o++)
+                            {
+                                // std::cout << this->keys[0] << std::endl;
+                                if (ser->channels[i].getUsers()[o].nickname == this->keys[c])
                                 {
                                     exist = 1;
                                     std::string msg = ":" +ser->channels[i].getOperators()[j].nickname.substr(1) + "~!"+ ser->channels[i].getOperators()[j].user_name +"@" + ser->hostname +" KICK " + this->args[l] + " " + this->keys[c];
@@ -179,7 +195,7 @@ void Command::KickCommand(server *ser)
                                     //     std::cout << "Failed Send Try Again"<<std::endl;
                                     // }
                                     ser->channels[i].removeUser(this->keys[c]);
-                                    break;
+                                    // break;
                                     // return;
                                 }
                             }
@@ -190,28 +206,47 @@ void Command::KickCommand(server *ser)
                                 {
                                     std::cout << "Failed Send Try Again"<<std::endl;
                                 }
-                                return;
+                                // return;
                             }
                         }
-                        // return;
+                            // return;
+                    }
                 }
-            }
-            // if (existchannel == 0)
-            // {
-            //     std::string msg = NotOPRT(args[l], ser->hostname);
-            //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-            //     {
-            //         std::cout << "Failed Send Try Again"<<std::endl;
-            //     }
-            //     return;
-            // }
-                // std::string msg = NotOPRT(args[0], ser->hostname);
-                // if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                if (op == 0)
+                {
+                    std::string msg = NotOPRT(args[l], ser->hostname);
+                    if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                    {
+                        std::cout << "Failed Send Try Again"<<std::endl;
+                    }
+                    // return;
+                }
+                // if (existchannel == 0)
                 // {
-                //     std::cout << "Failed Send Try Again //////"<<std::endl;
+                //     std::string msg = NotOPRT(args[l], ser->hostname);
+                //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                //     {
+                //         std::cout << "Failed Send Try Again"<<std::endl;
+                //     }
+                //     return;
                 // }
-                // return;
+                    // std::string msg = NotOPRT(args[0], ser->hostname);
+                    // if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                    // {
+                    //     std::cout << "Failed Send Try Again //////"<<std::endl;
+                    // }
+                    // return;
             }
+        }
+
+        if (existchannel == 0)
+        {
+            std::string msg = ERR_NOSUCHCHANNEL(args[l], ser->hostname);
+            if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+            {
+                std::cout << "Failed Send Try Again"<<std::endl;
+            }
+            // return;
         }
     }
     // std::string msg = ERR_NOSUCHCHANNEL(args[0], ser->hostname);
