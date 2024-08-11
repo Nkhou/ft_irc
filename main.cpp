@@ -2,26 +2,6 @@
 #include"srcs/server.hpp"
 #include"./cmd/command.hpp"
 
-
-// int checkschannels(server &ser)
-// {
-//     for (size_t i = 0; i < ser.channels.size(); i++)
-//     {
-//         if (ser.channels[i].getUsers().size() == 0)
-//             return 1;
-//     }
-//     return 0;
-// }
-// void deletechannels(server &ser)
-// {
-//     for (size_t i = 0; i < ser.channels.size(); i++)
-//     {
-//         if (ser.channels[i].getUsers().size() == 0)
-//         {
-//             ser.channels.erase(ser.channels.begin() + i);
-//         }
-//     }
-// }
 void deletechannels(server &ser, int fd)
 {
     for (size_t i = 0; i < ser.channels.size(); i++)
@@ -227,8 +207,6 @@ int main(int argc,char **argv)
     fdpoll.events = POLLIN;
     ser.fds.push_back(fdpoll);
     std::cout <<GREEN<< "Server is Ready to Accept a Connection...."<<std::endl;
-    // std::vector<std::string> jocks=addjocke();
-    // infinite loop
     while(1) 
     {
         //now using function poll to check if there is any incoming connection
@@ -294,7 +272,6 @@ int main(int argc,char **argv)
                     else
                     {
                        buffer[size] = '\0';
-                    //    std::cout << "<<< Received Data From Client >>> " << buffer << std::endl;
                        if (size < 2)
 						{
 							buffer_stor.push_back(buffer);
@@ -316,38 +293,6 @@ int main(int argc,char **argv)
                           buffer[size - 1] = '\0';
                       if (ends_with_carriage_return)
                           buffer[size - 2] = '\0';
-
-                    // if (size < 2)
-					// {
-					// 	buffer_stor.push_back(buffer);
-					// 	continue;
-					// }
-					// if (buffer[size - 1] != '\n' && buffer[size - 2] != '\r')
-					// {
-					// 	buffer_stor.push_back(buffer);
-					// 	continue;
-					// }
-					// if (size > 1 && buffer[size - 1] == '\n')
-					// 	buffer[size - 1] = '\0';
-					// if (size > 2 && buffer[size - 2] == '\r')
-					// 	buffer[size - 2] = '\0';
-
-                      
-						// if (valread < 2)
-						// {
-						// 	tmp_buffer.push_back(buffer);
-						// 	continue;
-						// }
-						// if (buffer[valread - 1] != '\n' && buffer[valread - 2] != '\r')
-						// {
-						// 	tmp_buffer.push_back(buffer);
-						// 	continue;
-						// }
-
-						// if (valread > 1 && buffer[valread - 1] == '\n')
-						// 	buffer[valread - 1] = '\0';
-						// if (valread > 2 && buffer[valread - 2] == '\r')
-						// 	buffer[valread - 2] = '\0';
                       // Push the buffer to buffer_stor
                       buffer_stor.push_back(buffer);
                       
@@ -384,32 +329,20 @@ int main(int argc,char **argv)
                             close(ser.fds[i].fd);
                             ser.fds.erase(ser.fds.begin() + i);
                             ser.clients.erase(ser.clients.begin() + i - 1);
-                            // continue;
                         }
-                        // std::cout << "Command: " << split[0] <<"**********"<< std::endl;
                        if(ser.clients[i - 1].password == false )
                        {
-                        std::cout <<  ser.clients[i - 1].nickname  <<"******"<< std::endl;
-                        std::cout <<  ser.clients[i - 1].user_name  <<"------"<< std::endl;
-                        // printf("here");
                             if (split[0] == "PASS")
                             {
                                 if(split.size() < 2)
                                 {
                                     msg = msg_err(split[0], ser.hostname);
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                                    {
-                                        std::cout << "Failed Send Try AgainEEEE"<<std::endl;
-                                    }
+                                        return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                 }
                                 else if(split[1] == pass && ser.clients[i - 1].nickname == "" && ser.clients[i - 1].user_name == "")
-                                {
-                                    std::cout << "Password is correct" << std::endl; 
                                     ser.clients[i - 1].password = true;
-                                }
-                            
-                            }
-                            // continue;
+                           }    
 
                         }
                         if (ser.clients[i - 1].password == true) 
@@ -424,9 +357,7 @@ int main(int argc,char **argv)
                                      {
                                         msg = msg_erroneusnickname(split[1],  ser.hostname);
                                         if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length() ,0) < 0)
-                                        {
-                                            std::cout << "Failed Send Try AgainUUUUUU"<<std::endl;
-                                        }
+                                            return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                        
                                      }
                                      else
@@ -439,9 +370,8 @@ int main(int argc,char **argv)
                                                 a = 1;
                                                 msg = msg_nicknameinuse(split[1], ser.hostname);
                                                if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                                                {
-                                                    std::cout << "Failed Send Try AgainFFFFFFF"<<std::endl;
-                                                }
+                                                   return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                                
                                             }
                                         }
                                         if(a == 0)
@@ -452,7 +382,7 @@ int main(int argc,char **argv)
                              {
                                     msg = msg_nonicknamegiven(ser.hostname);
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                                        std::cout << "Failed Send Try AgainTTTTT"<<std::endl;
+                                        return(std::cout << "Failed Send Try Again"<<std::endl,1);
                              }
                             }
                         }
@@ -473,7 +403,7 @@ int main(int argc,char **argv)
                                 {
                                       msg = msg_err(split[0],ser.hostname);
                                          if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                                            std::cout << "Failed Send Try AgainQQQQ"<<std::endl;
+                                            return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                 }
                             }
                            
@@ -487,7 +417,7 @@ int main(int argc,char **argv)
                             msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
                             if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
                             {
-                                return(std::cout << "Failed Send Try AgainGRGFGG"<<std::endl,1);
+                                return(std::cout << "Failed Send Try Again"<<std::endl,1);
                             }
                             ser.clients[i - 1].flag = true;
                          
@@ -504,7 +434,7 @@ int main(int argc,char **argv)
                                  msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
                                  if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                  {
-                                     std::cout << "Failed Send Try AgainBBBBB"<<std::endl;
+                                     return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                  }
                                 }
                                 split.clear();
@@ -517,10 +447,6 @@ int main(int argc,char **argv)
 }
 
             }
-            // if (checkschannels(ser) == 1)
-            // {
-            //     deletechannels(ser);
-            // }
             for (size_t i = 0; i < split.size(); i++)
             {
                  std::cout << split[i] << std::endl;
@@ -529,13 +455,11 @@ int main(int argc,char **argv)
             {
                 if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER" && split[0] != "PONG")
                 {
-                // std::cout << split[0] << std::endl;
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;
                 ser.client_cmd = ser.clients[i - 1];
                 Command cmd;
                 cmd.execCommand(&ser);
-                // std::cout << "3liya kat9alab"<< std::endl;
                 split.clear();
                 ser.client_fd = 0;
                 }
@@ -543,7 +467,6 @@ int main(int argc,char **argv)
             i++;
         } 
          
-    }    
-
+    }
     return (0);
 }
