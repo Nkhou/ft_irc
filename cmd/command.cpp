@@ -182,12 +182,12 @@ void Command::KickCommand(server *ser)
                         // return;
                     }
                     }
-                std::string msg = NotOPRT(args[0], ser->hostname);
-                if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-                {
-                    std::cout << "Failed Send Try Again //////"<<std::endl;
-                }
-                return;
+                // std::string msg = NotOPRT(args[0], ser->hostname);
+                // if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                // {
+                //     std::cout << "Failed Send Try Again //////"<<std::endl;
+                // }
+                // return;
             }
         }
     }

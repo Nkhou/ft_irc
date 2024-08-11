@@ -3,22 +3,39 @@
 #include"./cmd/command.hpp"
 
 
-int checkschannels(server &ser)
+// int checkschannels(server &ser)
+// {
+//     for (size_t i = 0; i < ser.channels.size(); i++)
+//     {
+//         if (ser.channels[i].getUsers().size() == 0)
+//             return 1;
+//     }
+//     return 0;
+// }
+// void deletechannels(server &ser)
+// {
+//     for (size_t i = 0; i < ser.channels.size(); i++)
+//     {
+//         if (ser.channels[i].getUsers().size() == 0)
+//         {
+//             ser.channels.erase(ser.channels.begin() + i);
+//         }
+//     }
+// }
+void deletechannels(server &ser, int fd)
 {
     for (size_t i = 0; i < ser.channels.size(); i++)
     {
-        if (ser.channels[i].getUsers().size() == 0)
-            return 1;
-    }
-    return 0;
-}
-void deletechannels(server &ser)
-{
-    for (size_t i = 0; i < ser.channels.size(); i++)
-    {
-        if (ser.channels[i].getUsers().size() == 0)
+        for (size_t j = 0; j < ser.channels[i].getUsers().size(); j++)
         {
-            ser.channels.erase(ser.channels.begin() + i);
+            if (ser.channels[i].getUsers()[j].fd == fd)
+            {
+                ser.channels[i].removeUser(ser.channels[i].getUsers()[j].nickname);
+                if (ser.channels[i].getUsers().size() == 0)
+                {
+                    ser.channels.erase(ser.channels.begin() + i);
+                }
+            }
         }
     }
 }
@@ -272,7 +289,7 @@ int main(int argc,char **argv)
                         close(ser.fds[i].fd);
                         ser.fds.erase(ser.fds.begin() + i);
                         ser.clients.erase(ser.clients.begin() + i - 1);
-                      
+                        deletechannels(ser, ser.fds[i].fd);
                     }
                     else
                     {
@@ -494,10 +511,10 @@ int main(int argc,char **argv)
 }
 
             }
-            if (checkschannels(ser) == 1)
-            {
-                deletechannels(ser);
-            }
+            // if (checkschannels(ser) == 1)
+            // {
+            //     deletechannels(ser);
+            // }
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
                 if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER" && split[0] != "PONG")
