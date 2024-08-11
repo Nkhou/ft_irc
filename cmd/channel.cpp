@@ -217,20 +217,20 @@ void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
         {
             perror("send");
         }
-        msg = ":" + hostname + " MODE " + name;
-        for (unsigned long j = 0; j < mode.size(); j++)
-        {
-            msg += mode[j];
-            // if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
-            // {
-            //     perror("send");
-            // }
-        }
-        msg += "\n";
-        if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
-        {
-            perror("send");
-        }
+        // msg = ":" + hostname + " MODE " + name;
+        // for (unsigned long j = 0; j < mode.size(); j++)
+        // {
+        //     msg += mode[j];
+        //     // if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
+        //     // {
+        //     //     perror("send");
+        //     // }
+        // }
+        // msg += "\n";
+        // if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
+        // {
+        //     perror("send");
+        // }
         msg = ":" + hostname + " 366 " + user + " " + name + " :End of /NAMES list\n";
         if (send(users[i].fd, msg.c_str(), msg.length(), 0) == -1)
         {
