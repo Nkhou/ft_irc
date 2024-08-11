@@ -389,7 +389,9 @@ int main(int argc,char **argv)
                         // std::cout << "Command: " << split[0] <<"**********"<< std::endl;
                        if(ser.clients[i - 1].password == false )
                        {
-                        printf("here");
+                        std::cout <<  ser.clients[i - 1].nickname  <<"******"<< std::endl;
+                        std::cout <<  ser.clients[i - 1].user_name  <<"------"<< std::endl;
+                        // printf("here");
                             if (split[0] == "PASS")
                             {
                                 if(split.size() < 2)
@@ -401,13 +403,16 @@ int main(int argc,char **argv)
                                     }
                                 }
                                 else if(split[1] == pass && ser.clients[i - 1].nickname == "" && ser.clients[i - 1].user_name == "")
+                                {
+                                    std::cout << "Password is correct" << std::endl; 
                                     ser.clients[i - 1].password = true;
+                                }
                             
                             }
                             // continue;
 
                         }
-                        if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
+                        if (ser.clients[i - 1].nickname == "" && ser.clients[i - 1].password == true) 
                         {
         
                           if (split[0] == "NICK")
