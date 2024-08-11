@@ -389,6 +389,7 @@ int main(int argc,char **argv)
                         // std::cout << "Command: " << split[0] <<"**********"<< std::endl;
                        if(ser.clients[i - 1].password == false )
                        {
+                        printf("here");
                             if (split[0] == "PASS")
                             {
                                 if(split.size() < 2)
@@ -399,12 +400,11 @@ int main(int argc,char **argv)
                                         std::cout << "Failed Send Try AgainEEEE"<<std::endl;
                                     }
                                 }
-                                else if(split[1] == pass)
+                                else if(split[1] == pass && ser.clients[i - 1].nickname == "" && ser.clients[i - 1].user_name == "")
                                     ser.clients[i - 1].password = true;
                             
                             }
-                            split.clear();
-                            continue;
+                            // continue;
 
                         }
                         if (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].password == true) 
@@ -516,6 +516,10 @@ int main(int argc,char **argv)
             // {
             //     deletechannels(ser);
             // }
+            for (size_t i = 0; i < split.size(); i++)
+            {
+                 std::cout << split[i] << std::endl;
+            }
             if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
             {
                 if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER" && split[0] != "PONG")
