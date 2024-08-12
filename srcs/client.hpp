@@ -12,8 +12,10 @@
 #include <csignal> //-> for signal()
 #include <cstdlib>
 #include <cstdio>
-
-
+#define ERR_ERRONEUSNICKNAME_CODE "432"
+#define ERR_ERRONEUSNICKNAME ":Erroneous Nickname"
+#define ERR_NICKNAMEINUSE_CODE "433"
+#define ERR_NICKNAMEINUSE_MSG "Nickname is already in use"
 
 #include <cstring>
 

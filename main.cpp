@@ -115,10 +115,6 @@ int check_error_nickname(std::string nickname)
     {
         return 1;
     }
-    if(nickname.size() == 1)
-    {
-        return 1;
-    }
     std::string alpha ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
     std::string alpha_find = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]\\^_`{}|0123456789";
 
@@ -263,6 +259,7 @@ int main(int argc,char **argv)
 
                     if(size == 0)
                     {
+                        std::cout <<"<<<<<<<<<<<hi"<<std::endl;
                         std::cout << "<<< Client Disconnected >>> " << buffer<< ser.fds[i].fd << std::endl;
                         close(ser.fds[i].fd);
                         ser.fds.erase(ser.fds.begin() + i);
@@ -355,7 +352,7 @@ int main(int argc,char **argv)
                              {
                                 if(check_error_nickname(split[1]) != 0)
                                      {
-                                        msg = msg_erroneusnickname(split[1],  ser.hostname);
+                                        msg = message_err_nick_name(ser.hostname, ERR_ERRONEUSNICKNAME_CODE,"*", ser.clients[i - 1].nickname, ERR_ERRONEUSNICKNAME);
                                         if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length() ,0) < 0)
                                             return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                        
@@ -368,7 +365,7 @@ int main(int argc,char **argv)
                                             if (ser.clients[j].nickname == split[1])
                                             {
                                                 a = 1;
-                                                msg = msg_nicknameinuse(split[1], ser.hostname);
+                                                msg = message_err_nick_name(ser.hostname, ERR_NICKNAMEINUSE_CODE,"*", ser.clients[i - 1].nickname, ERR_NICKNAMEINUSE_MSG);
                                                if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                                    return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                                 
@@ -379,12 +376,12 @@ int main(int argc,char **argv)
                                      }
                               }
                             if(split.size() < 2)
-                             {
-                                    msg = msg_nonicknamegiven(ser.hostname);
+                            {
+                              msg = message_err_nick_name(ser.hostname, ERR_NONICKNAMEGIVEN_CODE,"*", ser.clients[i - 1].nickname, ERR_NONICKNAMEGIVEN_MSG);
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                         return(std::cout << "Failed Send Try Again"<<std::endl,1);
-                             }
                             }
+                        }
                         }
                         if(ser.clients[i - 1].user_name == ""  && ser.clients[i - 1].password == true)
                         {
@@ -433,14 +430,12 @@ int main(int argc,char **argv)
 
                                  msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
                                  if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                                 {
-                                     return(std::cout << "Failed Send Try Again"<<std::endl,1);
-                                 }
+                                    return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                 
                                 }
                                 split.clear();
                              ser.clients[i - 1].flag_cmd = true;
                             }
-                         
                     }
                  
 
@@ -468,5 +463,6 @@ int main(int argc,char **argv)
         } 
          
     }
+    close(ser.ser_fd);
     return (0);
 }

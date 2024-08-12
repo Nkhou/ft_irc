@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 09:09:53 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/03 12:31:53 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/12 06:36:36 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
      if (connect(socket_fd,(struct sockaddr *)&cr_server,sizeof(cr_server) )== -1)
      {
-        std::cout <<"failed Error"<<std::endl;
+        std::cout <<"Failed Error"<<std::endl;
         return(1);
      }
      //authentication

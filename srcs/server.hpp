@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkh <nkh@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/07/16 11:36:46 by nkh              ###   ########.fr       */
+/*   Updated: 2024/08/12 08:47:39 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@
 #include <iterator>
 #include "../cmd/channel.hpp"
 #define GREEN "\033[0;32m"
+#define ERR_ERRONEUSNICKNAME_CODE "432"
+#define ERR_ERRONEUSNICKNAME ":Erroneous Nickname"
+#define ERR_NICKNAMEINUSE_CODE "433"
+#define ERR_NICKNAMEINUSE_MSG "Nickname is already in use"
+
+#define ERR_NONICKNAMEGIVEN_CODE "431"
+#define ERR_NONICKNAMEGIVEN_MSG "No nickname given"
+
 
 typedef struct server
 {
@@ -55,6 +63,7 @@ std::string msg_welcome(std::string nick,std::string hostname);
 std::string msg_nonicknamegiven(std::string hostname);
 std::string msg_notregistered(std::string nick,std::string hostname);
 std::string msg_nicknameinuse(std::string nick,std::string hostname);
+std::string message_err_nick_name(std::string hostname, std::string code, std::string nickname, std::string command, std::string msg);
 std::string ChannelExist(std::string channel, std::string hostname);
 std::string NotOPRT(std::string nick, std::string hostname);
 std::string msg_errpriv(std::string nick, std::string hostname);
