@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/12 08:47:39 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/12 16:41:54 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,6 @@ std::string notfyMessage(std::string nick, std::string hostname, std::string mes
 std::string notenghparam(std::string nick, std::string hostname);
 std::string unknowncommand(std::string nick, cli client ,std::string hostname);
 std::string kickerr(std::string nick, std::string hostname);
+std::string message_nick(std::string hostname, std::string oldnick, std::string newnick);
 
 #endif

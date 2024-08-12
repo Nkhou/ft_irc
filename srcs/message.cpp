@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 11:06:05 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/12 06:56:33 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/12 16:41:19 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,10 @@ std::string unknowncommand(std::string nick, cli client ,std::string hostname)
 std::string kickerr(std::string nick, std::string hostname)
 {
     std::string msg = ":" + hostname + " 461 " + nick+  " KICK :Not enough parameters\r\n";
+    return msg;
+}
+std::string message_nick(std::string hostname, std::string oldnick, std::string newnick)
+{
+    std::string msg = ":" + hostname + " NICK " + oldnick + " " + newnick + "\r\n";
     return msg;
 }

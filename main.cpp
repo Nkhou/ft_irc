@@ -372,7 +372,34 @@ int main(int argc,char **argv)
                                             }
                                         }
                                         if(a == 0)
+                                        {
+                                            for (size_t j = 0; j < ser.channels.size(); j++)
+                                            {
+                                                
+                                                for (size_t k = 0; k < ser.channels[j].getUsers().size(); k++)
+                                                {
+                                                    if (ser.channels[j].getUsers()[k].nickname == ser.clients[i - 1].nickname)
+                                                    {
+                                                       ser.channels[j].setUsers(split[1],ser.clients[i - 1].nickname);
+                                                    //     ser.channels[j].setUsers()[k].nickname = split[1];
+                                                    //     for (size_t o = 0; o <ser.channels[j].getOperators().size(); o++)
+                                                    //     {
+                                                    //         if (ser.channels[j].getOperators()[o].nickname == ser.clients[i - 1].nickname)
+                                                    //         {
+                                                    //             ser.channels[j].getOperators()[o].nickname = split[1];
+                                                    //         }
+                                                    //     }
+                                                        for (size_t l = 0; l < ser.channels[j].getUsers().size(); l++)
+                                                        {
+                                                            msg = message_nick(ser.hostname, ser.clients[i - 1].nickname, split[1]);
+                                                            if(send(ser.channels[j].getUsers()[l].fd, msg.c_str(), msg.length(), 0) < 0)
+                                                                return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                                        }
+                                                    }
+                                                }
+                                            }
                                           ser.clients[i - 1].nickname= split[1];
+                                        }
                                      }
                               }
                             if(split.size() < 2)

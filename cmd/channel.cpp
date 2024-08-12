@@ -27,6 +27,23 @@ std::vector<std::string> Channel::getMode()
 {
     return mode;
 }
+void Channel::setUsers(std::string nickname, std::string old)
+{
+    for (unsigned long i = 0; i < this->users.size(); i++)
+    {
+        if (this->users[i].nickname == old)
+        {
+            this->users[i].nickname = nickname;
+        }
+    }
+    for (unsigned long i = 0; i < operators.size(); i++)
+    {
+        if (this->operators[i].nickname == '@' + old)
+        {
+            this->operators[i].nickname = '@' + nickname;
+        }
+    }
+}
 void Channel::notifieusers(Channel channel,std::string nickname, std::string message, std::string hostname)
 {
     for (unsigned long i = 0; i < channel.getUsers().size(); i++)
