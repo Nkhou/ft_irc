@@ -7,6 +7,10 @@ Bot::Bot(std::string name)
 Bot::Bot()
 {
 }
+void Bot::clearMessage()
+{
+    messages.clear();
+}
 void Bot::parcingBuffer(std::vector<std::string> buffer)
 {
     int i = 1;
@@ -46,45 +50,45 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
     // std::cout << "i :" <<messages[1] << std::endl;
     std::string str;
 
-
-    // std::cout << "hello" << std::endl;
-    if ( buffer[3].length() > 1 &&  buffer[3][0] == ':' )
+    i = 1;
+    if (buffer[3][0] == ':')
     {
-        int j = 0;
-        while (j < buffer[3].length())
+        while (i < buffer[3].length() && buffer[3][i] == ':')
         {
-            j++;
+            i++;
         }
-        str = buffer[3].substr(1 , buffer[3].length());
+        if (i < buffer[3].length())
+        {
+        // std::cout << "bchakh "<<buffer[3].substr(i, buffer[3].length()) << std::endl;
+            str = buffer[3].substr(i , buffer[3].length());
+            i = 4;
+        }
+        else
+        {
+            // std::cout << "iiii: " << str << std::endl;
+            // std::cout << "hello" << std::endl;
+            str = buffer[4];
+            i = 5;
+        }
     }
     else
     {
-        // str = buffer[3];
-        str = buffer[4];
+        str = buffer[3];
+        i = 4;
     }
-    // else
-    // {
-        // std::cout << "str  fdd: " << str << std::endl;
-    // }
     messages.push_back(str.substr(0 , str.length()));
-    // std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
-    std::string str1;
-    if (buffer.size() > 4)
+    std::cout << "str  fdd: " << str << std::endl;
+    if (i < buffer.size())
     {
-       i = 5;
-       while (i < buffer.size())
-       {
-         str1 = str1 + buffer[i] + " ";
-         i++;
-       }
-
-    // std::cout << "i: " << std::endl;
-        messages.push_back(str1.substr(0 , str1.length() - 1));
+        str = "";
+        while (i < buffer.size())
+        {
+            str = str + buffer[i] + " ";
+            i++;
+        }
+        messages.push_back(str.substr(0 , str.length() - 1));
+        return;
     }
-    // for (int i = 0; i < messages.size(); i++)
-    // {
-    //     std::cout << "i  = " << i << " " << messages[i] << std::endl;
-    // }
 }
 int Bot::checkDate(std::string date)
 {
@@ -96,15 +100,15 @@ int Bot::checkDate(std::string date)
     // }
     if (date.length() != 10)
     {
-     std::cout << date<<"------"<< std::endl;
-     std::cout << date[12]<< std::endl;
+    //  std::cout << date<<"------"<< std::endl;
+    //  std::cout << date[12]<< std::endl;
         return 1;
     }
     if (date[4] != '-' || date[7] != '-')
     {
-        std::cout << "hello" << std::endl;
-        std::cout << date[4] << std::endl;
-        std::cout << date[7] << std::endl;
+        // std::cout << "hello" << std::endl;
+        // std::cout << date[4] << std::endl;
+        // std::cout << date[7] << std::endl;
         return 1;
     }
     for (int i = 0; i < 10; i++)
@@ -113,7 +117,7 @@ int Bot::checkDate(std::string date)
             continue;
         if (date[i] < '0' || date[i] > '9')
         {
-            std::cout << "hello" << std::endl;
+            // std::cout << "hello" << std::endl;
             return 1;
         }
     }
@@ -132,21 +136,21 @@ int Bot::checkDateparcing(std::string date, std::string nick, std::string hostna
     // t_date date2;
     date1.year = std::stoi(date.substr(0, 4));
     if (date1.year < 1900 || date1.year > 2024)
-        return (std::cout <<"hello 1"<<std::endl, notenghparam(nick, hostname), -1);
+        return ( notenghparam(nick, hostname), -1);
     date1.month = std::stoi(date.substr(5, 2));
     if (date1.month < 1 || date1.month > 12)
-        return (std::cout <<"hello 2"<<std::endl,notenghparam(nick, hostname),-1);
+        return (notenghparam(nick, hostname),-1);
     date1.day = std::stoi(date.substr(8, 2));
     if (date1.day < 1 || date1.day > 31)
-        return (std::cout <<"hello 3"<<std::endl,notenghparam(nick, hostname),-1);
+        return (notenghparam(nick, hostname),-1);
     if (date1.month == 2 && date1.day > 29 && date1.year % 4 == 0)
-        return (std::cout <<"hello 4"<<std::endl,notenghparam(nick, hostname),-1);
+        return (notenghparam(nick, hostname),-1);
     if (date1.month == 2 && date1.day > 28 && date1.year % 4 != 0)
-        return (std::cout <<"hello 5"<<std::endl,notenghparam(nick, hostname),-1);
+        return (notenghparam(nick, hostname),-1);
     if (date1.month <= 7 && date1.month % 2 == 0 && date1.day > 30)
-        return (std::cout <<"hello 6"<<std::endl,notenghparam(nick, hostname),-1);
+        return (notenghparam(nick, hostname),-1);
     if (date1.month > 7 && date1.month % 2 != 0 && date1.day > 30)
-        return (std::cout <<"hello 7"<<std::endl,notenghparam(nick, hostname),-1);
+        return (notenghparam(nick, hostname),-1);
     return 0;
 }
 int parcedate(std::string date, t_date *date1)
@@ -284,11 +288,11 @@ void Bot::addjocks()
 }
 void Bot::execbot(int fd )
 {
-    // std::cout << "hello" <<messages.size()<< std::endl;
-    // for (int i = 0; i < messages.size(); i++)
-    // {
-    //     std::cout << "i  = " << i << " " << messages[i] << std::endl;
-    // }
+    std::cout << "hello" <<messages.size()<< std::endl;
+    for (int i = 0; i < messages.size(); i++)
+    {
+        std::cout << "i  = " << i << " " << messages[i] << std::endl;
+    }
     if (messages.size() < 3)
     {
         return;
@@ -336,8 +340,8 @@ void Bot::execbot(int fd )
     {
         // std::cout << "hello" << std::endl;
         // std::cout << "msg: " << messages[0] << std::endl;
-        std::string msg = "privmsg " + messages[0] +  " :!age <date> - to get your age\r\n" + "privmsg " + messages[0] +  " :!jock - to get a jock\r\n" + "privmsg " + messages[0] +  " :!cmds - to get all commands\r\n" + "privmsg " + messages[0] +  " :!LIST - to get all user in server\r\n" + "privmsg " + messages[0] +  " :!JOIN <#channel> - to join a channel\r\n" 
-        + "privmsg " + messages[0] +  " :!KICK <#channel> <user> - to kick a user from a channel\r\n" + "privmsg " + messages[0] +  " :!TOPIC <#channel> <topic> - to change the topic of a channel\r\n" + "privmsg " + messages[0] +  " :!MSG <user> <message> - to send a private message to a user\r\n" + "privmsg " + messages[0] +  " :!QUIT - to quit the server\r\n";
+        std::string msg = "privmsg " + messages[0] +  " :!age <date> - to get your age   /" +  "!jock - to get a jock   /" +  "!cmds - to get all commands   /" +  "!LIST - to get all user in server   /" +  "!JOIN <#channel> - to join a channel   /" 
+   +  " :!KICK <#channel> <user> - to kick a user from a channel   /" +  "!TOPIC <#channel> <topic> - to change the topic of a channel   /" +  "!MSG <user> <message> - to send a private message to a user   /" +  "!QUIT - to quit the server\r\n";
         // std::cout << "msg: " << msg << std::endl;
         if (send(fd, msg.c_str(), msg.length(), 0) == -1) {
             messages.clear();

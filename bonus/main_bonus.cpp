@@ -17,7 +17,7 @@
 void  splited(std::string str, std::vector<std::string> *split)
 {
     // std::vector<std::string> split;
-            std::cout << "str: " << str << std::endl;
+            // std::cout << "str: " << str << std::endl;
     for (int i = 0; i < str.length(); i++)
     {
         if (str[i] == ':' && i < str.length()&& str[i + 1] == ' ')
@@ -163,35 +163,44 @@ int main(int argc, char **argv)
             std::cout <<"Error Failed"<<std::endl;
             return(1);
         }
-        std::string  str = static_cast<std::string>(buffer);
-        // buffer;
-        std::cout << "---------------------  " << str << std::endl;
-        // std::cout << GREEN << str << std::endl;
-        std::vector<std::string> split ;
-        splited(str, &split);
-        // for (int i = 0; i < split.size(); i++)
+        if(bytes == 0)
+        {
+            std::cout <<"Error Failed"<<std::endl;
+            return(1);
+        }
+        // if (buffer)
         // {
-        //     std::cout << "i  = " << i << " " << split[i] << std::endl;
+            std::string  str = static_cast<std::string>(buffer);
+            // buffer;
+            std::cout << "- " << str << std::endl;
+            // std::cout << GREEN << str << std::endl;
+            std::vector<std::string> split ;
+            splited(str, &split);
+            // for (int i = 0; i < split.size(); i++)
+            // {
+            //     std::cout << "i  = " << i << " " << split[i] << std::endl;
+            // }
+
+            // std::cout << "hello" << std::endl;
+            bot.parcingBuffer(split);
+            // for (int i = 0; i < bot.getMessage().size(); i++)
+            // {
+            //     std::cout <<"i  = " <<i <<" "<<bot.getMessage()[i] << std::endl;
+            // }
+            std::vector<std::string> msg = bot.getMessage();
+            // try 
+            // {
+            //     bot.execbot(socket_fd);
+            // }
+            // catch(const std::exception& e)
+            // {
+            //     std::cerr << e.what() << '\n';
+            // }
+            bot.execbot(socket_fd);
+            bot.clearMessage();
+            // std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
+            msg.clear();
+            split.clear();
         // }
-        
-        // std::cout << "hello" << std::endl;
-        bot.parcingBuffer(split);
-        // for (int i = 0; i < bot.getMessage().size(); i++)
-        // {
-        //     std::cout <<"i  = " <<i <<" "<<bot.getMessage()[i] << std::endl;
-        // }
-        std::vector<std::string> msg = bot.getMessage();
-        // try 
-        // {
-        //     bot.execbot(socket_fd);
-        // }
-        // catch(const std::exception& e)
-        // {
-        //     std::cerr << e.what() << '\n';
-        // }
-        bot.execbot(socket_fd);
-        // std::memset(static_cast<void*>(const_cast<char*>(str.c_str())),0,str.length());
-        msg.clear();
-        split.clear();
      }
 }

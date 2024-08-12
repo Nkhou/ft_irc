@@ -8,3 +8,4 @@ need to change * >>> nickname l9dim
 kick to somone not exist no sush user error :: (403): No such channel
 
 
+undefined behavior in quit (the last client )>>>  not finish 

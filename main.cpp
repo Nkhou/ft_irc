@@ -259,7 +259,7 @@ int main(int argc,char **argv)
 
                     if(size == 0)
                     {
-                        std::cout <<"<<<<<<<<<<<hi"<<std::endl;
+                        // std::cout <<"<<<<<<<<<<<hi"<<std::endl;
                         std::cout << "<<< Client Disconnected >>> " << buffer<< ser.fds[i].fd << std::endl;
                         close(ser.fds[i].fd);
                         ser.fds.erase(ser.fds.begin() + i);

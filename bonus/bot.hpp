@@ -37,6 +37,7 @@ class Bot {
         int checkDateparcing(std::string date, std::string nick, std::string hostname);
         std::vector<std::string>  getJocks();
         void addjocks();
+        void clearMessage();        
         // int getYear();
         // int getMonth();
         // int getDay();
