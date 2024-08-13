@@ -52,13 +52,13 @@ void Channel::setMode(std::string mode)
         {
             return;
         }
-        else if (this->mode[i] == "+" + mode)
+        else if (this->mode[i] == "+" + mode.substr(1))
         {
             this->mode.erase(this->mode.begin() + i);
             this->mode.push_back(mode);
             return;
         }
-        else if (this->mode[i] == "-" + mode)
+        else if (this->mode[i] == "-" + mode.substr(1))
         {
             this->mode.erase(this->mode.begin() + i);
             this->mode.push_back(mode);

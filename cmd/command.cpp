@@ -334,8 +334,9 @@ void Command::ModeCommand(server *ser)
                             }
                             else if (this->keys[o] == "-i")
                             {
-                                if (!ser->channels[i].checkModeexist(ser->channels[i], "-i"))
+                                if (ser->channels[i].checkModeexist(ser->channels[i], "+i") )
                                 {
+                                    std::cout << "keys : " << ser->channels[i].checkModeexist(ser->channels[i], "+i") << std::endl;
                                     ser->channels[i].setMode(this->keys[o]);
                                     ser->channels[i].setInviteOnly(0);
                                     std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] ) + "\r\n";
@@ -370,18 +371,7 @@ void Command::ModeCommand(server *ser)
                                 ser->channels[i].sendMessage(msg);
                                 // return;
                             }
-                            // else
-                            // {
-                            //     std::string msg = notenghparam(args[0], ser->hostname);
-                            //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-                            //     {
-                            //         std::cout << "Failed Send Try Again"<<std::endl;
-                            //     }
-                            //     return;
-                            // }
                         }
-                        // std::string msg = ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + ser->splited[2] + "\r\n";
-                        // ser->channels[i].sendMessage(msg);
                         return;
                     }
                 }
@@ -398,7 +388,6 @@ void Command::ModeCommand(server *ser)
         {
             std::cout << "Failed Send Try Again"<<std::endl;
         }
-        // throw std::invalid_argument("Channel does not exist");
     }
     else 
     {
@@ -421,8 +410,6 @@ void Command::ModeCommand(server *ser)
                 {
                     if (ser->channels[i].getOperators()[j].fd == this->fd)
                     {
-                        // std::string op;
-                        // op += this->args[1][0];
                         for (size_t o = 0; o < this->keys.size(); o++)
                         {
                             if (this->keys[o] == "+l" && ((o + 1) < this->args.size()))
@@ -434,7 +421,6 @@ void Command::ModeCommand(server *ser)
                                         break;
                                     c++;
                                 }
-                                    // std::cout << <<"hello" << std::endl;
                                 if (c ==  this->args[o + 1].size())
                                 {
                                     if (std::atoi(this->args[o + 1].c_str()) > 0)
@@ -555,8 +541,9 @@ void Command::ModeCommand(server *ser)
     }
 void Command::ParceModeCommand(std::vector <std::string> splited, int client_fd)
 {
-    if (splited.size() == 0)
+    if (splited.size() < 2)
         return;
+    
     for (unsigned long i = 1; i < splited.size(); i++)
     {
         // if ()
@@ -973,6 +960,24 @@ void Command::executecmd(server *server) {
             {
                 std::cout << "Failed Send Try Again"<<std::endl;
             }
+            return;
+        }
+        std::cout << server->splited[2][0]<<"************" << std::endl;
+        if (server->splited[2][0] != '-' && server->splited[2][0] != '+')
+        {
+            for (size_t i = 0; i < server->clients.size(); i++)
+            {
+                if (server->clients[i].fd == server->client_fd)
+                {
+                    std::string msg = ":" + server->clients[i].nickname + " MODE " + server->splited[1] + " :is unknown mode char to me\r\n";
+                    if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
+                    {
+                        std::cout << "Failed Send Try Again"<<std::endl;
+                    }
+                    return;
+                }
+            }
+            // std::string msg = ":" + ser + splited[2] + " :is unknown mode char to me\r\n";
         }
         ParceModeCommand(server->splited, server->client_fd);
         ModeCommand(server);
