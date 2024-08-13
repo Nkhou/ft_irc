@@ -78,5 +78,7 @@ std::string notfyMessage(std::string nick, std::string hostname, std::string mes
 std::string notenghparam(std::string nick, std::string hostname);
 std::string unknowncommand(std::string nick, cli client ,std::string hostname);
 std::string kickerr(std::string nick, std::string hostname);
+std::string ERR_KEYSET(std::string nick, std::string hostname);
+std::string ERR_NOTONCHANNEL(std::string nick, std::string hostname);
 
 #endif

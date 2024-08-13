@@ -130,3 +130,13 @@ std::string kickerr(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 461 " + nick+  " KICK :Not enough parameters\r\n";
     return msg;
 }
+std::string ERR_KEYSET(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 467 " + nick + " :Channel key already set\r\n";
+    return msg;
+}
+std::string ERR_NOTONCHANNEL(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 442 " + nick + " :You're not on that channel\r\n";
+    return msg;
+}
