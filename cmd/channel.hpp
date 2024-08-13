@@ -29,7 +29,6 @@ class Channel
         int getOperatorCount();
         // int getMaxUsers();
         int getChannelSize();
-        void setUsers(std::string nickname, std::string old);
         void setuserCount(int userCount);
         void setoperatorCount(int operatorCount);
         std::vector<cli> getOperators();
