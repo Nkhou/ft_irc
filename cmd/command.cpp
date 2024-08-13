@@ -260,10 +260,17 @@ void Command::ModeCommand(server *ser)
     if (this->args.size() == 0)
         return;
     // std::cout << this->args.size() << std::endl;
-    // for (unsigned long i = 0 ; i < this->args.size(); i++)
-    // {
-    //     std::cout << this->args[i] << std::endl;
-    // }
+    for (unsigned long i = 0 ; i < this->args.size(); i++)
+    {
+        std::cout << "this->args : "<<this->args[i] << std::endl;
+        // std::cout << this->keys[i] << std::endl;
+    }
+    for (unsigned long i = 0 ; i < this->keys.size(); i++)
+    {
+        std::cout <<"keys : " <<this->keys[i] << std::endl;
+        // std::cout << this->keys[i] << std::endl;
+    }
+    // for÷ (unsigned )
     // return ;
     if (ser->channels.size() == 0)
     {
@@ -274,8 +281,9 @@ void Command::ModeCommand(server *ser)
         }
         return;
     }
-    if (ser->splited.size() == 2 && this->args.size() == 1)
+    if (ser->splited.size() == 2)
     {
+        
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
             if (ser->channels[i].getName() == this->args[0])
@@ -304,8 +312,9 @@ void Command::ModeCommand(server *ser)
             std::cout << "Failed Send Try Again"<<std::endl;
         }
     }
-    else if (ser->splited.size() == 3 || this->args.size() == 2)
+    else if (ser->splited.size() == 3)
     {
+        std::cout << "hello" << std::endl;
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
             if (ser->channels[i].getName() == this->args[0])
@@ -391,7 +400,7 @@ void Command::ModeCommand(server *ser)
         }
         // throw std::invalid_argument("Channel does not exist");
     }
-    else if (ser->splited.size() == 4 || this->args.size() == 3)
+    else 
     {
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
@@ -412,40 +421,33 @@ void Command::ModeCommand(server *ser)
                 {
                     if (ser->channels[i].getOperators()[j].fd == this->fd)
                     {
-                        std::string op;
-                        op += this->args[1][0];
-                        for (size_t o = 0; o < this->args.size(); o++)
+                        // std::string op;
+                        // op += this->args[1][0];
+                        for (size_t o = 0; o < this->keys.size(); o++)
                         {
                             if (this->keys[o] == "+l" && ((o + 1) < this->args.size()))
                             {
                                 int c = 0;
-                                while ((o + 1) <this->args.size() && this->args[o + 1][c])
+                                while (c  < this->args[o + 1][c])
                                 {
                                     if (this->args[o + 1][c] < '0' || this->args[o + 1][c] > '9')
                                         break;
                                     c++;
                                 }
-                                if (c != 0 && c < this->args[o + 1].size())
+                                    // std::cout << <<"hello" << std::endl;
+                                if (c ==  this->args[o + 1].size())
                                 {
-                                    if (std::atoi(this->args[o + 1].c_str()) < 0)
+                                    if (std::atoi(this->args[o + 1].c_str()) > 0)
                                     {
                                         ser->channels[i].setMode(this->keys[o]);
                                         ser->channels[i].setMaxUsers(std::atoi(this->args[o + 1].c_str()));
                                         std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1]) + "\r\n";
                                         ser->channels[i].sendMessage(msg);
-                                        // std::string msg = ":" + ser->hostname + " 461 " + ser->channels[i].getOperators()[j].nickname.substr(1) + " " + this->args[0] + " " + this->keys[o] + " :Channel key already set\r\n";
-                                        // if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-                                        // {
-                                        //     std::cout << "Failed Send Try Again"<<std::endl;
-                                        // }
-                                        // return;
                                     }
                                 }
-                                // return;
                             } 
                             else if (this->keys[o] == "+o" && ((o + 1) < this->args.size()))
                             {
-                                // ser->channels[i].setMode(this->keys[o]);
                                 for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
                                 {
                                     if (ser->channels[i].getUsers()[l].nickname == this->args[o + 1])
@@ -463,38 +465,28 @@ void Command::ModeCommand(server *ser)
                                             std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1]);
                                             ser->channels[i].sendMessage(msg);
                                         }
-                                        // return;
                                     }
                                 }
-                                // if (ser->channels[i].getUsers()[0].nickname == this->args[2])
-                                //     return ;
-                                // std::string msg = msg_errpriv(args[0], ser->hostname);
-                                // if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-                                // {
-                                //     std::cout << "Failed Send Try Again"<<std::endl;
-                                // }
-                                // return;
                             }
                             else if (this->keys[o] == "-o")
                             {
                                 ser->channels[i].setMode(this->keys[o]);
                                 for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
                                 {
-                                    if (ser->channels[i].getUsers()[l].nickname == this->args[o + 1])
+                                    if (ser->channels[i].getUsers()[l].nickname == this->args[1])
                                     {
                                         int c = 0;
                                         for (unsigned long k = 0; k < ser->channels[i].getOperators().size(); k++)
                                         {
-                                            if (ser->channels[i].getOperators()[k].nickname == this->args[o + 1])
+                                            if (ser->channels[i].getOperators()[k].nickname == this->args[1])
                                                 break ;
                                             c++;
                                         }
                                         if (c < ser->channels[i].getOperators().size())
                                         {
                                             ser->channels[i].removeOperator(ser->channels[i].getUsers()[l].nickname);
-                                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1]) + "\r\n";
+                                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[1]) + "\r\n";
                                             ser->channels[i].sendMessage(msg);
-                                            // return;
                                         }
                                     }
                                 }
@@ -536,43 +528,13 @@ void Command::ModeCommand(server *ser)
                             {
                                 ser->channels[i].setMode(this->keys[o]);
                                 ser->channels[i].setKey("\0");
-                                for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
-                                {
-                                    // if (ser->channels[i].getUsers()[l].nickname == this->args[o + 1])
-                                    // {
-                                    //     ser->channels[i].removeUser(ser->channels[i].getUsers()[l].nickname);
-                                        // std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] )+ "\r\n";
-                                        // ser->channels[i].sendMessage(msg);
-                                        return;
-                                    }
                                 std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0]  ) + "\r\n";
                                 ser->channels[i].sendMessage(msg);
-                                }
-                                // return;
+                                
                             }
-                            // else
-                            // {
-                            //     std::string msg = NotMode(args[0], ser->hostname);
-                            //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-                            //     {
-                            //         std::cout << "Failed Send Try Again"<<std::endl;
-                            //     }
-                            //     return;
-                            // }
 
                         }
-                        // if (op)
-                        // {
-                        //     for (size_t o = 0; o < this->args.size(); o++)
-                        //     {
-                        //         std::string msg = ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + op + "\r\n";
-                        //         ser->channels[i].sendMessage(msg);
-                        //         return;
-                        //     }
-                        //     // std::string msg = ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + op + "\r\n";
-                        //     // ser->channels[i].sendMessage(msg);
-                        //     // return;
-                        // }
+                        return;
                     }
                 }
                 std::string msg = NotOPRT(args[0], ser->hostname);
@@ -581,6 +543,7 @@ void Command::ModeCommand(server *ser)
                     std::cout << "Failed Send Try Again"<<std::endl;
                 }
                 return;
+                }
             }
             std::string msg = ChannelExist(args[0], ser->hostname);
             if(send(fd, msg.c_str(), msg.length(), 0) < 0)
@@ -590,138 +553,8 @@ void Command::ModeCommand(server *ser)
             return;
         }
     }
-    // return ;
-    // else
-    // {
-    //     for (unsigned long i = 0; i < ser->channels.size(); i++)
-    //     {
-    //         if (ser->channels[i].getName() == this->args[0])
-    //         {
-    //             if (ser->channels[i].getOperators().size() == 0)
-    //             {
-    //                 std::string msg = NotOPRT(args[0], ser->hostname);
-    //             if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-    //             {
-    //                 std::cout << "Failed Send Try Again"<<std::endl;
-    //             }
-    //                 return;
-    //             }
-    //             for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
-    //             {
-    //                 if (ser->channels[i].getOperators()[j].fd == this->fd)
-    //                 {
-                        
-    //                     if (this->keys[o][0] == '+' && this->args[1][1] == 't')
-    //                     {
-    //                         ser->channels[i].setMode(this->args[1]);
-    //                         for (unsigned long l = 2; l < ser->channels[i].getOperators().size(); l++)
-    //                         {
-                                
-    //                         if (l == 2)
-    //                             ser->channels[i].setTopic(this->args[l]); // need to add mode if not existe
-    //                         else if (l > 1)
-    //                             ser->channels[i].setTopic((ser->channels[i].getTopic() + this->args[l]));
-    //                         }
-    //                         std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) + " MODE " + this->args[0] + " " + this->args[1] + " " + this->args[2] + "\r\n";
-    //                         if (send(fd, msg.c_str(), msg.length(), 0) < 0)
-    //                         {
-    //                             std::cout << "Failed Send Try Again"<<std::endl;
-    //                         }
-    //                         return;
-    //                     }
-    //                     else if (this->args[1][0] == '-' && this->args[1][1] == 't')
-    //                     {
-    //                         ser->channels[i].setMode(this->args[1]);
-    //                         ser->channels[i].setTopic("\0");
-    //                         std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) + " MODE " + this->args[0] + " " + this->args[1] + "\r\n";
-    //                         if (send(fd, msg.c_str(), msg.length(), 0) < 0)
-    //                         {
-    //                             std::cout << "Failed Send Try Again"<<std::endl;
-    //                         }
-    //                         return;
-    //                     }
-    //                 }
-    //             }
-    //             std::string msg = NotOPRT(args[0], ser->hostname);
-    //             if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-    //             {
-    //                 std::cout << "Failed Send Try Again"<<std::endl;
-    //             }
-    //             return;
-    //         }
-    //         std::string msg = ChannelExist(args[0], ser->hostname);
-    //         if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-    //         {
-    //             std::cout << "Failed Send Try Again"<<std::endl;
-    //         }
-    //     }
-    // }
-            
-// }
 void Command::ParceModeCommand(std::vector <std::string> splited, int client_fd)
 {
-    // for (unsigned long i = 1; i < splited.size(); i++)
-    // {
-    //     if (splited[1][0] != '#' && splited[1][0] != '&' && splited[1][0] != '!')
-    //     {
-    //         throw std::invalid_argument("Invalid argument--------------------------------------------");
-    //     }
-    //     // if (i == 1)
-    //     // {
-    //     //     for (unsigned long j = 1; j < splited[1].size(); j++)
-    //     //     {
-    //     //         if (!((splited[i][j] >= 'a' && splited[i][j] <= 'z') || (splited[i][j] >= 'A' && splited[i][j] <= 'Z')  || (splited[i][j] == '_')))
-    //     //         {
-    //     //             throw std::invalid_argument("Invalid argument++++++++++++++++++++++++++++++++++++++++++");
-    //     //         }
-    //     //     }
-    //     //     this->args.push_back(splited[i]);
-    //     // }
-    //     if (splited[i][0] == '+')
-    //     {
-    //         for (unsigned long j = 1; j < splited[i].size(); j++)
-    //         {
-    //             if (splited[i][j] == 'o' || splited[i][j] == 't' || splited[i][j] == 'i' || splited[i][j] == 'k' || splited[i][j] == 'l')
-    //             {
-    //                 this->args.push_back(splited[i]);
-    //             }
-    //             else
-    //             {
-    //                 throw std::invalid_argument("Invalid argument................................");
-    //             }
-    //         }
-    //     }
-    //     else if (splited[i][0] == '-')
-    //     {
-    //         for (unsigned long j = 1; j < splited[i].size(); j++)
-    //         {
-    //             if (splited[i][j] == 'o' || splited[i][j] == 't' || splited[i][j] == 'i' || splited[i][j] == 'k' || splited[i][j] == 'l')
-    //             {
-    //                 this->args.push_back(splited[i]);
-    //             }
-    //             else
-    //             {
-    //                 throw std::invalid_argument("Invalid argument~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    //             }
-    //         }
-    //     }
-    //     else if (i == 4)
-    //     {
-    //         this->args.push_back(splited[i]);
-    //     }
-    //     else if (splited[i][0] == '#')
-    //     {
-    //         this->args.push_back(splited[i]);
-    //     }
-    //     else if (splited[2] == "+t")
-    //     {
-    //         this->args.push_back(splited[i]);
-    //     }
-    //     else
-    //     {
-    //         throw std::invalid_argument("Invalid argument___________________________________________");
-    //     }
-    // }
     if (splited.size() == 0)
         return;
     for (unsigned long i = 1; i < splited.size(); i++)
