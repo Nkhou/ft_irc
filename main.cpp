@@ -374,7 +374,7 @@ int main(int argc,char **argv)
                                         if(a == 0)
                                         {
                                           ser.clients[i - 1].nickname= split[1];
-                                            
+                                            // continue;
                                         }
                                      }
                               }
@@ -397,6 +397,7 @@ int main(int argc,char **argv)
                                       ser.clients[i - 1].hostname = split[2];
                                       ser.clients[i - 1].servername = split[3];
                                       ser.clients[i - 1].realname = split[4];
+                                    //   continue;
                                     
                                 }  
                                 else if(split.size() < 5)
@@ -420,6 +421,7 @@ int main(int argc,char **argv)
                                 return(std::cout << "Failed Send Try Again"<<std::endl,1);
                             }
                             ser.clients[i - 1].flag = true;
+                            continue;
                          
                         }
                     }

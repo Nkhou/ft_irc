@@ -1017,7 +1017,7 @@ void Command::user_auth(std::vector<std::string> split,server *server,int client
                 std::cout << "Failed Send Try Again"<<std::endl;
           
      }  
-     else if(split.size() < 5)
+     else
      {
            std::string msg = msg_err(split[0],server->hostname);
               if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
@@ -1034,9 +1034,8 @@ void Command::pass_auth(server *server)
              if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
                  std::cout << "Failed Send Try Again"<<std::endl;
          }
-         else if(server->splited[1] == server->pass)
+         else
          {
-             std::cout << "pass_authhereeeeeee" << std::endl;
              std::string msg = msg_may_registered(server->splited[0],server->hostname);
             if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
                 std::cout << "Failed Send Try Again"<<std::endl;
