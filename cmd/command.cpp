@@ -260,16 +260,16 @@ void Command::ModeCommand(server *ser)
     if (this->args.size() == 0)
         return;
     // std::cout << this->args.size() << std::endl;
-    for (unsigned long i = 0 ; i < this->args.size(); i++)
-    {
-        std::cout << "this->args : "<<this->args[i] << std::endl;
-        // std::cout << this->keys[i] << std::endl;
-    }
-    for (unsigned long i = 0 ; i < this->keys.size(); i++)
-    {
-        std::cout <<"keys : " <<this->keys[i] << std::endl;
-        // std::cout << this->keys[i] << std::endl;
-    }
+    // for (unsigned long i = 0 ; i < this->args.size(); i++)
+    // {
+    //     std::cout << "this->args : "<<this->args[i] << std::endl;
+    //     // std::cout << this->keys[i] << std::endl;
+    // }
+    // for (unsigned long i = 0 ; i < this->keys.size(); i++)
+    // {
+    //     std::cout <<"keys : " <<this->keys[i] << std::endl;
+    //     // std::cout << this->keys[i] << std::endl;
+    // }
     // for÷ (unsigned )
     // return ;
     if (ser->channels.size() == 0)
