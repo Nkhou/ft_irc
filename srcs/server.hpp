@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/12 08:47:39 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/14 17:09:05 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,10 @@ typedef struct server
     std::string hostname;
     std::vector<Channel>channels;
     std::vector<std::string>splited;
+    std::string pass;
     int client_fd;
     client client_cmd;
-  
+    int check_error_nickname(std::string nickname);
 }ser;
 
 
@@ -81,5 +82,6 @@ std::string kickerr(std::string nick, std::string hostname);
 std::string ERR_KEYSET(std::string nick, std::string hostname);
 std::string ERR_NOTONCHANNEL(std::string nick, std::string hostname);
 std::string ERR_CHANNELISFULL(std::string nick, std::string hostname);
-
+std::string msg_err_one(std::string nick, std::string hostname);
+std::string msg_may_registered(std::string nick,std::string hostname);
 #endif

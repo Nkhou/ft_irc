@@ -40,6 +40,9 @@ class Command {
         void InviteCommand(server *ser);
         void ParceModeCommand(std::vector <std::string> splited, int client_fd);
         void ParcePrivmsg(std::vector <std::string> splited, int client_fd);
+        void nick_auth(std::vector<std::string> split,server *server,int client_fd);
+        void pass_auth(server *server);
+        void user_auth(std::vector<std::string> split,server *server,int client_fd);
         void PrivmsgCommand(server *ser);
         client *getClientByFd(server *ser, int fd);
         

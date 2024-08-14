@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 11:06:05 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/12 06:56:33 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/14 17:01:21 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ std::string message_err_nick_name(std::string hostname, std::string code, std::s
 std::string msg_err(std::string nick, std::string hostname)
 {
    std::string msg = ":" + hostname + " 461 " +"* "+ nick + " :Not enough parameters\r\n";
+    return msg;
+}
+
+std::string msg_err_one(std::string nick, std::string hostname)
+{
+   std::string msg = ":" + hostname + " 461 " +"* "+ nick + " just testing wax khadam\r\n";
     return msg;
 }
 
@@ -47,7 +53,11 @@ std::string msg_notregistered(std::string nick,std::string hostname)
     std::string msg = ":" + hostname + " 451 " + nick + " :You have not registered !\r\n";
     return msg;
 }
-
+std::string msg_may_registered(std::string nick,std::string hostname)
+{
+    std::string msg = ":" + hostname + " 462 " + nick + " :You may not reregister !\r\n";
+    return msg;
+}
 std::string msg_nicknameinuse(std::string nick,std::string hostname)
 {
     std::string msg = ":" + hostname + " 433 " + nick + " :Nickname is already in use !\r\n";

@@ -109,7 +109,7 @@ std::vector<std::string> split_string(std::string cmd,std::vector<std::string> s
 
     return split;
 }
-int check_error_nickname(std::string nickname)
+int server::check_error_nickname(std::string nickname)
 {
     if(nickname.size() > 9)
     {
@@ -135,7 +135,7 @@ int main(int argc,char **argv)
 {
    int port_num;
     server ser;
-    std::string pass;
+   
      struct sockaddr_in addr;
      std::vector<std::string> buffer_stor;
      struct pollfd fdpoll;
@@ -156,8 +156,8 @@ int main(int argc,char **argv)
         exit (0);
     }
     port_num = std::atoi(argv[1]);
-    pass= argv[2];  
-    if(pass.empty())
+    ser.pass= argv[2];  
+    if(ser.pass.empty())
     {
         std::cout <<"Error Password empty"<<std::endl;
         exit (0);
@@ -245,7 +245,7 @@ int main(int argc,char **argv)
                 cli.servername = "";
                 cli.password = false;
                 cli.flag = false;
-               cli.flag_cmd = false;
+                cli.flag_cmd = false;
 
                
                    ser.clients.push_back(cli);
@@ -337,7 +337,7 @@ int main(int argc,char **argv)
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                         return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                 }
-                                else if(split[1] == pass && ser.clients[i - 1].nickname == "" && ser.clients[i - 1].user_name == "")
+                                else if(split[1] == ser.pass && ser.clients[i - 1].nickname == "" && ser.clients[i - 1].user_name == "")
                                     ser.clients[i - 1].password = true;
                            }    
 
@@ -350,7 +350,7 @@ int main(int argc,char **argv)
                          
                              if(split.size() >= 2)
                              {
-                                if(check_error_nickname(split[1]) != 0)
+                                if(ser.check_error_nickname(split[1]) != 0)
                                      {
                                         msg = message_err_nick_name(ser.hostname, ERR_ERRONEUSNICKNAME_CODE,"*", ser.clients[i - 1].nickname, ERR_ERRONEUSNICKNAME);
                                         if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length() ,0) < 0)
@@ -449,9 +449,9 @@ int main(int argc,char **argv)
             {
                  std::cout << split[i] << std::endl;
             }
-            if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
+            if (split.size() > 0 && ser.clients[i - 1].password == true && ser.clients[i - 1].nickname != "" )
             {
-                if (split[0] != "PASS" && split[0] != "NICK" && split[0] != "USER" && split[0] != "PONG")
+                if (split[0] != "PONG")
                 {
                 ser.splited = split;
                 ser.client_fd = ser.fds[i].fd;

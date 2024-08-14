@@ -963,7 +963,99 @@ void Command::PrivmsgCommand(server *ser)
 
         // }
 }
+void Command::nick_auth(std::vector<std::string> split,server *server,int client_fd)
+{
+     if(server->splited.size() >= 2)
+     {
+        if(server->check_error_nickname(server->splited[1]) != 0)
+             {
+                std::string msg = message_err_nick_name(server->hostname, ERR_ERRONEUSNICKNAME_CODE,"*", server->client_cmd.nickname, ERR_ERRONEUSNICKNAME);
+                if(send(server->client_cmd.fd, msg.c_str(), msg.length() ,0) < 0)
+                    std::cout << "Failed Send Try Again"<<std::endl;
+               
+             }
+             else
+             {
+                int a = 0;
+                for (size_t j = 0; j < server->clients.size(); j++)
+                {
+                    if (server->clients[j].nickname == server->splited[1])
+                    {
+                        a = 1;
+                       std::string  msg = message_err_nick_name(server->hostname, ERR_NICKNAMEINUSE_CODE,"*", server->client_cmd.nickname, ERR_NICKNAMEINUSE_MSG);
+                       if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+                           std::cout << "Failed Send Try Again"<<std::endl;
+                        
+                    }
+                }
+                if(a == 0)
+                {
+                   server->client_cmd.nickname= server->splited[1];
+                   std::string  msg = message_err_nick_name(server->hostname, ERR_NICKNAMEINUSE_CODE,"*", server->client_cmd.nickname, ERR_NICKNAMEINUSE_MSG);
+                   if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+                     std::cout << "Failed Send Try Again"<<std::endl;
+                    
+                }
+             }
+      }
+     if(server->splited.size() < 2)
+     {
+       std::string msg = message_err_nick_name(server->hostname, ERR_NONICKNAMEGIVEN_CODE,"*", server->client_cmd.nickname, ERR_NONICKNAMEGIVEN_MSG);
+             if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+                 std::cout << "Failed Send Try Again"<<std::endl;
+     }
+   
+}
+void Command::user_auth(std::vector<std::string> split,server *server,int client_fd)
+{
+    std::cout << "user_authhereeeeeee" << std::endl;
+    
+     if(split.size() == 5 || split.size() > 5)
+     {
+           std::string msg = msg_may_registered(split[0],server->hostname);
+            if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
+                std::cout << "Failed Send Try Again"<<std::endl;
+          
+     }  
+     else if(split.size() < 5)
+     {
+           std::string msg = msg_err(split[0],server->hostname);
+              if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
+                std::cout << "Failed Send Try Again"<<std::endl;
+     }
+    
+}
+
+void Command::pass_auth(server *server)
+{
+    if(server->splited.size() < 2)
+         {
+             std::string msg = msg_err(server->splited[0], server->hostname);
+             if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+                 std::cout << "Failed Send Try Again"<<std::endl;
+         }
+         else if(server->splited[1] == server->pass)
+         {
+             std::cout << "pass_authhereeeeeee" << std::endl;
+             std::string msg = msg_may_registered(server->splited[0],server->hostname);
+            if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+                std::cout << "Failed Send Try Again"<<std::endl;
+         }
+}
 void Command::executecmd(server *server) {
+    // if(server->splited[0] == "NICK")
+    // {
+    //      nick_auth(server);
+    // }
+    if(server->splited[0] == "USER")
+    { 
+        std::cout << "USER6777777" << std::endl;
+        user_auth(server->splited,server,server->client_fd);
+    }
+    if(server->splited[0] == "PASS")
+    {
+         pass_auth(server);
+    }
     if (server->splited[0] == "QUIT")
     {
         std::cout << "QUIT" << std::endl;
