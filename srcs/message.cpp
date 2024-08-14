@@ -135,8 +135,18 @@ std::string ERR_KEYSET(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 467 " + nick + " :Channel key already set\r\n";
     return msg;
 }
+std::string ERR_CHANNELISFULL(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 471 " + nick + " :Cannot join channel (+l)\r\n";
+    return msg;
+}
 std::string ERR_NOTONCHANNEL(std::string nick, std::string hostname)
 {
     std::string msg = ":" + hostname + " 442 " + nick + " :You're not on that channel\r\n";
+    return msg;
+}
+std::string ERR_NOTOPERATOR(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 482 " + nick + " :You're not channel operator\r\n";
     return msg;
 }

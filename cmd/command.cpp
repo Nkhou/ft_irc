@@ -259,19 +259,25 @@ void Command::ModeCommand(server *ser)
 {
     if (this->args.size() == 0)
         return;
-    // std::cout << this->args.size() << std::endl;
-    // for (unsigned long i = 0 ; i < this->args.size(); i++)
-    // {
-    //     std::cout << "this->args : "<<this->args[i] << std::endl;
-    //     // std::cout << this->keys[i] << std::endl;
-    // }
-    // for (unsigned long i = 0 ; i < this->keys.size(); i++)
-    // {
-    //     std::cout <<"keys : " <<this->keys[i] << std::endl;
-    //     // std::cout << this->keys[i] << std::endl;
-    // }
-    // for÷ (unsigned )
-    // return ;
+    for (size_t i = 0; i < ser->channels.size(); i++)
+    {
+        if (ser->channels[i].getName() == this->args[0])
+        {
+            if (ser->channels[i].getUser(this->fd) == NULL)
+            {
+                std::string msg = ERR_NOTONCHANNEL(args[0], ser->hostname);
+                if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                {
+                    std::cout << "Failed Send Try Again"<<std::endl;
+                }
+                return;
+            }
+        }
+    }
+    for (size_t p = 0; p < this->keys.size(); p++)
+    {
+        std::cout << "---args : " << this->keys[p] << std::endl;
+    }
     if (ser->channels.size() == 0)
     {
         std::string msg = ChannelExist(args[0], ser->hostname);
@@ -314,7 +320,7 @@ void Command::ModeCommand(server *ser)
     }
     else if (ser->splited.size() == 3)
     {
-        std::cout << "hello" << std::endl;
+        // std::cout << "hello" << std::endl;
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
             if (ser->channels[i].getName() == this->args[0])
@@ -325,6 +331,7 @@ void Command::ModeCommand(server *ser)
                     {
                         for (size_t o = 0; o < this->keys.size(); o++)
                         {
+                            std::cout << "hello" << this->keys[o]<< std::endl;
                             if (this->keys[o] == "+i" && !ser->channels[i].checkModeexist(ser->channels[i], "+i"))
                             {
                                 ser->channels[i].setMode(this->keys[o]);
@@ -343,7 +350,7 @@ void Command::ModeCommand(server *ser)
                                     ser->channels[i].sendMessage(msg);
                                 }
                             }
-                            else if (this->keys[o] == "-t" && !ser->channels[i].checkModeexist(ser->channels[i], "-t"))
+                            else if (this->keys[o] == "-t" && ser->channels[i].checkModeexist(ser->channels[i], "+t"))
                             {
                                     ser->channels[i].setMode(this->keys[o]);
                                     ser->channels[i].setTopic("\0");
@@ -358,16 +365,18 @@ void Command::ModeCommand(server *ser)
                                     std::cout << "Failed Send Try Again"<<std::endl;
                                 }
                             }
-                            else if (this->keys[o] == "-k" && !ser->channels[i].checkModeexist(ser->channels[i], "-k"))
+                            else if (this->keys[o] == "-k" && ser->channels[i].checkModeexist(ser->channels[i], "+k"))
                             {
                                 ser->channels[i].setMode(this->keys[o]);
                                 ser->channels[i].setKey("\0");
+                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] ) + "\r\n";
+                                ser->channels[i].sendMessage(msg);
                             }
-                            else if (this->keys[o] == "-l" && !ser->channels[i].checkModeexist(ser->channels[i], "-l"))
+                            else if (this->keys[o] == "-l" && ser->channels[i].checkModeexist(ser->channels[i], "+l"))
                             {
                                 ser->channels[i].setMode(this->keys[o]);
                                 ser->channels[i].setMaxUsers(-1);
-                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] ) + "\r\n";
+                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0]  + " " + this->keys[o]) + "\r\n";
                                 ser->channels[i].sendMessage(msg);
                                 // return;
                             }
@@ -414,49 +423,62 @@ void Command::ModeCommand(server *ser)
                         {
                             if (this->keys[o] == "+l" && ((o + 1) < this->args.size()))
                             {
-                                int c = 0;
-                                while (c  < this->args[o + 1][c])
+                                int d = 0;
+                                int z = 0;
+                                while (d  < keys.size())
                                 {
-                                    if (this->args[o + 1][c] < '0' || this->args[o + 1][c] > '9')
+                                    if (this->keys[d] == "+i")
+                                        z++;
+                                    if (this->keys[d] == "+l")
+                                        break;
+                                    d++;
+                                }
+                                int c = 0;
+                                // std::cout << "args : " << this->args[o + 1 - z] << std::endl;
+                                while (c  < this->args[o + 1 - z][c])
+                                {
+                                    if (this->args[o + 1 - z][c] < '0' || this->args[o + 1 - z][c] > '9')
                                         break;
                                     c++;
                                 }
-                                if (c ==  this->args[o + 1].size())
+                                if (c ==  this->args[o + 1 - z].size())
                                 {
-                                    if (std::atoi(this->args[o + 1].c_str()) > 0 && !ser->channels[i].checkModeexist(ser->channels[i], "+l"))
+                                    if (std::atoi(this->args[o + 1 - z].c_str()) > 0)
                                     {
                                         ser->channels[i].setMode(this->keys[o]);
-                                        ser->channels[i].setMaxUsers(std::atoi(this->args[o + 1].c_str()));
-                                        std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1]) + "\r\n";
+                                        ser->channels[i].setMaxUsers(std::atoi(this->args[o + 1 - z].c_str()));
+                                        std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1 - z]) + "\r\n";
                                         ser->channels[i].sendMessage(msg);
-                                    }
-                                    else
-                                    {
-                                        std::string msg = ERR_KEYSET(ser->channels[i].getOperators()[j].nickname.substr(1), ser->hostname);
-                                        if(send(fd, msg.c_str(), msg.length(), 0) < 0)
-                                        {
-                                            std::cout << "Failed Send Try Again"<<std::endl;
-                                        }
                                     }
                                 }
                             } 
                             else if (this->keys[o] == "+o" && ((o + 1) < this->args.size()))
                             {
+                                int d = 0;
+                                int z = 0;
+                                while (d  < keys.size())
+                                {
+                                    if (this->keys[d] == "+i")
+                                        z++;
+                                    if (this->keys[d] == "+o")
+                                        break;
+                                    d++;
+                                }
                                 for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
                                 {
-                                    if (ser->channels[i].getUsers()[l].nickname == this->args[o + 1])
+                                    if (ser->channels[i].getUsers()[l].nickname == this->args[o + 1 - z])
                                     {
                                         int c = 0;
                                         for (unsigned long k = 0; k < ser->channels[i].getOperators().size(); k++)
                                         {
-                                            if (ser->channels[i].getOperators()[k].nickname == this->args[o + 1])
+                                            if (ser->channels[i].getOperators()[k].nickname == this->args[o + 1 - z])
                                                 break ;
                                             c++;
                                         }
                                         if (c != 0 && c == ser->channels[i].getOperators().size())
                                         {
                                             ser->channels[i].addOperator(ser->channels[i].getUsers()[l]);
-                                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1]);
+                                            std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1 - z])+ "\r\n";
                                             ser->channels[i].sendMessage(msg);
                                         }
                                     }
@@ -464,7 +486,7 @@ void Command::ModeCommand(server *ser)
                             }
                             else if (this->keys[o] == "-o")
                             {
-                                ser->channels[i].setMode(this->keys[o]);
+                                // ser->channels[i].setMode(this->keys[o]);
                                 for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
                                 {
                                     if (ser->channels[i].getUsers()[l].nickname == this->args[1])
@@ -482,23 +504,43 @@ void Command::ModeCommand(server *ser)
                                             std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[1]) + "\r\n";
                                             ser->channels[i].sendMessage(msg);
                                         }
+                                        // else 
+                                        // {
+                                        //     std::string msg = ERR_NOTOPERATOR(ser->channels[i].getOperators()[j].nickname.substr(1), ser->hostname);
+                                        //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                        //     {
+                                        //         std::cout << "Failed Send Try Again"<<std::endl;
+                                        //     }
+                                        //     break ;
+                                        // }
                                     }
                                 }
 
                             }
-                            else if (this->keys[o] == "-l" &&  ser->channels[i].checkModeexist(ser->channels[i], "+l"))
+                            else if (this->keys[o] == "-l" && ser->channels[i].checkModeexist(ser->channels[i], "+l"))
                             {
+                                // std::cout << "hello" << std::endl;
                                 ser->channels[i].setMode(this->keys[o]);
                                 ser->channels[i].setMaxUsers(-1);
-                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] ) + "\r\n";
+                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + keys[o]) + "\r\n";
                                 ser->channels[i].sendMessage(msg);
                                 // return;
                             }
                             else if (this->keys[o] == "+t" &&  ((o + 1) < this->args.size()))
                             {
+                                int d = 0;
+                                int z = 0;
+                                while (d  < keys.size())
+                                {
+                                    if (this->keys[d] == "+i")
+                                        z++;
+                                    if (this->keys[d] == "+t")
+                                        break;
+                                    d++;
+                                }
                                 ser->channels[i].setMode(this->keys[o]);
-                                ser->channels[i].setTopic(this->args[o + 1]);
-                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + this->args[o + 1]) + "\r\n";
+                                ser->channels[i].setTopic(this->args[o + 1 - z]);
+                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " "+ this->args[o + 1 - z]) + "\r\n";
                                 ser->channels[i].sendMessage(msg);
                                 // return;
                             }
@@ -512,17 +554,38 @@ void Command::ModeCommand(server *ser)
                             }
                             else if (this->keys[o] == "+k" &&  ((o + 1) < this->args.size())) //delete key
                             {
-                                ser->channels[i].setMode(this->keys[o]);
-                                ser->channels[i].setKey(this->args[o + 1]);
-                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] )+   "\r\n";
-                                ser->channels[i].sendMessage(msg); 
-                                // return;
+                                int d = 0;
+                                int z = 0;
+                                while (d  < keys.size())
+                                {
+                                    if (this->keys[d] == "+i")
+                                        z++;
+                                    if (this->keys[d] == "+k")
+                                        break;
+                                    d++;
+                                }
+                                if (!ser->channels[i].checkModeexist(ser->channels[i], "+k"))
+                                {
+                                    // std::cout << "hello " << this->keys[o]<< std::endl;
+                                    ser->channels[i].setMode(this->keys[o]);
+                                    ser->channels[i].setKey(this->args[o + 1 - z]);
+                                    std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] +" " + this->keys[o] +" "+ args[o + 1 - z])+   "\r\n";
+                                    ser->channels[i].sendMessage(msg); 
+                                }
+                                else
+                                {
+                                    std::string msg = ERR_KEYSET(ser->channels[i].getOperators()[j].nickname.substr(1), ser->hostname);
+                                    if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                    {
+                                        std::cout << "Failed Send Try Again"<<std::endl;
+                                    }
+                                }
                             }
                             else if (this->keys[o] == "-k" && ser->channels[i].checkModeexist(ser->channels[i], "+k"))
                             {
                                 ser->channels[i].setMode(this->keys[o]);
                                 ser->channels[i].setKey("\0");
-                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0]  ) + "\r\n";
+                                std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0]  + this->keys[o]) + "\r\n";
                                 ser->channels[i].sendMessage(msg);
                                 
                             }
@@ -672,9 +735,14 @@ void Command::InviteCommand(server *ser)
                                     if (ser->channels[i].getUsers()[c].nickname == ser->clients[l].nickname)
                                         return ;
                                 }
-                                ser->channels[i].addUser(ser->clients[l], 0);
+                                ser->channels[i].setFd(ser->clients[l].fd);
+                                // ser->channels[i].addUser(ser->clients[l], 0);
                                 std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " INVITE " + this->args[0] + " " + this->args[1] + "\r\n";
                                 ser->channels[i].sendMessage(msg);
+                                if (send(ser->clients[l].fd, msg.c_str(), msg.length(), 0) < 0)
+                                {
+                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                }
                                 return ;
                             }
                         }
@@ -1084,9 +1152,11 @@ void Command::addusertoChannel(server *server, std::string channel, int o) {
                 {
                     if ((server->channels[i].addUser(server->clients[j], o) == 1) || (server->channels[i].addUser(server->clients[j], o) == 2))
                     {
+                        server->channels[i].removefd(server->client_fd);
                         return;
                     }
                     server->channels[i].notifyUserJoin(server->clients[j].nickname, server->hostname, o);
+                    server->channels[i].removefd(server->client_fd);
                     return ;
                 }
             } 
@@ -1123,7 +1193,11 @@ void Command::JoinCommand(server *server) {
             {
                 if (server->channels[i].getName() == this->args[0])
                 {
-                    if (checkMode(server->channels[i].getMode(), "+i") == 1)
+                    if (server->channels[i].getUser(server->client_fd))
+                    {
+                        return ;
+                    }
+                    if (checkMode(server->channels[i].getMode(), "+i") == 1 && !server->channels[i].userinvite(server->client_fd))
                     {
                         std::string msg = ERR_INVITEONLYCHAN(args[0], server->hostname);
                         if (send(fd, msg.c_str(), msg.length(), 0) < 0)
@@ -1157,6 +1231,15 @@ void Command::JoinCommand(server *server) {
                         }
                         return ;
                     }
+                    else if (server->channels[i].getUsers().size() + 1 > server->channels[i].getMaxUsers())
+                    {
+                        std::string msg = ERR_CHANNELISFULL(args[0], server->hostname);
+                        if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                        {
+                            std::cout << "Failed Send Try Again"<<std::endl;
+                        }
+                        return ;
+                    }
                     addusertoChannel(server, this->args[0], 0);
                     return ;
                 }
@@ -1170,12 +1253,21 @@ void Command::JoinCommand(server *server) {
             }
         }
         addusertoChannel(server, this->args[0], 1);
+        // removefd(server->client_fd);
     }
     else
     {
         
         for (unsigned long i = 0; i < this->args.size(); i++)
         {
+            int c = 0;
+            // for (unsigned long j = 0; j < server->channels[i].getUsers().size(); j++)
+            //         {
+            //             if (server->channels[i].getUsers()[j].fd == this->fd)
+            //             {
+            //                 return ;
+            //             }
+            //         }
             if (server->channels.size() == 0)
             {
                 server->channels.push_back(Channel(this->args[i]));
@@ -1188,55 +1280,83 @@ void Command::JoinCommand(server *server) {
             }
             else
             {
+               
                 for (unsigned long j = 0; j < server->channels.size(); j++)
                 {
                     if (server->channels[j].getName() == this->args[i])
                     {
-                        if (checkMode(server->channels[j].getMode(), "+i") == 1)
-                        {  
-                            std::string msg = ERR_INVITEONLYCHAN(args[0], server->hostname);
-                        if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                        if (!server->channels[i].getUser(server->client_fd))
                         {
-                            std::cout << "Failed Send Try Again"<<std::endl;
-                        }
-                            return;
-                        }
-                        else if (checkMode(server->channels[j].getMode(), "+k") == 1 && i <= this->keys.size() && server->channels[j].getKey() != this->keys[i])
-                        {
-                            if (server->channels[j].getKey() != this->args[i + 1]) //need more check and fix this
+                            if (checkMode(server->channels[j].getMode(), "+i") == 1 && !server->channels[i].userinvite(server->client_fd))
+                            {  
+                                c = 1;
+                                std::string msg = ERR_INVITEONLYCHAN(args[0], server->hostname);
+                                if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                {
+                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                }
+                                // return;
+                            }
+                            else if (checkMode(server->channels[j].getMode(), "+k") == 1 && i <= this->keys.size() && server->channels[j].getKey() != this->keys[i])
                             {
+                                c = 1;
+                                if (server->channels[j].getKey() != this->args[i + 1]) //need more check and fix this
+                                {
+                                     std::string msg = ERR_BADCHANNELKEY(args[0], server->hostname);
+                                    if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                    {
+                                        std::cout << "Failed Send Try Again"<<std::endl;
+                                    }
+                                    // throw std::invalid_argument("Channel is key protected");
+                                    // return;
+                                }
+                            }
+                            else if (server->channels[i].getKey().size() > 0 && i <= this->keys.size() && server->channels[i].getKey() != this->keys[i])
+                            {
+                                c=1;
                                  std::string msg = ERR_BADCHANNELKEY(args[0], server->hostname);
-                            if (send(fd, msg.c_str(), msg.length(), 0) < 0)
-                            {
-                                std::cout << "Failed Send Try Again"<<std::endl;
-                            }
+                                if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                {
+                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                }
                                 // throw std::invalid_argument("Channel is key protected");
-                                return;
+                                // return ;
                             }
-                        }
-                        else if (server->channels[i].getKey().size() > 0 && i <= this->keys.size() && server->channels[i].getKey() != this->keys[i])
-                        {
-                             std::string msg = ERR_BADCHANNELKEY(args[0], server->hostname);
-                            if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                            else if (server->channels[j].getUsers().size() + 1 > server->channels[j].getMaxUsers())
                             {
-                                std::cout << "Failed Send Try Again"<<std::endl;
+                                c = 1;
+                                std::string msg = ERR_CHANNELISFULL(args[0], server->hostname);
+                                if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                {
+                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                }
+                                // return ;
                             }
-                            // throw std::invalid_argument("Channel is key protected");
-                            return ;
+                            if (c == 0)
+                            {
+                                addusertoChannel(server, this->args[i], 0);
+                                // removefd(server->client_fd);
+
+                            }
+                            break ;
                         }
-                        addusertoChannel(server, this->args[i], 0);
-                        break ;
                     }
                 }
-                server->channels.push_back(Channel(this->args[i]));
-                server->channels[server->channels.size() - 1].setMode("+t");
-                if (this->keys.size() > 0)
+                if (c == 0)
                 {
-                    server->channels[server->channels.size() - 1].setMode("+k");
-                    server->channels[server->channels.size() - 1].setKey(this->keys[i]);
+                    server->channels.push_back(Channel(this->args[i]));
+                    server->channels[server->channels.size() - 1].setMode("+t");
+                    if (this->keys.size() > 0)
+                    {
+                        server->channels[server->channels.size() - 1].setMode("+k");
+                        server->channels[server->channels.size() - 1].setKey(this->keys[i]);
+                    }
                 }
             }
-            addusertoChannel(server, this->args[i], 1);
+            if (c == 0)
+            {
+                addusertoChannel(server, this->args[i], 1);
+            }
         }
     }
 }

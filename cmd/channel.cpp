@@ -39,9 +39,46 @@ void Channel::notifieusers(Channel channel,std::string nickname, std::string mes
         }
     }
 }
+client *Channel::getUser(int fd)
+{
+    for (unsigned long i = 0; i < users.size(); i++)
+    {
+        if (users[i].fd == fd)
+        {
+            return &users[i];
+        }
+    }
+    return NULL;
+}
+void Channel::setFd(int fd)
+{
+    fds.push_back(fd);
+}
+int Channel::userinvite(int fd)
+{
+    for (unsigned long i = 0; i < fds.size(); i++)
+    {
+        if (fds[i] == fd)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
 void Channel::setInviteOnly(int inviteOnly)
 {
     this->inviteOnly = inviteOnly;
+}
+void Channel::removefd( int fd)
+{
+    for (unsigned long i = 0; i < fds.size(); i++)
+    {
+        if (fds[i] == fd)
+        {
+            fds.erase(fds.begin() + i);
+            return;
+        }
+    }
 }
 void Channel::setMode(std::string mode)
 {
@@ -296,6 +333,7 @@ int Channel::checkModeexist(Channel channel, std::string mode)
 {
     for (unsigned long i = 0; i < channel.getMode().size(); i++)
     {
+        // std::cout << "channel.getMode()[i]: " << channel.getMode()[i] << std::endl;
         if (channel.getMode()[i] == mode)
         {
             return 1;

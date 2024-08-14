@@ -11,6 +11,7 @@ class Channel
     private:
         std::vector<client> users;
         std::vector<client> operators;
+        std::vector<int> fds;
         std::string name;
         std::string topic;
         std::vector<std::string> mode;
@@ -41,6 +42,7 @@ class Channel
         std::string getKey();
         void setKey(std::string key);
         void setMode(std::string mode);
+        client *getUser(int fd);
         void printUsers();
         void clearUsers();
         void sendMessage(std::string message);
@@ -49,12 +51,15 @@ class Channel
         void notifyUserJoin(std::string user, std::string hostname, int o);
         void setMaxUsers(int maxUsers);
         long unsigned int getMaxUsers();
+        void setFd(int fd);
         void PrintTopic(int fd);
         void PrintMode(int fd);
         void setInviteOnly(int inviteOnly);
         void notfyMessageinChannel(std::string message);
         int checkModeexist(Channel channel, std::string mode);
         void notifieusers(Channel channel,std::string nickname, std::string message, std::string hostname);
+        int userinvite(int fd);
+        void removefd( int fd);
         // void sendMessage(std::string message);
         // void executecmdJOIN(server *server);
         ~Channel();
