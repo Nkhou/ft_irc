@@ -1,1 +1,8 @@
-mode #ch +li 2
+
+:BB TOPIC #ch "new topic" :set new topic message 
+e3r10p18.1337.ma 482 #ch :You're not channel operator
+mode +li 2
+:BB MODE +li :is unknown mode char to me //need to be no such channel
+mode #ch +li 2  
+BB!~d@e3r10p18.1337.ma MODE #ch +l 2
+when user in channel need to aadd error ERR_USERONCHANNEL for topic 

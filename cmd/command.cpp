@@ -725,7 +725,7 @@ void Command::InviteCommand(server *ser)
                 }
                 for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
                 {
-                    if (ser->channels[i].getOperators()[j].fd == this->fd)
+                    if (ser->channels[i].getUsers()[j].fd == this->fd)
                     {
                         // std::cout << "args: " << this->args[0] << std::endl;
                         // std::cout << "args: " << this->args[0] << std::endl;
