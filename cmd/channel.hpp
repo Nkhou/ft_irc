@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "../srcs/client.hpp"
+#include <limits>
 // #include "../srcs/server.hpp"
 class Channel
 {
@@ -19,7 +20,8 @@ class Channel
         int userCount;
         int inviteOnly;
         int operatorCount;
-        long unsigned int maxUsers;
+        bool limits;
+        size_t maxUsers;
     public:
         Channel(std::string name);
         Channel(std::string name, int o, int fd, std::vector<client> clients);
@@ -60,6 +62,8 @@ class Channel
         void notifieusers(Channel channel,std::string nickname, std::string message, std::string hostname);
         int userinvite(int fd);
         void removefd( int fd);
+        void setMaxUsers(size_t maxUsers);
+        void setLimits(bool limits);
         // void sendMessage(std::string message);
         // void executecmdJOIN(server *server);
         ~Channel();

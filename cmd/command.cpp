@@ -375,6 +375,7 @@ void Command::ModeCommand(server *ser)
                             else if (this->keys[o] == "-l" && ser->channels[i].checkModeexist(ser->channels[i], "+l"))
                             {
                                 ser->channels[i].setMode(this->keys[o]);
+                                ser->channels[i].setLimits(0);
                                 ser->channels[i].setMaxUsers(-1);
                                 std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0]  + " " + this->keys[o]) + "\r\n";
                                 ser->channels[i].sendMessage(msg);
@@ -446,6 +447,7 @@ void Command::ModeCommand(server *ser)
                                     if (std::atoi(this->args[o + 1 - z].c_str()) > 0)
                                     {
                                         ser->channels[i].setMode(this->keys[o]);
+                                        ser->channels[i].setLimits(1);
                                         ser->channels[i].setMaxUsers(std::atoi(this->args[o + 1 - z].c_str()));
                                         std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[o + 1 - z]) + "\r\n";
                                         ser->channels[i].sendMessage(msg);
@@ -521,6 +523,7 @@ void Command::ModeCommand(server *ser)
                             {
                                 // std::cout << "hello" << std::endl;
                                 ser->channels[i].setMode(this->keys[o]);
+                                ser->channels[i].setLimits(0);
                                 ser->channels[i].setMaxUsers(-1);
                                 std::string msg = (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + keys[o]) + "\r\n";
                                 ser->channels[i].sendMessage(msg);
@@ -1243,6 +1246,7 @@ void Command::addusertoChannel(server *server, std::string channel, int o) {
                 {
                     if ((server->channels[i].addUser(server->clients[j], o) == 1) || (server->channels[i].addUser(server->clients[j], o) == 2))
                     {
+                        // std::cout << "He" << std::endl;
                         server->channels[i].removefd(server->client_fd);
                         return;
                     }
@@ -1269,7 +1273,7 @@ void Command::JoinCommand(server *server) {
     if (this->args.size() == 1)
     {
         if (server->channels.size() == 0){
-
+            // server->channels[0].setMaxUsers(SIZE_MAX);
             server->channels.push_back(Channel(this->args[0]));
             server->channels[0].setMode("+t");
             if (this->keys.size() > 0)
@@ -1343,7 +1347,10 @@ void Command::JoinCommand(server *server) {
                 server->channels[server->channels.size() - 1].setMode("+k");
             }
         }
+        std::cout << "Here" << std::endl;
+        std::cout << "args: " << this->args[0] << std::endl;
         addusertoChannel(server, this->args[0], 1);
+        return ;
         // removefd(server->client_fd);
     }
     else

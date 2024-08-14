@@ -3,11 +3,14 @@
 Channel::Channel(std::string name)
 {
     this->name = name;
+    limits = false;
 }
 
 Channel::Channel(std::string name, int o, int fd, std::vector<client> clients)
 {
     this->name = name;
+    limits = false;
+    // this->maxUsers = std::numeric_limits<size_t>::max();
     if (o)
     {
         operators.push_back(clients[fd]);
@@ -26,6 +29,10 @@ void Channel::sendMessage(std::string message)
 std::vector<std::string> Channel::getMode()
 {
     return mode;
+}
+void Channel::setMaxUsers(size_t maxUsers)
+{
+    this->maxUsers = maxUsers;
 }
 void Channel::notifieusers(Channel channel,std::string nickname, std::string message, std::string hostname)
 {
@@ -120,19 +127,34 @@ std::string Channel::getKey()
 {
     return key;
 }
+void Channel::setLimits(bool limits)
+{
+    this->limits = limits;
+}
 int Channel::addUser(cli client, int o)
 {
     for (unsigned long i = 0; i < users.size(); i++)
     {
         if (users[i].fd == client.fd)
         {
+            // std::cout << "User already in channel" << std::endl;
             return 1;
         }
     }
-    if (users.size() >= maxUsers)
+    std::cout << "users.size(): " << limits << std::endl;
+    if (limits)
     {
-        return 2;
+        if (users.size() >= maxUsers)
+        {
+            // std::cout << "Channel is full" << std::endl;
+            return 2;
+        }
     }
+    // if (users.size() >= maxUsers)
+    // {
+    //     // std::cout << "Channel is full" << std::endl;
+    //     return 2;
+    // }
     users.push_back(client);
     if (o)
     {
