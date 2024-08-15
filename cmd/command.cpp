@@ -1020,20 +1020,21 @@ void Command::pass_auth(server *server)
          }
 }
 void Command::executecmd(server *server) {
-    // if(server->splited[0] == "NICK")
-    // {
-    //      nick_auth(server->splited,server,server->client_fd);
-    // }
-    // if(server->splited[0] == "USER")
-    // { 
-    //     std::cout << "USER6777777" << std::endl;
-    //     user_auth(server->splited,server,server->client_fd);
-    // }
-    // if(server->splited[0] == "PASS")
-    // {
-    //      pass_auth(server);
-    // }
-    if (server->splited[0] == "QUIT")
+    if(server->splited[0] == "NICK")
+    {
+         nick_auth(server->splited,server,server->client_fd);
+    }
+    else if(server->splited[0] == "USER")
+    { 
+        std::cout << "USER6777777" << std::endl;
+        user_auth(server->splited,server,server->client_fd);
+    }
+    else if(server->splited[0] == "PASS")
+    {
+         pass_auth(server);
+         return;
+    }
+    else if (server->splited[0] == "QUIT")
     {
         std::cout << "QUIT" << std::endl;
         for (unsigned long i = 0; i < server->clients.size(); i++)

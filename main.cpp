@@ -376,13 +376,13 @@ int main(int argc,char **argv)
                                         if(a == 0)
                                         {
                                           ser.clients[i - 1].nickname = split[1];
-                                          
+                                          split.clear();
                   
                                             // continue;
                                         }
                                 }
                               }
-                            if(split.size() < 2)
+                            if(split.size() < 2 && ser.clients[i - 1].nickname == "")
                             {
                               msg = message_err_nick_name(ser.hostname, ERR_NONICKNAMEGIVEN_CODE,"*", ser.clients[i - 1].nickname, ERR_NONICKNAMEGIVEN_MSG);
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
@@ -395,7 +395,7 @@ int main(int argc,char **argv)
                                 {
                                     return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                 }
-                
+                                split.clear();
                             }
                             
                         }
@@ -411,7 +411,7 @@ int main(int argc,char **argv)
                                       ser.clients[i - 1].hostname = split[2];
                                       ser.clients[i - 1].servername = split[3];
                                       ser.clients[i - 1].realname = split[4];
-                                    
+                                        split.clear();
                                     //   continue;
                                 }  
                                 else if(split.size() < 5)
@@ -427,7 +427,8 @@ int main(int argc,char **argv)
                                     {
                                         return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                     }
-                                    ser.clients[i - 1].flag = true;
+                                    // ser.clients[i - 1].flag = true;
+                                    split.clear();
                                 }
                             }
                     // if(ser.clients[i - 1].flag == false && split.size() > 0 )
@@ -448,7 +449,7 @@ int main(int argc,char **argv)
                     //         }
                     // }
                      std::cout << "im hreeeeeeeeeee" << std::endl;
-                            continue;
+                            // continue;
                            
                     }
                          
@@ -483,13 +484,14 @@ int main(int argc,char **argv)
           
                 if (split.size() > 0 && split[0] != "PONG")
                 {
-                ser.splited = split;
-                ser.client_fd = ser.fds[i].fd;
-                ser.client_cmd = ser.clients[i - 1];
-                Command cmd;
-                cmd.execCommand(&ser);
-                split.clear();
-                ser.client_fd = 0;
+                    std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
+                    ser.splited = split;
+                    ser.client_fd = ser.clients[i - 1].fd;
+                    ser.client_cmd = ser.clients[i - 1];
+                    Command cmd;
+                    cmd.execCommand(&ser);
+                    split.clear();
+                    ser.client_fd = 0;
                 }
             
             i++;
