@@ -5,3 +5,30 @@ MODE
 #ff
 need to change message in password
   std::string msg = ":" + user + "!~" + users[i].user_name + "@" + hostname + " JOIN " + name + "\n";
+
+
+  ----------------
+
+**makefile 
+  c++    -c -o main.o main.cpp
+c++    -c -o srcs/message.o srcs/message.cpp          //// asahbi hta hado khessom -Wall -Wextra -Werror -std=c++98 
+c++    -c -o cmd/channel.o cmd/channel.cpp
+c++    -c -o cmd/command.o cmd/command.cpp
+c++ -Wall -Wextra -Werror -std=c++98  main.o srcs/message.o cmd/channel.o cmd/command.o -o ircserv
+
+
+**mni kanbedlo header makay3awedch ymiki
+
+
+** ida kan 3andna linechat fih "nk"
+
+pass s
+user t y f r
+nick nk
+:e3r10p18.1337.ma 433 *  Nickname is already in use
+:e3r10p18.1337.ma 001  Welcome to e3r10p18.1337.ma Internet Relay Chat Network
+
+// matkhaf madhech hada gir message welcome makhessoch ytpranta
+user a bc d
+:e3r10p18.1337.ma 461 * USER :Not enough parameters
+:e3r10p18.1337.ma 461 * USER :Not enough parameters

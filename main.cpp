@@ -433,7 +433,7 @@ int main(int argc,char **argv)
                             }
                     if(ser.clients[i - 1].flag == false)
                     {
-                             std::cout << "im hreeeeeeeeeee" << std::endl;
+                             std::cout << buffer << std::endl;
                             if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE" || split[0] == "INVITE")
                             {
                                 if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
@@ -448,9 +448,11 @@ int main(int argc,char **argv)
                              ser.clients[i - 1].flag_cmd = true;
                             }
                     }
-                     std::cout << "im hreeeeeeeeeee" << std::endl;
-                            // continue;
-                           
+                    //  for (size_t i = 0; i < split.size(); i++)          
+                    // {               
+                    //     std::cout << split[i] << std::endl;     
+                    //         // continue;
+                    // }   
                     }
                          
                         // }

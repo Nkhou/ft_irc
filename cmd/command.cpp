@@ -290,7 +290,7 @@ void Command::ModeCommand(server *ser)
     }
     if (ser->splited.size() == 2)
     {
-        std::cout << "hello1111" << std::endl;
+        // std::cout << "hello1111" << std::endl;
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
             if (ser->channels[i].getName() == this->args[0])
@@ -344,7 +344,7 @@ void Command::ModeCommand(server *ser)
                     {
                         for (size_t o = 0; o < this->keys.size(); o++)
                         {
-                            std::cout << "hello" << this->keys[o]<< std::endl;
+                            std::cout << "hello2" << this->keys[o]<< std::endl;
                             if (this->keys[o] == "+i" && !ser->channels[i].checkModeexist(ser->channels[i], "+i"))
                             {
                                 ser->channels[i].setMode(this->keys[o]);
@@ -1216,6 +1216,8 @@ void Command::executecmd(server *server) {
             {
                 c = 1;
                 break;
+
+                
             }
         }
         if (c == 0)
