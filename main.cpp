@@ -431,23 +431,23 @@ int main(int argc,char **argv)
                                     split.clear();
                                 }
                             }
-                    // if(ser.clients[i - 1].flag == false && split.size() > 0 )
-                    // {
-                    //          std::cout << "im hreeeeeeeeeee" << std::endl;
-                    //         if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE" || split[0] == "INVITE")
-                    //         {
-                    //             if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
-                    //             {
+                    if(ser.clients[i - 1].flag == false)
+                    {
+                             std::cout << "im hreeeeeeeeeee" << std::endl;
+                            if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE" || split[0] == "INVITE")
+                            {
+                                if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "" || ser.clients[i - 1].password == false)
+                                {
 
-                    //              msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
-                    //              if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
-                    //                 return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                 msg = msg_notregistered(ser.clients[i - 1].nickname, ser.hostname);
+                                 if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
+                                    return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                  
-                    //             }
-                    //             split.clear();
-                    //          ser.clients[i - 1].flag_cmd = true;
-                    //         }
-                    // }
+                                }
+                                split.clear();
+                             ser.clients[i - 1].flag_cmd = true;
+                            }
+                    }
                      std::cout << "im hreeeeeeeeeee" << std::endl;
                             // continue;
                            

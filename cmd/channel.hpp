@@ -48,6 +48,7 @@ class Channel
         void printUsers();
         void clearUsers();
         void sendMessage(std::string message);
+        void sendMessagenick(std::string message, int fd);
         bool userExists(cli *client, int fd);
         void createChannel(std::string name);
         void notifyUserJoin(std::string user, std::string hostname, int o);

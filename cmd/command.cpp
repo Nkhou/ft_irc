@@ -968,14 +968,44 @@ void Command::PrivmsgCommand(server *ser)
 }
 void Command::nick_auth(std::vector<std::string> split,server *server,int client_fd)
 {
+     if( server->splited.size() < 2)
+     {
+       std::string msg = message_err_nick_name(server->hostname, ERR_NONICKNAMEGIVEN_CODE,"*", server->client_cmd.nickname, ERR_NONICKNAMEGIVEN_MSG);
+             if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+                 std::cout << "Failed Send Try Again"<<std::endl;
+     }
      if(server->splited.size() >= 2)
      {
-        
+        int c = 0;
             
-                    std::string  msg = ":" + server->client_cmd.nickname +"!~"+server->client_cmd.user_name+"@"+server->hostname+ " NICK " + server->splited[1] + "\r\n";
-                   if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
-                     std::cout << "Failed Send Try Again"<<std::endl;
-                   server->client_cmd.nickname= server->splited[1];
+    std::string  msg = ":" + server->client_cmd.nickname +"!~"+server->client_cmd.user_name+"@"+server->hostname+ " NICK " + server->splited[1] + "\r\n";
+    std::cout << server->splited.size() << std::endl;
+    if(server->splited.size() >= 2)
+    {
+        for (unsigned long i = 0; i < server->channels.size(); i++)
+        {
+           for (unsigned long j = 0; j < server->channels[i].getUsers().size(); j++)
+           {
+               if(server->channels[i].getUsers()[j].nickname == server->client_cmd.nickname)
+               {
+                    c = 1;
+                   server->channels[i].getUsers()[j].nickname = server->splited[1];
+                   for (unsigned long k = 0; k < server->channels[i].getOperators().size(); k++)
+                   {
+                       if(server->channels[i].getOperators()[k].nickname == server->client_cmd.nickname)
+                       {
+                           server->channels[i].getOperators()[k].nickname = server->splited[1];
+                       }
+                   }
+                   server->channels[i].sendMessagenick(msg, server->client_cmd.fd);
+               }
+           }
+        }
+        // if (c == 0)
+        if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+            std::cout << "Failed Send Try Again"<<std::endl;
+        server->client_cmd.nickname= server->splited[1];
+    }
                     
             
              

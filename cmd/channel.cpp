@@ -26,6 +26,28 @@ void Channel::sendMessage(std::string message)
         }
     }
 }
+void Channel::sendMessagenick(std::string message, int fd)
+{
+    for (unsigned long i = 0; i < users.size(); i++)
+    {
+        if (users[i].fd != fd)
+        {
+            if (send(users[i].fd, message.c_str(), message.length(), 0) == -1)
+            {
+                perror("send");
+            }
+        }
+    }
+}
+// {
+//     for (unsigned long i = 0; i < users.size(); i++)
+//     {
+//         if (send(users[i].fd, message.c_str(), message.length(), 0) == -1)
+//         {
+//             perror("send");
+//         }
+//     }
+// }
 std::vector<std::string> Channel::getMode()
 {
     return mode;
