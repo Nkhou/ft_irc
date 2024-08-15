@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 11:06:05 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/14 17:01:21 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/15 08:44:37 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 std::string message_err_nick_name(std::string hostname, std::string code, std::string nickname, std::string command, std::string msg)
 {
-	std::string message =  ":" + hostname + " " + code + " " + nickname + " " + command + " :" + msg + "\r\n";
+	std::string message =  ":" + hostname + " " + code + " " + nickname + " " + command +" "+msg + "\r\n";
 	return message;
 }
 
@@ -32,7 +32,7 @@ std::string msg_err_one(std::string nick, std::string hostname)
 
 std::string msg_erroneusnickname(std::string nick,std::string hostname)
 {
-    std::string msg = ":" + hostname + " 432" + " * " + nick + " :Erroneous Nickname\r\n";
+    std::string msg = ":" + hostname + " 432" + " * " + nick + " Erroneous Nickname\r\n";
     return msg;
 }
 

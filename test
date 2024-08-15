@@ -6,3 +6,7 @@ mode +li 2
 mode #ch +li 2  
 BB!~d@e3r10p18.1337.ma MODE #ch +l 2
 when user in channel need to aadd error ERR_USERONCHANNEL for topic 
+
+
+need to change message in password
+  std::string msg = ":" + user + "!~" + users[i].user_name + "@" + hostname + " JOIN " + name + "\n";
