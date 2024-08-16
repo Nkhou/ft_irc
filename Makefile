@@ -6,8 +6,6 @@ SRC = main.cpp \
 	  cmd/channel.cpp \
 		cmd/command.cpp \
 
-	  #bonus/srcs/main_bonus.cpp \
-
 SRC_BONUS = bonus/main_bonus.cpp \
 			bonus/bot.cpp
 
@@ -24,8 +22,9 @@ all : $(NAME) #$(NAME_BONUS)
 bonus : $(NAME_BONUS) $(NAME)
 
 
-%.o: %.cpp srcs/*.hpp cmd/*.hpp bonus/srcs/server.hpp bonus/bot.hpp
+%.o: %.cpp srcs/client.hpp srcs/server.hpp cmd/command.hpp bonus/srcs/server.hpp bonus/bot.hpp
 	$(CC) $(FLAGS) -c $< -o $@
+
 
 $(NAME) : $(OBJ_DIR) #$(OBJ_DIR_BONUS)
 	$(CC) $(FLAGS) $^ -o $@
@@ -42,3 +41,34 @@ fclean : clean
 re : fclean all
 
 .PHONY : all clean fclean re
+
+# NAME = ircserv
+
+# SRCS = main.cpp \
+# 		srcs/message.cpp \
+# 		cmd/channel.cpp \
+# 		cmd/command.cpp \ 
+
+# CC = c++
+
+# FLAGS = -Wall -Wextra -Werror -std=c++98
+
+# OBJS = $(SRCS:.cpp=.o)
+
+# all: $(NAME)
+
+# %.o: %.cpp srcs/client.hpp srcs/server.hpp cmd/command.hpp
+# 	$(CC) $(FLAGS)  -c $< -o $@
+
+# $(NAME): $(OBJS) 
+# 	$(CC) $(FLAGS) $^ -o $@
+
+# clean:
+# 	rm -rf $(OBJS)
+
+# fclean: clean
+# 	rm -rf $(NAME)
+
+# re: fclean all
+	
+# .PHONY : all clean fclean re

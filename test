@@ -19,16 +19,5 @@ c++ -Wall -Wextra -Werror -std=c++98  main.o srcs/message.o cmd/channel.o cmd/co
 
 **mni kanbedlo header makay3awedch ymiki
 
+bka lmakefile tfixa walakin tal3o lik errors dyalk "chi comparaison" so khalit l9dim tatkoni onfixiwhom rah dayra lih commentaire >>"makefile jdid"
 
-** ida kan 3andna linechat fih "nk"
-
-pass s
-user t y f r
-nick nk
-:e3r10p18.1337.ma 433 *  Nickname is already in use
-:e3r10p18.1337.ma 001  Welcome to e3r10p18.1337.ma Internet Relay Chat Network
-
-// matkhaf madhech hada gir message welcome makhessoch ytpranta
-user a bc d
-:e3r10p18.1337.ma 461 * USER :Not enough parameters
-:e3r10p18.1337.ma 461 * USER :Not enough parameters

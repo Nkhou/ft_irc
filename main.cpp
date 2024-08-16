@@ -388,15 +388,15 @@ int main(int argc,char **argv)
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                         return(std::cout << "Failed Send Try Again"<<std::endl,1);
                             }
-                            if(ser.clients[i - 1].user_name != "")
-                            {
-                                msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
-                                if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
-                                {
-                                    return(std::cout << "Failed Send Try Again"<<std::endl,1);
-                                }
-                                split.clear();
-                            }
+                            // if(ser.clients[i - 1].user_name != "")
+                            // {
+                            //     msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
+                            //     if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
+                            //     {
+                            //         return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                            //     }
+                            //     split.clear();
+                            // }
                             
                         }
                         // }
@@ -420,16 +420,16 @@ int main(int argc,char **argv)
                                          if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                             return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                 }
-                                if(ser.clients[i - 1].nickname != "")
-                                {
-                                    msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
-                                    if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
-                                    {
-                                        return(std::cout << "Failed Send Try Again"<<std::endl,1);
-                                    }
-                                    // ser.clients[i - 1].flag = true;
-                                    split.clear();
-                                }
+                                // if(ser.clients[i - 1].nickname != "")
+                                // {
+                                //     msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
+                                //     if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
+                                //     {
+                                //         return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                //     }
+                                //     // ser.clients[i - 1].flag = true;
+                                //     split.clear();
+                                // }
                             }
                     if(ser.clients[i - 1].flag == false)
                     {
@@ -458,33 +458,34 @@ int main(int argc,char **argv)
                         // }
                        
                     }
-                    // if(ser.clients[i - 1].flag == false)
-                    // {
-                    //     if(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true)
-                    //     {
-                    //         msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
-                    //         if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
-                    //         {
-                    //             return(std::cout << "Failed Send Try Again"<<std::endl,1);
-                    //         }
-                    //         ser.clients[i - 1].flag = true;
-                         
-                    //     }
-                    //         std::cout << "im hreeeeeeeeeee" << std::endl;
-                    //         // continue;
-                    // }
+                    if(ser.clients[i - 1].flag == false)
+                    {
+                        if(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true)
+                        {
+                            msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
+                            if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
+                            {
+                                return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                            }
+                            ser.clients[i - 1].flag = true;
+                            split.clear();
+                        }
+                            std::cout << "im hreeeeeeeeeee" << std::endl;
+                            // continue;
+                    }
                     
                  
 
 }
 
             }
+            
             for (size_t i = 0; i < split.size(); i++)
             {
                  std::cout << split[i] << std::endl;
             }
           
-                if (split.size() > 0 && split[0] != "PONG")
+                if (split.size() > 0 && split[0] != "PONG" && ser.clients[i - 1].flag == true)
                 {
                     std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
                     ser.splited = split;

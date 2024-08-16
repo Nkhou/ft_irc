@@ -73,6 +73,7 @@ void Command::execCommand(server *server) {
 
 void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::vector<Channel>channel, std::string hostname)
 {
+    (void)channel;
     if (command.size() < 3)
     {
         std::string msg = kickerr(command[0], hostname);
@@ -1023,6 +1024,9 @@ void Command::PrivmsgCommand(server *ser)
 }
 void Command::nick_auth(std::vector<std::string> split,server *server,int client_fd)
 {
+    (void)split;
+    (void)client_fd;
+
      if( server->splited.size() < 2)
      {
        std::string msg = message_err_nick_name(server->hostname, ERR_NONICKNAMEGIVEN_CODE,"*", server->client_cmd.nickname, ERR_NONICKNAMEGIVEN_MSG);
@@ -1072,15 +1076,16 @@ void Command::user_auth(std::vector<std::string> split,server *server,int client
 {
     std::cout << "user_authhereeeeeee" << std::endl;
     
-     if(split.size() == 5 || split.size() > 5)
+     if (split.size() == 5 || split.size() > 5)
      {
-           std::string msg = msg_may_registered(split[0],server->hostname);
+           std::string msg = msg_may_registered(server->client_cmd.nickname,server->hostname);
             if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
                 std::cout << "Failed Send Try Again"<<std::endl;
           
      }  
      else
-     {
+     {     
+           std::cout << "ana wasal tal hna" << std::endl;
            std::string msg = msg_err(split[0],server->hostname);
               if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
                 std::cout << "Failed Send Try Again"<<std::endl;
@@ -1093,13 +1098,13 @@ void Command::pass_auth(server *server)
     std::cout << "pass_auth ***********" << std::endl;
     if(server->splited.size() < 2)
          {
-             std::string msg = msg_err(server->splited[0], server->hostname);
+             std::string msg = msg_err(server->splited[1], server->hostname);
              if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
                  std::cout << "Failed Send Try Again"<<std::endl;
          }
          else
          {
-             std::string msg = msg_may_registered(server->splited[0],server->hostname);
+             std::string msg = msg_may_registered(server->splited[1],server->hostname);
             if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
                 std::cout << "Failed Send Try Again"<<std::endl;
          }
