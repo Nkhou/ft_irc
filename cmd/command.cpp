@@ -142,19 +142,11 @@ void Command::KickCommand(server *ser)
     int exist = 0;
     if (this->args.size() == 0)
         return;
-
-    // for (int o = 0; o < this->args.size(); o++)
-    // {
-    //     std::cout << "|" << args[o] << "|" << std::endl;
-    // }
-
-    // std::cout <<"hello     "<<this->args.size()  << std::endl;
     for (size_t l = 0; l < this->args.size() ; l++)
     {
         existchannel = 0;
         for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
-            // std::cout << "hello     "  << std::endl;
             op = 0;
 
             if (ser->channels[i].getName() == this->args[l])
@@ -164,12 +156,12 @@ void Command::KickCommand(server *ser)
                 {
                     if (ser->channels[i].getOperators()[j].fd == this->fd)
                     {
+                        // std::cout << "hello" << std::endl;
                         op = 1;
-                        for (size_t c = 0; c <this->keys.size(); c++)
+                        for (size_t c = 0; c < this->keys.size(); c++)
                         {
-                            for (unsigned long o = 1; o < ser->channels[i].getUsers().size(); o++)
+                            for (unsigned long o = 0; o < ser->channels[i].getUsers().size(); o++)
                             {
-                                // std::cout << this->keys[0] << std::endl;
                                 if (ser->channels[i].getUsers()[o].nickname == this->keys[c])
                                 {
                                     exist = 1;
@@ -196,6 +188,10 @@ void Command::KickCommand(server *ser)
                                     //     std::cout << "Failed Send Try Again"<<std::endl;
                                     // }
                                     ser->channels[i].removeUser(this->keys[c]);
+                                    if (ser->channels[i].getUsers().size() == 0)
+                                    {
+                                        ser->channels.erase(ser->channels.begin() + i);
+                                    }
                                     // break;
                                     // return;
                                 }
