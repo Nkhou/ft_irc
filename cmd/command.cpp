@@ -857,47 +857,47 @@ void Command::ParceInvite(std::vector <std::string> splited, int client_fd)
     }
      this->fd = client_fd;
 }
-void Command::ParcePrivmsg(std::vector <std::string> command, int client_fd)
-{
-    //  this->fd = client_fd;
-    // for (unsigned long i = 1; i < command.size(); i++)
-    // {
-        int i = 1;
-        for (unsigned long j = 0; j < command[i].size(); j++)
-        {
-            unsigned long k = j;
-            while (k < command[i].size() && command[i][k] != ',')
-                k++;
-            if (k > j)
-            {
-                // if (i == 1)
-                    args.push_back(command[i].substr(j, k));
-                // else if (i == 2)
-                //     keys.push_back(command[i].substr(j, k));
-                j = k;
-                // else if (i == 3)
-                //     message = message + " " + command[i].substr(j,k);
-            }
-        }
-    // }
-    if (command.size() == 3)
-        this->message = command[command.size() - 1];
-    else if (command.size() > 3)
-        this->message = command[2];
-    else
-        this->message = "\0";
-    // for (unsigned long j = 0; j < this->args.size(); j++)
-    // {
-    //     std::cout << "args: " << this->args[j] << std::endl;
-    // }
-    // for (unsigned long i = 1; i < splited.size(); i++) 
-    // {
-    //     // std::cout << "splited[i]: " << splited[i] << std::endl;
-    //     // std::cout << "size: " << splited[].size() << std::endl;
-    //     this->args.push_back(splited[i]);
-    // }
-     this->fd = client_fd;
-}
+// void Command::ParcePrivmsg(std::vector <std::string> command, int client_fd)
+// {
+//     //  this->fd = client_fd;
+//     // for (unsigned long i = 1; i < command.size(); i++)
+//     // {
+//         int i = 1;
+//         for (unsigned long j = 0; j < command[i].size(); j++)
+//         {
+//             unsigned long k = j;
+//             while (k < command[i].size() && command[i][k] != ',')
+//                 k++;
+//             if (k > j)
+//             {
+//                 // if (i == 1)
+//                     args.push_back(command[i].substr(j, k));
+//                 // else if (i == 2)
+//                 //     keys.push_back(command[i].substr(j, k));
+//                 j = k;
+//                 // else if (i == 3)
+//                 //     message = message + " " + command[i].substr(j,k);
+//             }
+//         }
+//     // }
+//     if (command.size() == 3)
+//         this->message = command[command.size() - 1];
+//     else if (command.size() > 3)
+//         this->message = command[2];
+//     else
+//         this->message = "\0";
+//     // for (unsigned long j = 0; j < this->args.size(); j++)
+//     // {
+//     //     std::cout << "args: " << this->args[j] << std::endl;
+//     // }
+//     // for (unsigned long i = 1; i < splited.size(); i++) 
+//     // {
+//     //     // std::cout << "splited[i]: " << splited[i] << std::endl;
+//     //     // std::cout << "size: " << splited[].size() << std::endl;
+//     //     this->args.push_back(splited[i]);
+//     // }
+//      this->fd = client_fd;
+// }
 client *Command::getClientByFd(server *ser, int fd)
 {
     for (unsigned long i = 0; i < ser->clients.size(); i++)
@@ -907,155 +907,155 @@ client *Command::getClientByFd(server *ser, int fd)
     }
     return NULL;
 }
-void Command::PrivmsgCommand(server *ser)
-{
-    if (this->args.size() == 0)
-        return ;
-    // std::cout << "args[0]: " << this->args[0] << std::endl; 
-    int flag = 0;
-    if (ser->channels.size() == 0)
-    {
-        // std::cout << "No channels" << std::endl;
-        for (size_t o = 0; o < this->args.size(); o++)
-        {
-            for (unsigned long j = 0; j < ser->clients.size(); j++)
-            {
-                if (ser->clients[j].nickname == this->args[o])
-                {
-                    flag = 1;
-                    std::string msg;
-                    // if (this->args.size() > 0 && this->args[o][0] != ':')
-                    // msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
-                    // else if (this->args.size() > 0 && this->args[o][0] == ':')
-                    //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
-                    // std::cout << "args: " << std::endl;
-                    // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
-                    //         msg += "\r\n";
-                    msg = ":" + getClientByFd(ser, this->fd)->nickname + "!"+ getClientByFd(ser, this->fd)->user_name +"@" +ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
-                    std::cout << "msg: " << msg << std::endl;
+// void Command::PrivmsgCommand(server *ser)
+// {
+//     if (this->args.size() == 0)
+//         return ;
+//     // std::cout << "args[0]: " << this->args[0] << std::endl; 
+//     int flag = 0;
+//     if (ser->channels.size() == 0)
+//     {
+//         // std::cout << "No channels" << std::endl;
+//         for (size_t o = 0; o < this->args.size(); o++)
+//         {
+//             for (unsigned long j = 0; j < ser->clients.size(); j++)
+//             {
+//                 if (ser->clients[j].nickname == this->args[o])
+//                 {
+//                     flag = 1;
+//                     std::string msg;
+//                     // if (this->args.size() > 0 && this->args[o][0] != ':')
+//                     // msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
+//                     // else if (this->args.size() > 0 && this->args[o][0] == ':')
+//                     //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
+//                     // std::cout << "args: " << std::endl;
+//                     // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
+//                     //         msg += "\r\n";
+//                     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!"+ getClientByFd(ser, this->fd)->user_name +"@" +ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
+//                     std::cout << "msg: " << msg << std::endl;
 
-                    if(send(ser->clients[j].fd, msg.c_str(), msg.length(), 0) < 0)
-                    {
-                        std::cout << "Failed Send Try Again"<<std::endl;
-                    }
-                    // return ;
-                }
-            }
-            if (flag == 0)
-            {
-                std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
-                if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
-                {
-                    std::cout << "Failed Send Try Again"<<std::endl;
-                }
-            };
-        }
-        return ;
-    }
-        for (size_t o = 0; o < this->args.size(); o++)
-        {
-            flag = 0;
-            if (this->args[o][0] == '#')
-            {
-                for (unsigned long i = 0; i < ser->channels.size(); i++)
-                {
-                    if (ser->channels[i].getName() == this->args[o])
-                    {
-                        flag = 1;
-                        int c = 0;
-                        for (size_t j = 0; j < ser->channels[i].getUsers().size(); j++)
-                        {
-                            if (ser->channels[i].getUsers()[j].fd == this->fd)
-                            {
-                                c = 1;
-                                break;
-                            }
-                        }
-                        if (c == 1)
-                        {
-                            for (unsigned long j = 0; j < ser->channels[i].getUsers().size(); j++)
-                            {
-                                std::string msg;
-                                // if (this->args.size() > 1 && this->args[o][0] != ':')
-                                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :" + this->message + "\r\n";
-                                // else if (this->args.size() > 1 && this->args[o][0] == ':')
-                                //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " ";
-                                // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
-                                // msg += "\r\n";
-                                if (ser->channels[i].getUsers()[j].fd != this->fd)
-                                {
-                                    if(send(ser->channels[i].getUsers()[j].fd, msg.c_str(), msg.length(), 0) < 0)
-                                    {
-                                        std::cout << "Failed Send Try Again"<<std::endl;
-                                    }
-                                    // return ;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            std::string msg = ERR_NOTONCHANNEL(ser->splited[0], ser->hostname);
-                            if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
-                            {
-                                std::cout << "Failed Send Try Again"<<std::endl;
-                            }
-                        }
-                    // if (ser->channels[i].getUsers().size() == 0)
-                    // {
-                    //     std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
-                    //     if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
-                    //     {
-                    //         std::cout << "Failed Send Try Again"<<std::endl;
-                    //     }
-                    // }
-                    // std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
-                    // if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
-                    // {
-                    //     std::cout << "Failed Send Try Again"<<std::endl;
-                    // }
-                    // return ;
-                }
-            }
-        }
-            else
-            {
-                for (unsigned long j = 0; j < ser->clients.size(); j++)
-                {
-                    if (ser->clients[j].nickname == this->args[o])
-                    {
-                        flag = 1;
-                        std::string msg;
-                        // if (this->args.size() > 0 && this->args[o][0] != ':')
-    msg = ":" + getClientByFd(ser, this->fd)->nickname + "!"+ getClientByFd(ser, this->fd)->user_name +"@" + ser->client_cmd.ip_addr +" PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
-                        std::cout << "****msg: " << msg << std::endl;
-                        // else if (this->args.size() > 0 && this->args[o][0] == ':')
-                        // //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
-                        // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
-                        //     //     if (l < this->args.size() - 1)
-                        //     //         msg += " ";
-                        //     // }
-                        //     msg += "\r\n";
-                        if(send(ser->clients[j].fd, msg.c_str(), msg.length(), 0) < 0)
-                        {
-                            std::cout << "Failed Send Try Again"<<std::endl;
-                        }
-                        // return ;
-                    }
-                }
-                }
-                if (flag == 0)
-                {
-                    std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
-                    if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
-                    {
-                        std::cout << "Failed Send Try Again"<<std::endl;
-                    }
-                }
-            }
+//                     if(send(ser->clients[j].fd, msg.c_str(), msg.length(), 0) < 0)
+//                     {
+//                         std::cout << "Failed Send Try Again"<<std::endl;
+//                     }
+//                     // return ;
+//                 }
+//             }
+//             if (flag == 0)
+//             {
+//                 std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                 if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
+//                 {
+//                     std::cout << "Failed Send Try Again"<<std::endl;
+//                 }
+//             };
+//         }
+//         return ;
+//     }
+//         for (size_t o = 0; o < this->args.size(); o++)
+//         {
+//             flag = 0;
+//             if (this->args[o][0] == '#')
+//             {
+//                 for (unsigned long i = 0; i < ser->channels.size(); i++)
+//                 {
+//                     if (ser->channels[i].getName() == this->args[o])
+//                     {
+//                         flag = 1;
+//                         int c = 0;
+//                         for (size_t j = 0; j < ser->channels[i].getUsers().size(); j++)
+//                         {
+//                             if (ser->channels[i].getUsers()[j].fd == this->fd)
+//                             {
+//                                 c = 1;
+//                                 break;
+//                             }
+//                         }
+//                         if (c == 1)
+//                         {
+//                             for (unsigned long j = 0; j < ser->channels[i].getUsers().size(); j++)
+//                             {
+//                                 std::string msg;
+//                                 // if (this->args.size() > 1 && this->args[o][0] != ':')
+//                                          msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :" + this->message + "\r\n";
+//                                 // else if (this->args.size() > 1 && this->args[o][0] == ':')
+//                                 //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " ";
+//                                 // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
+//                                 // msg += "\r\n";
+//                                 if (ser->channels[i].getUsers()[j].fd != this->fd)
+//                                 {
+//                                     if(send(ser->channels[i].getUsers()[j].fd, msg.c_str(), msg.length(), 0) < 0)
+//                                     {
+//                                         std::cout << "Failed Send Try Again"<<std::endl;
+//                                     }
+//                                     // return ;
+//                                 }
+//                             }
+//                         }
+//                         else
+//                         {
+//                             std::string msg = ERR_NOTONCHANNEL(ser->splited[0], ser->hostname);
+//                             if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
+//                             {
+//                                 std::cout << "Failed Send Try Again"<<std::endl;
+//                             }
+//                         }
+//                     // if (ser->channels[i].getUsers().size() == 0)
+//                     // {
+//                     //     std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                     //     if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
+//                     //     {
+//                     //         std::cout << "Failed Send Try Again"<<std::endl;
+//                     //     }
+//                     // }
+//                     // std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                     // if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
+//                     // {
+//                     //     std::cout << "Failed Send Try Again"<<std::endl;
+//                     // }
+//                     // return ;
+//                 }
+//             }
+//         }
+//             else
+//             {
+//                 for (unsigned long j = 0; j < ser->clients.size(); j++)
+//                 {
+//                     if (ser->clients[j].nickname == this->args[o])
+//                     {
+//                         flag = 1;
+//                         std::string msg;
+//                         // if (this->args.size() > 0 && this->args[o][0] != ':')
+//     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!"+ getClientByFd(ser, this->fd)->user_name +"@" + ser->client_cmd.ip_addr +" PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
+//                         std::cout << "****msg: " << msg << std::endl;
+//                         // else if (this->args.size() > 0 && this->args[o][0] == ':')
+//                         // //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
+//                         // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
+//                         //     //     if (l < this->args.size() - 1)
+//                         //     //         msg += " ";
+//                         //     // }
+//                         //     msg += "\r\n";
+//                         if(send(ser->clients[j].fd, msg.c_str(), msg.length(), 0) < 0)
+//                         {
+//                             std::cout << "Failed Send Try Again"<<std::endl;
+//                         }
+//                         // return ;
+//                     }
+//                 }
+//                 }
+//                 if (flag == 0)
+//                 {
+//                     std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                     if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
+//                     {
+//                         std::cout << "Failed Send Try Again"<<std::endl;
+//                     }
+//                 }
+//             }
             
 
-        // }
-}
+//         // }
+// }
 void Command::nick_auth(std::vector<std::string> split,server *server,int client_fd)
 {
     (void)split;

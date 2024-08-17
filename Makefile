@@ -48,6 +48,7 @@ SRCS = main.cpp \
 		srcs/message.cpp \
 		cmd/channel.cpp \
 		cmd/command.cpp \
+		cmd/privmsg.cpp \
 
 CC = c++
 
