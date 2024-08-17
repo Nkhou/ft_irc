@@ -26,6 +26,10 @@ void Channel::sendMessage(std::string message)
         }
     }
 }
+bool Channel::getLimits()
+{
+    return limits;
+}
 void Channel::sendMessagenick(std::string message, int fd)
 {
     for (unsigned long i = 0; i < users.size(); i++)

@@ -457,8 +457,8 @@ void Command::ModeCommand(server *ser)
                             }
                             else if (this->keys[o] == "+l" && ((o + 1) < this->args.size()))
                             {
-                                int d = 0;
-                                int z = 0;
+                                size_t d = 0;
+                                size_t z = 0;
                                 while (d  < keys.size())
                                 {
                                     if (this->keys[d] == "+i")
@@ -467,9 +467,9 @@ void Command::ModeCommand(server *ser)
                                         break;
                                     d++;
                                 }
-                                int c = 0;
+                                size_t c = 0;
                                 // std::cout << "args : " << this->args[o + 1 - z] << std::endl;
-                                while (c  < this->args[o + 1 - z][c])
+                                while (c  < this->args[o + 1 - z].length())
                                 {
                                     if (this->args[o + 1 - z][c] < '0' || this->args[o + 1 - z][c] > '9')
                                         break;
@@ -489,8 +489,8 @@ void Command::ModeCommand(server *ser)
                             } 
                             else if (this->keys[o] == "+o" && ((o + 1) < this->args.size()))
                             {
-                                int d = 0;
-                                int z = 0;
+                                size_t d = 0;
+                                size_t z = 0;
                                 while (d  < keys.size())
                                 {
                                     if (this->keys[d] == "+i")
@@ -503,7 +503,7 @@ void Command::ModeCommand(server *ser)
                                 {
                                     if (ser->channels[i].getUsers()[l].nickname == this->args[o + 1 - z])
                                     {
-                                        int c = 0;
+                                        size_t c = 0;
                                         for (unsigned long k = 0; k < ser->channels[i].getOperators().size(); k++)
                                         {
                                             if (ser->channels[i].getOperators()[k].nickname == this->args[o + 1 - z])
@@ -526,7 +526,7 @@ void Command::ModeCommand(server *ser)
                                 {
                                     if (ser->channels[i].getUsers()[l].nickname == this->args[1])
                                     {
-                                        int c = 0;
+                                        size_t c = 0;
                                         for (unsigned long k = 0; k < ser->channels[i].getOperators().size(); k++)
                                         {
                                             if (ser->channels[i].getOperators()[k].nickname == this->args[1])
@@ -564,7 +564,7 @@ void Command::ModeCommand(server *ser)
                             }
                             else if (this->keys[o] == "+t" &&  ((o + 1) < this->args.size()))
                             {
-                                int d = 0;
+                                size_t d = 0;
                                 int z = 0;
                                 while (d  < keys.size())
                                 {
@@ -590,7 +590,7 @@ void Command::ModeCommand(server *ser)
                             }
                             else if (this->keys[o] == "+k" &&  ((o + 1) < this->args.size())) //delete key
                             {
-                                int d = 0;
+                                size_t d = 0;
                                 int z = 0;
                                 while (d  < keys.size())
                                 {
@@ -1241,7 +1241,7 @@ void Command::executecmd(server *server) {
             }
         }
         // std::cout << server->splited[2][0]<<"************" << std::endl;
-        if (server->splited[2][0] != '-' && server->splited[2][0] != '+')
+        if (server->splited.size() >= 3 && server->splited[2][0] != '-' && server->splited[2][0] != '+')
         {
             for (size_t i = 0; i < server->clients.size(); i++)
             {
@@ -1419,7 +1419,7 @@ void Command::JoinCommand(server *server) {
                         }
                         return ;
                     }
-                    else if (server->channels[i].getUsers().size() + 1 > server->channels[i].getMaxUsers())
+                    else if (server->channels[i].getLimits() && server->channels[i].getUsers().size() + 1 > server->channels[i].getMaxUsers())
                     {
                         std::string msg = ERR_CHANNELISFULL(args[0], server->hostname);
                         if (send(fd, msg.c_str(), msg.length(), 0) < 0)
@@ -1513,7 +1513,7 @@ void Command::JoinCommand(server *server) {
                                 // throw std::invalid_argument("Channel is key protected");
                                 // return ;
                             }
-                            else if (server->channels[j].getUsers().size() + 1 > server->channels[j].getMaxUsers())
+                            else if (server->channels[i].getLimits() && server->channels[j].getUsers().size() + 1 > server->channels[j].getMaxUsers())
                             {
                                 c = 1;
                                 std::string msg = ERR_CHANNELISFULL(args[0], server->hostname);
@@ -1526,8 +1526,6 @@ void Command::JoinCommand(server *server) {
                             if (c == 0)
                             {
                                 addusertoChannel(server, this->args[i], 0);
-                                // removefd(server->client_fd);
-
                             }
                             break ;
                         }

@@ -30,6 +30,7 @@ class Channel
         Channel(std::string name);
         Channel(std::string name, int o, int fd, std::vector<client> clients);
         int addUser(cli client, int o);
+        bool getLimits();
         void removeUser(std::string user);
         std::string getName();
         int getUserCount();

@@ -1,7 +1,7 @@
 
 when user in channel need to aadd error ERR_USERONCHANNEL for topic 
 
-MODE
+MODE 
 #ff
 need to change message in password
   std::string msg = ":" + user + "!~" + users[i].user_name + "@" + hostname + " JOIN " + name + "\n";
