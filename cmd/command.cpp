@@ -925,12 +925,15 @@ void Command::PrivmsgCommand(server *ser)
                     flag = 1;
                     std::string msg;
                     // if (this->args.size() > 0 && this->args[o][0] != ':')
-                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
+                    // msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
                     // else if (this->args.size() > 0 && this->args[o][0] == ':')
                     //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
                     // std::cout << "args: " << std::endl;
-                    msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
-                            msg += "\r\n";
+                    // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
+                    //         msg += "\r\n";
+                    msg = ":" + getClientByFd(ser, this->fd)->nickname + "!"+ getClientByFd(ser, this->fd)->user_name +"@" +ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
+                    std::cout << "msg: " << msg << std::endl;
+
                     if(send(ser->clients[j].fd, msg.c_str(), msg.length(), 0) < 0)
                     {
                         std::cout << "Failed Send Try Again"<<std::endl;
@@ -974,11 +977,11 @@ void Command::PrivmsgCommand(server *ser)
                             {
                                 std::string msg;
                                 // if (this->args.size() > 1 && this->args[o][0] != ':')
-                                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :";
+                                         msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :" + this->message + "\r\n";
                                 // else if (this->args.size() > 1 && this->args[o][0] == ':')
                                 //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " ";
-                                msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
-                                msg += "\r\n";
+                                // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
+                                // msg += "\r\n";
                                 if (ser->channels[i].getUsers()[j].fd != this->fd)
                                 {
                                     if(send(ser->channels[i].getUsers()[j].fd, msg.c_str(), msg.length(), 0) < 0)
@@ -1023,14 +1026,15 @@ void Command::PrivmsgCommand(server *ser)
                         flag = 1;
                         std::string msg;
                         // if (this->args.size() > 0 && this->args[o][0] != ':')
-                             msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
+    msg = ":" + getClientByFd(ser, this->fd)->nickname + "!"+ getClientByFd(ser, this->fd)->user_name +"@" + ser->client_cmd.ip_addr +" PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
+                        std::cout << "****msg: " << msg << std::endl;
                         // else if (this->args.size() > 0 && this->args[o][0] == ':')
-                        //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
-                        msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
-                            //     if (l < this->args.size() - 1)
-                            //         msg += " ";
-                            // }
-                            msg += "\r\n";
+                        // //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
+                        // msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
+                        //     //     if (l < this->args.size() - 1)
+                        //     //         msg += " ";
+                        //     // }
+                        //     msg += "\r\n";
                         if(send(ser->clients[j].fd, msg.c_str(), msg.length(), 0) < 0)
                         {
                             std::cout << "Failed Send Try Again"<<std::endl;

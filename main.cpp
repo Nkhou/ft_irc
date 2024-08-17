@@ -307,10 +307,9 @@ int main(int argc,char **argv)
 
                         split = split_string(cmd, split);
                         if (split.size() == 0)
-                        {
                             cmd.clear();
-                            continue;
-                        }
+                         
+                        
                         
 						if (split[0][0] == ':')
 							split.erase(split.begin());
@@ -340,7 +339,7 @@ int main(int argc,char **argv)
                                 else if(split[1] == ser.pass && ser.clients[i - 1].nickname == "" && ser.clients[i - 1].user_name == "")
                                     ser.clients[i - 1].password = true;
                            }    
-                           continue;
+                         
 
                         }
                         // if (ser.clients[i - 1].password == true) 

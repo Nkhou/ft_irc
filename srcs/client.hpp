@@ -30,6 +30,7 @@ typedef struct client
     std::string servername;
     std::string realname;
     std::string nickname;
+    std::string ip_adddress;
     std::string buff;
     std::string cmd; 
     bool password;
