@@ -145,6 +145,7 @@ int main(int argc,char **argv)
      std::string msg;
      std::string cmd;
      char hostname[1024] ;
+     memset(hostname,0,sizeof(hostname));
      hostname [1023] = '\0';
      //returns the standard host name for the current machine
      gethostname(hostname, 1023);
@@ -237,12 +238,19 @@ int main(int argc,char **argv)
                    fdpoll.revents = 0;
                    
                 cli.ip_addr = inet_ntoa(addr.sin_addr);
-                cli.hostname = "";
                 cli.fd = cli_fd;
                 cli.nickname ="";
                 cli.realname = "";
                 cli.user_name = "";
                 cli.servername = "";
+                cli.hostname = "";
+                // memset(hostname,0,sizeof(hostname));
+                // hostname [1023] = '\0';
+                // gethostname(hostname, 1023);
+                // cli.hostname = hostname;
+                // std::cout << "hostname " << cli.hostname << std::endl;
+                
+                //returns the standard host name for the current machine
                 cli.password = false;
                 cli.flag = false;
                 cli.flag_cmd = false;
@@ -326,7 +334,7 @@ int main(int argc,char **argv)
                             ser.fds.erase(ser.fds.begin() + i);
                             ser.clients.erase(ser.clients.begin() + i - 1);
                         }
-                       if(ser.clients[i - 1].password == false )
+                       if(i > 0 && ser.clients[i - 1].password == false )
                        {
                             if (split[0] == "PASS")
                             {
@@ -344,7 +352,7 @@ int main(int argc,char **argv)
                         }
                         // if (ser.clients[i - 1].password == true) 
                         // {
-                        if(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "")
+                        if(i > 0 && (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
                         {
                                if (split[0] == "NICK" )
                           {
@@ -372,16 +380,18 @@ int main(int argc,char **argv)
                                                 
                                             }
                                         }
-                                        if(a == 0)
+                                        if(a == 0 && i > 0 )
                                         {
                                           ser.clients[i - 1].nickname = split[1];
+
+                                           
                                           split.clear();
                   
                                             // continue;
                                         }
                                 }
                               }
-                            if(split.size() < 2 && ser.clients[i - 1].nickname == "")
+                            if(i > 0 && split.size() < 2 && ser.clients[i - 1].nickname == "")
                             {
                               msg = message_err_nick_name(ser.hostname, ERR_NONICKNAMEGIVEN_CODE,"*", ser.clients[i - 1].nickname, ERR_NONICKNAMEGIVEN_MSG);
                                     if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
@@ -410,6 +420,11 @@ int main(int argc,char **argv)
                                       ser.clients[i - 1].hostname = split[2];
                                       ser.clients[i - 1].servername = split[3];
                                       ser.clients[i - 1].realname = split[4];
+
+                                    //    memset(hostname,0,sizeof(hostname));
+                                    //     hostname [1023] = '\0';
+                                    //     gethostname(hostname, 1023);
+                                    //     cli.hostname = hostname;
                                         split.clear();
                                     //   continue;
                                 }  
@@ -430,7 +445,7 @@ int main(int argc,char **argv)
                                 //     split.clear();
                                 // }
                             }
-                    if(ser.clients[i - 1].flag == false)
+                    if(i > 0 && ser.clients[i - 1].flag == false)
                     {
                              std::cout << buffer << std::endl;
                             if(split[0] == "JOIN" || split[0] == "KICK" || split[0] == "TOPIC" || split[0] == "PRIVMSG" || split[0] == "MODE" || split[0] == "INVITE")
@@ -457,10 +472,14 @@ int main(int argc,char **argv)
                         // }
                        
                     }
-                    if(ser.clients[i - 1].flag == false)
+                    if(i > 0 && ser.clients[i - 1].flag == false)
                     {
                         if(ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "" && ser.clients[i - 1].password == true)
                         {
+                            memset(hostname,0,sizeof(hostname));
+                            hostname [1023] = '\0';
+                            gethostname(hostname, 1023);
+                            ser.clients[i - 1].hostname = hostname;
                             msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
                             if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
                             {
@@ -484,7 +503,7 @@ int main(int argc,char **argv)
                  std::cout << split[i] << std::endl;
             }
           
-                if (split.size() > 0 && split[0] != "PONG" && ser.clients[i - 1].flag == true)
+                if (i > 0 && split.size() > 0 && ser.clients.size() > 0 && split[0] != "PONG" && ser.clients[i - 1].flag == true)
                 {
                     std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
                     ser.splited = split;

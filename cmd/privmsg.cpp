@@ -118,10 +118,10 @@ void Command::PrivmsgCommand(server *ser)
                         flag = 1;
                         std::string msg;
                         //:test!~u@qk3i8byd6tfyg.irc PRIVMSG 1337 :hello
-                        msg = ":" + ser->client_cmd.nickname + "!~"+ ser->client_cmd.user_name + "@localhost PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
+
+                        msg = ":" + ser->client_cmd.nickname + "!~"+ ser->client_cmd.user_name + "@"+ser->client_cmd.ip_addr +" PRIVMSG " + ser->clients[j].nickname + " :" + this->message + "\r\n";
                        
                         std::cout << msg << std::endl;
-                        std::cout << ser->client_cmd.ip_addr << std::endl;
 
                         if(send(ser->clients[j].fd, msg.c_str(), msg.length(), 0) < 0)
                         {

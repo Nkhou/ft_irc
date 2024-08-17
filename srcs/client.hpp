@@ -33,6 +33,7 @@ typedef struct client
     std::string ip_adddress;
     std::string buff;
     std::string cmd; 
+    
     bool password;
     bool flag;
     bool flag_cmd;
