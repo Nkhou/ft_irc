@@ -382,6 +382,38 @@ void Command::ModeCommand(server *ser)
                                     std::cout << "Failed Send Try Again"<<std::endl;
                                 }
                             }
+                            else if (this->keys[o] =="-o")
+                            {
+                                for (unsigned long l = 0; l < ser->channels[i].getUsers().size(); l++)
+                                {
+                                    if (ser->channels[i].getUsers()[l].nickname == this->args[1])
+                                    {
+                                        size_t c = 0;
+                                        for (unsigned long k = 0; k < ser->channels[i].getOperators().size(); k++)
+                                        {
+                                            if (ser->channels[i].getOperators()[k].nickname.substr(1) == this->args[1])
+                                                break ;
+                                            c++;
+                                        }
+                                        std::cout << "c : " << c << std::endl;
+                                        if (c < ser->channels[i].getOperators().size())
+                                        {
+                                            ser->channels[i].removeOperator(ser->channels[i].getUsers()[l].nickname);
+                                            std::string msg = ":" + (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] + " " + this->keys[o] + " " + this->args[1]) + "\r\n";
+                                            ser->channels[i].sendMessage(msg);
+                                        }
+                                        // else 
+                                        // {
+                                        //     std::string msg = ERR_NOTOPERATOR(ser->channels[i].getOperators()[j].nickname.substr(1), ser->hostname);
+                                        //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                        //     {
+                                        //         std::cout << "Failed Send Try Again"<<std::endl;
+                                        //     }
+                                        //     break ;
+                                        // }
+                                    }
+                                }
+                            }
                             else if (this->keys[o] == "-k" && ser->channels[i].checkModeexist(ser->channels[i], "+k"))
                             {
                                 ser->channels[i].setMode(this->keys[o]);
@@ -502,7 +534,7 @@ void Command::ModeCommand(server *ser)
                                         break;
                                     d++;
                                 }
-                                for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
+                                for (unsigned long l = 0; l < ser->channels[i].getUsers().size(); l++)
                                 {
                                     if (ser->channels[i].getUsers()[l].nickname == this->args[o + 1 - z])
                                     {
@@ -525,14 +557,14 @@ void Command::ModeCommand(server *ser)
                             else if (this->keys[o] == "-o")
                             {
                                 // ser->channels[i].setMode(this->keys[o]);
-                                for (unsigned long l = 1; l < ser->channels[i].getUsers().size(); l++)
+                                for (unsigned long l = 0; l < ser->channels[i].getUsers().size(); l++)
                                 {
                                     if (ser->channels[i].getUsers()[l].nickname == this->args[1])
                                     {
                                         size_t c = 0;
                                         for (unsigned long k = 0; k < ser->channels[i].getOperators().size(); k++)
                                         {
-                                            if (ser->channels[i].getOperators()[k].nickname == this->args[1])
+                                            if (ser->channels[i].getOperators()[k].nickname.substr(1)  == this->args[1])
                                                 break ;
                                             c++;
                                         }
@@ -850,8 +882,10 @@ void Command::ParcePrivmsg(std::vector <std::string> command, int client_fd)
     // }
     if (command.size() == 3)
         this->message = command[command.size() - 1];
+    else if (command.size() > 3)
+        this->message = command[2];
     else
-        this->message = command[i];
+        this->message = "\0";
     // for (unsigned long j = 0; j < this->args.size(); j++)
     // {
     //     std::cout << "args: " << this->args[j] << std::endl;
@@ -890,10 +924,10 @@ void Command::PrivmsgCommand(server *ser)
                 {
                     flag = 1;
                     std::string msg;
-                    if (this->args.size() > 0 && this->args[o][0] != ':')
+                    // if (this->args.size() > 0 && this->args[o][0] != ':')
                          msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
-                    else if (this->args.size() > 0 && this->args[o][0] == ':')
-                        msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
+                    // else if (this->args.size() > 0 && this->args[o][0] == ':')
+                    //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
                     // std::cout << "args: " << std::endl;
                     msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
                             msg += "\r\n";
@@ -924,7 +958,7 @@ void Command::PrivmsgCommand(server *ser)
                 {
                     if (ser->channels[i].getName() == this->args[o])
                     {
-                            flag = 1;
+                        flag = 1;
                         int c = 0;
                         for (size_t j = 0; j < ser->channels[i].getUsers().size(); j++)
                         {
@@ -939,10 +973,10 @@ void Command::PrivmsgCommand(server *ser)
                             for (unsigned long j = 0; j < ser->channels[i].getUsers().size(); j++)
                             {
                                 std::string msg;
-                                if (this->args.size() > 1 && this->args[o][0] != ':')
+                                // if (this->args.size() > 1 && this->args[o][0] != ':')
                                          msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :";
-                                else if (this->args.size() > 1 && this->args[o][0] == ':')
-                                    msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " ";
+                                // else if (this->args.size() > 1 && this->args[o][0] == ':')
+                                //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " ";
                                 msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
                                 msg += "\r\n";
                                 if (ser->channels[i].getUsers()[j].fd != this->fd)
@@ -988,10 +1022,10 @@ void Command::PrivmsgCommand(server *ser)
                     {
                         flag = 1;
                         std::string msg;
-                        if (this->args.size() > 0 && this->args[o][0] != ':')
+                        // if (this->args.size() > 0 && this->args[o][0] != ':')
                              msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " :";
-                        else if (this->args.size() > 0 && this->args[o][0] == ':')
-                            msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
+                        // else if (this->args.size() > 0 && this->args[o][0] == ':')
+                        //     msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~"+ getClientByFd(ser, this->fd)->user_name +"@"+ser->hostname+" PRIVMSG " + ser->clients[j].nickname + " ";
                         msg += sendMessage(ser->clients[j].nickname, ser->splited[0], this->message);
                             //     if (l < this->args.size() - 1)
                             //         msg += " ";
