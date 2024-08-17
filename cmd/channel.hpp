@@ -32,6 +32,7 @@ class Channel
         int addUser(cli client, int o);
         bool getLimits();
         void removeUser(std::string user);
+        int getUserfd(int fd);
         std::string getName();
         int getUserCount();
         int getOperatorCount();

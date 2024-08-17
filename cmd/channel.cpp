@@ -5,6 +5,17 @@ Channel::Channel(std::string name)
     this->name = name;
     limits = false;
 }
+int Channel::getUserfd(int fd)
+{
+    for (unsigned long i = 0; i < getUsers().size(); i++)
+    {
+        if (getUsers()[i].fd == fd)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 Channel::Channel(std::string name, int o, int fd, std::vector<client> clients)
 {
@@ -261,6 +272,7 @@ void Channel::createChannel(std::string name)
 
 void Channel::addOperator(cli user)
 {
+    user.nickname = "@" + user.nickname;
     operators.push_back(user);
 }
 void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
@@ -285,7 +297,9 @@ void Channel::notifyUserJoin(std::string user, std::string hostname, int o)
                 // unsigned long k = 0;
                 for (unsigned long j = 0; j < operators.size(); j++)
                 {
-                    if (users[i].nickname != operators[j].nickname.substr(1))
+                    if (users[i].nickname == operators[j].nickname.substr(1))
+                        break;
+                    else
                     {
                         // std::cout << "operators[j].nickname: " << operators[j].nickname.substr(1) << std::endl;
                         msg += users[i].nickname + " ";
