@@ -4,6 +4,8 @@
 
 void deletechannels(server &ser, int fd)
 {
+    if (ser.channels.size() == 0)
+        return;
     for (size_t i = 0; i < ser.channels.size(); i++)
     {
         for (size_t j = 0; j < ser.channels[i].getUsers().size(); j++)
@@ -214,6 +216,7 @@ int main(int argc,char **argv)
     fdpoll.events = POLLIN;
     fdpoll.revents = 0;
     ser.fds.push_back(fdpoll);
+    // ssize_t size = 0;
     std::cout <<GREEN<< "Server is Ready to Accept a Connection...."<<std::endl;
     while(1) 
     {
@@ -269,10 +272,23 @@ int main(int argc,char **argv)
                 }
                 else
                 {
-                    memset(buffer,0,sizeof(buffer));
-                    ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
                     std::string buff;
+                    
+                    memset(buffer,0,sizeof(buffer));
+                    ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0);
+                    // size += n;
                     buff += buffer;
+                    while (buff.find("\n") == std::string::npos  && buff.size() > 0)
+                    {
+                        memset(buffer,0,sizeof(buffer));
+                        std::cout << "size " << size << std::endl;
+                        size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
+                        buff += buffer;
+                        // size += n;
+                    }
+                    // memset(buffer,0,sizeof(buffer));
+                    // ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
+                    // buff += buffer;
                     // need to add ctrl + c to close the server and Ctrl + D to  join the buffer
 
                     if(size <= 0)
@@ -290,30 +306,59 @@ int main(int argc,char **argv)
                     }
                     else
                     {
-                       buffer[size] = '\0';
+                    //    buff[buff.size()] = '\0';
                        if (size < 2)
 						{
-							buffer_stor.push_back(buffer);
+							// buffer_stor.push_back(buff);
 							continue;
 						}
                        
-                    // Check if the buffer doesn't end with '\n' or '\r'
-                     bool ends_with_newline = (buffer[size - 1] == '\n');
-                     bool ends_with_carriage_return = (size > 2 && buffer[size - 2] == '\r');
+                    // Check if the buff doesn't end with '\n' or '\r'
+                    size_t ends = buff.find("\n");
+                    size_t ends1 = buff.find("\r");
+                    if (ends != std::string::npos && ends1 != std::string::npos)
+                    {
+                        // std::cout << "buff " << buff.substr(0, ends) << std::endl;
+                        // buff.substr(0, ends);
+                        buffer_stor.push_back(buff.substr(0, ends - 1));
+                    }
+                    else if (ends != std::string::npos)
+                    {
+                        // std::cout << "2buff " << buff.substr(0, ends - 1)<< "------"<< std::endl;
+                        // buff.substr(0, ends);
+                        buffer_stor.push_back(buff.substr(0, ends));
+                    }
+                    // else if (ends1 != std::string::npos)
+                    // {
+                    //     std::cout << "3buff " << buff.substr(0, ends1) << std::endl;
+                    //     buff.substr(0, ends1);
+                    //     buffer_stor.push_back(buff.substr(0, ends1 - 1));
+                    // }
+                    // else
+                    //     buff.substr(0, buff.size() - 1);
+                    // std::cout << "buff " << buff << std::endl;
+                    //  bool ends_with_newline = buff.find("\n") == std::string::npos;
+                    //  std::cout << "ends_with_newline " << ends_with_newline << std::endl;
+                    //  bool ends_with_carriage_return = (size > 2 && buff.find("\r") == std::string::npos);
+                    //     std::cout << "ends_with_carriage_return " << ends_with_carriage_return << std::endl;
                       
-                      if (!ends_with_newline && buffer[size - 2] == '\r')
-                      {
-                          buffer_stor.push_back(buffer);
-                          continue;
-                      }
+                    //   if (!ends_with_newline && buff.find("\r") == std::string::npos)
+                    //   {
+                    //       buffer_stor.push_back(buff);
+                    //       continue;
+                    //   }
                       
-                    //   // Null-terminate the buffer correctly
-                      if (ends_with_newline)
-                          buffer[size - 1] = '\0';
-                      if (ends_with_carriage_return)
-                          buffer[size - 2] = '\0';
+                    // //   // Null-terminate the buff correctly
+                    //   if (ends_with_newline)
+                    //       buff[buff.size() - 1] = '\0';
+                    //   if (ends_with_carriage_return)
+                    //       buff[buff.size() - 2] = '\0';
                       // Push the buffer to buffer_stor
-                      buffer_stor.push_back(buffer);
+                    //   buffer_stor.push_back(buff);
+                      for (size_t j = 0; j < buffer_stor.size(); j++)
+                      {
+                          std::cout << "buffer_stor " << buffer_stor[j]<< "--------"<< std::endl;
+                      }
                       
                       // Concatenate all buffers in buffer_stor into cmd
                       for (size_t j = 0; j < buffer_stor.size(); j++)
@@ -354,6 +399,7 @@ int main(int argc,char **argv)
 
                             if (split[0] == "PASS")
                             {
+                                std::cout << "split " <<split[1]<<"--------" << std::endl;
                                 if(split.size() < 2)
                                 {
                                     msg = msg_err(split[0], ser.hostname);
@@ -369,8 +415,9 @@ int main(int argc,char **argv)
                          
 
                         }
-                        while (i > 0 && split.size()> 0 && ser.clients[i - 1].password == true &&  (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
+                        while (i > 0 && split.size() > 0 && ser.clients[i - 1].password == true &&  (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
                         {
+
                             // std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
                            
                             // std::cout <<
@@ -498,7 +545,7 @@ int main(int argc,char **argv)
             
             for (size_t j = 0; j < split.size(); j++)
             {
-                 std::cout << i<<"  ------   " <<split[j] << std::endl;
+                 std::cout << i<<"  ------   " <<split[j] <<"-------"<< std::endl;
                  std::cout << "fd " <<ser.clients[i - 1].nickname<< std::endl;
             }
           
