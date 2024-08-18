@@ -747,7 +747,12 @@ void Command::TopicCommand(server *ser)
                         }
                         return;
                     }
-                    ser->channels[i].PrintTopic(this->fd);
+                    std::string msg = ":" + ser->hostname + " 332 " + ser->client_cmd.nickname + " " + ser->channels[i].getName() + " :" + ser->channels[i].getTopic() + "\r\n";
+                    if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                    {
+                        std::cout << "Failed Send Try Again"<<std::endl;
+                    }
+                    // ser->channels[i].PrintTopic(this->fd);
                     return;
                 }
                 else 
