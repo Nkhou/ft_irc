@@ -490,7 +490,7 @@ void Command::ModeCommand(server *ser)
                                     ser->channels[i].sendMessage(msg);
                                 }
                             }
-                            else if (this->keys[o] == "+l" && ((o + 1) < this->args.size()))
+                            else if (this->keys[o] == "+l" )
                             {
                                 size_t d = 0;
                                 size_t z = 0;
@@ -504,6 +504,7 @@ void Command::ModeCommand(server *ser)
                                 }
                                 size_t c = 0;
                                 // std::cout << "args : " << this->args[o + 1 - z] << std::endl;
+                                std::cout << "args : " << this->args[o + 1 - z].length() << std::endl;
                                 while (c  < this->args[o + 1 - z].length())
                                 {
                                     if (this->args[o + 1 - z][c] < '0' || this->args[o + 1 - z][c] > '9')
@@ -597,7 +598,7 @@ void Command::ModeCommand(server *ser)
                                 ser->channels[i].sendMessage(msg);
                                 // return;
                             }
-                            else if (this->keys[o] == "+t" &&  ((o + 1) < this->args.size()))
+                            else if (this->keys[o] == "+t")
                             {
                                 // size_t d = 0;
                                 // int z = 0;
@@ -611,7 +612,7 @@ void Command::ModeCommand(server *ser)
                                 // }
                                 ser->channels[i].setMode(this->keys[o]);
                                 // ser->channels[i].setTopic(this->args[o + 1 - z]);
-                                std::string msg = ":" + (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] ) + "\r\n";
+                                std::string msg = ":" + (ser->channels[i].getOperators()[j].nickname.substr(1)  +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " MODE " + this->args[0] ) + " " +this->keys[o] + "\r\n";
                                 ser->channels[i].sendMessage(msg);
                                 // return;
                             }
@@ -1067,6 +1068,22 @@ void Command::nick_auth(std::vector<std::string> split,server *server,int client
              if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
                  std::cout << "Failed Send Try Again"<<std::endl;
      }
+    //   else
+    //     {
+    //        int a = 0;
+    //        for (size_t j = 0; j < server->clients.size(); j++)
+    //        {
+    //            if (server->client_cmd.nickname == split[1])
+    //            {
+    //                a = 1;
+    //                std::string msg = message_err_nick_name(server->hostname, ERR_NICKNAMEINUSE_CODE,"*", server->client_cmd.nickname, ERR_NICKNAMEINUSE_MSG);
+    //               if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+    //                   std::cout << "Failed Send Try Again"<<std::endl;
+    //                 split.clear();
+                   
+    //            }
+    //        }
+    //     }
      if(server->splited.size() >= 2)
      {
         int c = 0;
@@ -1166,31 +1183,37 @@ void Command::executecmd(server *server) {
             if (server->clients[i].fd == server->client_fd)
             {
                 server->clients.erase(server->clients.begin() + i);
-                break;
+                // break;
             }
         }
+        std::string msg = ":" + server->client_cmd.nickname + "!~" + server->client_cmd.user_name + "@" + server->hostname + " QUIT :" + server->splited[1] + "\r\n";
         for (unsigned long i = 0; i < server->channels.size(); i++)
         {
             for (unsigned long j = 0; j < server->channels[i].getUsers().size(); j++)
             {
                 if (server->channels[i].getUsers()[j].fd == server->client_fd)
                 {
+                    server->channels[i].sendMessagenick(msg, server->client_fd);
                     server->channels[i].removeUser(server->channels[i].getUsers()[j].nickname);
-                    break;
+                    if (server->channels[i].getUsers().size() == 0)
+                    {
+                        server->channels.erase(server->channels.begin() + i);
+                    }
+                    // break;
                 }
             }
         }
-        for (unsigned long i = 0; i < server->channels.size(); i++)
-        {
-            for (unsigned long j = 0; j < server->channels[i].getOperators().size(); j++)
-            {
-                if (server->channels[i].getOperators()[j].fd == server->client_fd)
-                {
-                    server->channels[i].removeOperator(server->channels[i].getOperators()[j].nickname);
-                    break;
-                }
-            }
-        }
+        // for (unsigned long i = 0; i < server->channels.size(); i++)
+        // {
+        //     for (unsigned long j = 0; j < server->channels[i].getOperators().size(); j++)
+        //     {
+        //         if (server->channels[i].getOperators()[j].fd == server->client_fd)
+        //         {
+        //             server->channels[i].removeOperator(server->channels[i].getOperators()[j].nickname);
+        //             break;
+        //         }
+        //     }
+        // }
         close(server->client_fd);
         return;
     }

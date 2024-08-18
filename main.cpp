@@ -10,9 +10,12 @@ void deletechannels(server &ser, int fd)
         {
             if (ser.channels[i].getUsers()[j].fd == fd)
             {
+                std::string msg = ":" + ser.client_cmd.nickname + "!" + ser.client_cmd.user_name + "@" + ser.hostname + " QUIT :" + "Connection closed by the server\r\n";
+                ser.channels[i].sendMessagenick( msg, ser.client_cmd.fd);
                 ser.channels[i].removeUser(ser.channels[i].getUsers()[j].nickname);
                 if (ser.channels[i].getUsers().size() == 0)
                 {
+                    std::cout << "Channel " << ser.channels[i].getName() << " is empty" << std::endl;
                     ser.channels.erase(ser.channels.begin() + i);
                 }
             }
@@ -133,7 +136,7 @@ int server::check_error_nickname(std::string nickname)
 
 int main(int argc,char **argv)
 {
-   int port_num;
+    int port_num;
     server ser;
    
      struct sockaddr_in addr;
@@ -152,6 +155,12 @@ int main(int argc,char **argv)
      ser.hostname = hostname;
      
     if (argc != 3)
+    {
+        std::cout <<"Error Try Again"<<std::endl;
+        exit (0);
+    }
+    std::string str = argv[1];
+    if(str.length() > 5)
     {
         std::cout <<"Error Try Again"<<std::endl;
         exit (0);
@@ -266,15 +275,22 @@ int main(int argc,char **argv)
                 {
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
+                    std::string buff;
+                    buff += buffer;
+                    // need to add ctrl + c to close the server and Ctrl + D to  join the buffer
 
                     if(size == 0)
                     {
                         // std::cout <<"<<<<<<<<<<<hi"<<std::endl;
-                        std::cout << "<<< Client Disconnected >>> " << buffer<< ser.fds[i].fd << std::endl;
-                        close(ser.fds[i].fd);
+                        std::cout << "<<< Client Disconnected  >>> " << buffer<< ser.fds[i].fd << std::endl;
+                        std::string msg = "Connection closed by the server\r\n";
+                        if(send(ser.fds[i].fd,msg.c_str(),msg.length(),0) < 0)
+                            std::cout << "Failed Send Try Again"<<std::endl;
                         ser.fds.erase(ser.fds.begin() + i);
                         ser.clients.erase(ser.clients.begin() + i - 1);
                         deletechannels(ser, ser.fds[i].fd);
+                        split.clear();
+                        close(ser.fds[i].fd);
                     }
                     else
                     {
@@ -335,6 +351,7 @@ int main(int argc,char **argv)
                             close(ser.fds[i].fd);
                             ser.fds.erase(ser.fds.begin() + i);
                             ser.clients.erase(ser.clients.begin() + i - 1);
+                            split.clear();
                         }
                        if(i > 0 && ser.clients[i - 1].password == false )
                        {

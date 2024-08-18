@@ -1,54 +1,45 @@
-
-@REM when user in channel need to aadd error ERR_USERONCHANNEL for topic 
-
-@REM MODE 
-@REM #ff
-@REM need to change message in password
-@REM   std::string msg = ":" + user + "!~" + users[i].user_name + "@" + hostname + " JOIN " + name + "\n";
-
-
-@REM   ----------------
-
-@REM **makefile 
-@REM   c++    -c -o main.o main.cpp
-@REM c++    -c -o srcs/message.o srcs/message.cpp          //// asahbi hta hado khessom -Wall -Wextra -Werror -std=c++98 
-@REM c++    -c -o cmd/channel.o cmd/channel.cpp
-@REM c++    -c -o cmd/command.o cmd/command.cpp
-@REM c++ -Wall -Wextra -Werror -std=c++98  main.o srcs/message.o cmd/channel.o cmd/command.o -o ircserv
-
-
-@REM **mni kanbedlo header makay3awedch ymiki
-
-@REM bka lmakefile tfixa walakin tal3o lik errors dyalk "chi comparaison" so khalit l9dim tatkoni onfixiwhom rah dayra lih commentaire >>"makefile jdid"
-
-
-user s s s s
-:e3r10p16.1337.ma 001 ss Welcome to e3r10p16.1337.ma Internet Relay Chat Network
-:e3r10p16.1337.ma 462 ss :You may not reregister !
-
---------------------------------------------
+pass ddd
+user s ss  s s
+nick nn
 pass ss
-nick a
-user s s s s 
-:e3r10p16.1337.ma 001 a Welcome to e3r10p16.1337.ma Internet Relay Chat Network
-:e3r10p16.1337.ma 421 a pss :Unknown command
-:a!~s@e3r10p16.1337.ma NICK a
+nick ss
+user s ss s s
+:e3r10p12.1337.ma 001 ss Welcome to e3r10p12.1337.ma Internet Relay Chat Network
+join #b,#c,#a bb,cc,aa
+:ss!~s@127.0.0.1 JOIN #b
+:127.0.0.1 353 ss @ #b :@ss
+:127.0.0.1 366 ss #b :End of /NAMES list
+:ss!~s@127.0.0.1 JOIN #c
+:127.0.0.1 353 ss @ #c :@ss
+:127.0.0.1 366 ss #c :End of /NAMES list
+:ss!~s@127.0.0.1 JOIN #a
+:127.0.0.1 353 ss @ #a :@ss
+:127.0.0.1 366 ss #a :End of /NAMES list
+
 
 pass ss
-nick a
-:e3r10p16.1337.ma 433 *  Nickname is already in use
 nick b
 user s s s s
-:e3r10p16.1337.ma 001 b Welcome to e3r10p16.1337.ma Internet Relay Chat Network
-nick a
-:b!~s@e3r10p16.1337.ma NICK a
---------------------------------------------
+:e3r10p12.1337.ma 001 b Welcome to e3r10p12.1337.ma Internet Relay Chat Network
+join #a
+:e3r10p12.1337.ma 475 #a :Cannot join channel (+k)
+join #a,#b,#c,#d
+--------------------------------------------------
+pass ss
+nick b
+user s s s s
+:e3r10p12.1337.ma 001 b Welcome to e3r10p12.1337.ma Internet Relay Chat Network
+join #a
+:b!~s@127.0.0.1 JOIN #a
+:127.0.0.1 353 b @ #a :@b
+:127.0.0.1 366 b #a :End of /NAMES list
+topic #a jjj
+:b!~s@e3r10p12.1337.ma TOPIC #a :jjj
+topic #a
+TOPIC #a :jjj
+topic #a :
+:e3r10p12.1337.ma 442 #a :You're not on that channel
 
-:a~!s@e3r10p16.1337.ma KICK #a b
-kick #a b
-Error(441): b #abcs They aren't on that channel
-kick #a hhh
-Error(401): hhhh No such nick
-
---------------------------------------------
-privmsg #a :hello wa baln hada 
+---------------------------------------------------
+RPL_TOPIC (332) 
+  "<client> <channel> :<topic>"

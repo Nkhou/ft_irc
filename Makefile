@@ -43,6 +43,7 @@
 # .PHONY : all clean fclean re
 
 NAME = ircserv
+# NAME_BONUS = ircserv_bonus
 
 SRCS = main.cpp \
 		srcs/message.cpp \
