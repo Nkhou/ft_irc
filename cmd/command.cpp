@@ -1377,7 +1377,7 @@ void Command::addusertoChannel(server *server, std::string channel, int o) {
                         server->channels[i].removefd(server->client_fd);
                         return;
                     }
-                    server->channels[i].notifyUserJoin(server->clients[j].nickname, server->hostname, o);
+                    server->channels[i].notifyUserJoin(server->clients[j].nickname, server->client_cmd.ip_addr, o);
                     server->channels[i].removefd(server->client_fd);
                     return ;
                 }

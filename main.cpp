@@ -195,7 +195,7 @@ int main(int argc,char **argv)
         std::cout << "Failed Bind Try Again"<<std::endl;
         exit(0);
     }
-    if (listen(ser.ser_fd,5) < 0) //listen for incoming connections
+    if (listen(ser.ser_fd,SOMAXCONN) < 0) //listen for incoming connections
     {
         std::cout << "Failed Listen Try Again"<<std::endl;
         exit(0);
@@ -239,6 +239,7 @@ int main(int argc,char **argv)
                    fdpoll.revents = 0;
                    
                 cli.ip_addr = inet_ntoa(addr.sin_addr);
+                std::cout << "ip address " << cli.ip_addr << std::endl;
                 cli.fd = cli_fd;
                 cli.nickname ="";
                 cli.realname = "";
@@ -342,6 +343,7 @@ int main(int argc,char **argv)
                         //     std::cout << "password "  << std::endl;
                             if (split[0] == "PASS")
                             {
+                                std::cout << "password " << std::endl;
                                 if(split.size() < 2)
                                 {
                                     msg = msg_err(split[0], ser.hostname);
@@ -365,20 +367,20 @@ int main(int argc,char **argv)
                         while (i > 0 && split.size() != 0 &&ser.clients[i - 1].password == true &&  (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
                         {
                             std::cout << "****************im here" << std::endl;
-                            // if (!(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
-                            // {
-                            // // std::cout << "im here" << std::endl;
-                            // // std::cout << "nickname " << ser.clients[i - 1].nickname << std::endl;
-                            // // std::cout << "user_name " << ser.clients[i - 1].user_name << std::endl;
-                            //     msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
-                            //     if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
-                            //     {
-                            //         return(std::cout << "Failed Send Try Again"<<std::endl,1);
-                            //     }
-                            //     ser.clients[i - 1].flag = true;
-                            //     split.clear();
-                            //     break;
-                            // }
+                            if (!(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
+                            {
+                            // std::cout << "im here" << std::endl;
+                            // std::cout << "nickname " << ser.clients[i - 1].nickname << std::endl;
+                            // std::cout << "user_name " << ser.clients[i - 1].user_name << std::endl;
+                                // msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
+                                // if(send(ser.clients[i - 1].fd,msg.c_str(), msg.length(), 0) < 0)
+                                // {
+                                //     return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                // }
+                                // ser.clients[i - 1].flag = true;
+                                // split.clear();
+                                break;
+                            }
                             if (split[0] == "NICK" )
                             {
                                 std::cout << "-------------im here" << std::endl;
@@ -489,7 +491,7 @@ int main(int argc,char **argv)
                                      ser.clients[i - 1].flag_cmd = true;
                                     }
                             }
-                            continue;
+                            // continue;
                     //  for (size_t i = 0; i < split.size(); i++)          
                     // {               
                     //     std::cout << split[i] << std::endl;     
