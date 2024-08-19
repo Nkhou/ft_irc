@@ -1,3 +1,4 @@
+
 #include<iostream>
 #include"srcs/server.hpp"
 #include"./cmd/command.hpp"
@@ -291,18 +292,18 @@ int main(int argc,char **argv)
                     // buff += buffer;
                     // need to add ctrl + c to close the server and Ctrl + D to  join the buffer
 
-                    if(size <= 0)
+                    if(size == 0)
                     {
                         // std::cout <<"<<<<<<<<<<<hi"<<std::endl;
-                        std::cout << "<<< Client Disconnected  >>> " << buffer<< ser.fds[i].fd << std::endl;
-                        std::string msg = "Connection closed by the server\r\n";
-                        if(send(ser.fds[i].fd,msg.c_str(),msg.length(),0) < 0)
-                            std::cout << "Failed Send Try Again"<<std::endl;
-                        ser.fds.erase(ser.fds.begin() + i);
-                        ser.clients.erase(ser.clients.begin() + i - 1);
                         deletechannels(ser, ser.fds[i].fd);
-                        split.clear();
                         close(ser.fds[i].fd);
+                        // close(ser.fds[i].fd);
+                        ser.fds.erase(ser.fds.begin() + i);
+                        buffer_stor.clear();
+                        cmd.clear();
+                        ser.clients.erase(ser.clients.begin() + i - 1);
+
+                        std::cout << "<<< Client Disconnected  >>> " << buffer<< ser.fds[i].fd << std::endl;
                     }
                     else
                     {
