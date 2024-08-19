@@ -28,7 +28,7 @@ void Command::ParceCommand(std::vector<std::string> command, int fd, std::string
                         this->args.push_back(command[i].substr(k, j - k));
                     }
             }
-            else if (i != 1 )
+            else if (i == 2)
             {
                 while (j < command[i].size() && command[i][j] != ',')
                 {
@@ -1232,7 +1232,7 @@ void Command::executecmd(server *server) {
 
     if (server->splited[0] == "JOIN") // need to check nickename exist befor need to check if channel have keys
     {
-        if (server->splited.size() != 2 && server->splited.size() != 3)
+        if (server->splited.size() < 2)
         {
             std::string msg = msg_err(server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
@@ -1242,7 +1242,10 @@ void Command::executecmd(server *server) {
             return;
         }
         ParceCommand(server->splited, server->client_fd, server->hostname);
-
+        // for (size_t i = 0; i < this->args.size(); i++)
+        // {
+        //     std::cout << "*******args: " << this->args[i] << std::endl;
+        // }
         JoinCommand(server);
     }
     else if (server->splited[0] == "KICK")
@@ -1529,7 +1532,7 @@ void Command::JoinCommand(server *server) {
             if (server->channels.size() == 0)
             {
                 server->channels.push_back(Channel(this->args[i]));
-                server->channels[0].setMode("+t");
+                // server->channels[0].setMode("+t");
                 if (this->keys.size() > 0)
                 {
                     server->channels[0].setMode("+k");
@@ -1550,7 +1553,7 @@ void Command::JoinCommand(server *server) {
                         // }
                         if (!server->channels[i].getUser(server->client_fd))
                         {
-                            std::cout << "Here" << std::endl;
+                            std::cout << "Here" <<this->args[i]<< std::endl;
 
                             if (checkMode(server->channels[j].getMode(), "+i") == 1 && !server->channels[i].userinvite(server->client_fd))
                             {  
