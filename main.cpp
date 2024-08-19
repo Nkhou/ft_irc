@@ -416,6 +416,7 @@ int main(int argc,char **argv)
                          
 
                         }
+                        // i > 0 && split.size() > 0 && ser.clients[i - 1].password == true &&  (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "")
                         while (i > 0 && split.size() > 0 && ser.clients[i - 1].password == true &&  (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
                         {
 
@@ -532,6 +533,7 @@ int main(int argc,char **argv)
                                       break;
                                   }
                             }
+                            
                    
                     }
                          
@@ -547,11 +549,12 @@ int main(int argc,char **argv)
             for (size_t j = 0; j < split.size(); j++)
             {
                  std::cout << i<<"  ------   " <<split[j] <<"-------"<< std::endl;
-                 std::cout << "fd " <<ser.clients[i - 1].nickname<< std::endl;
+                 std::cout << "^^^^^^^" << ser.clients[i - 1].flag << std::endl;
             }
-          
+                std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
                 if (i > 0 && split.size() > 0 && ser.clients.size() > 0 && split[0] != "PONG" && ser.clients[i - 1].flag == true)
                 {
+                    std::cout << "split &&&&&&&&&&&&&&&" <<split[1] << std::endl;
                     std::cout << "split " <<split[0] << std::endl;
                     std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
                     std::cout << "fd_ser " <<ser.fds[i].fd<< std::endl;

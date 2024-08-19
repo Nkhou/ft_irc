@@ -1064,72 +1064,64 @@ client *Command::getClientByFd(server *ser, int fd)
 // }
 void Command::nick_auth(std::vector<std::string> split,server *server,int client_fd)
 {
-    (void)split;
-    (void)client_fd;
+  
      std::string msg;
-
-     if( server->splited.size() < 2)
+   std::cout << "nick_authhereeeeeee" << std::endl;
+   std::cout << "********" << server->client_cmd.nickname << std::endl;
+     if( split.size() < 2)
      {
        std::string msg = message_err_nick_name(server->hostname, ERR_NONICKNAMEGIVEN_CODE,"*", server->client_cmd.nickname, ERR_NONICKNAMEGIVEN_MSG);
-             if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
+             if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
                  std::cout << "Failed Send Try Again"<<std::endl;
      }
-     if(server->splited.size() >= 2)
+     else if(server->check_error_nickname(split[1]) != 0)
+     {
+        msg = message_err_nick_name(server->hostname, ERR_ERRONEUSNICKNAME_CODE,"*", server->client_cmd.nickname, ERR_ERRONEUSNICKNAME);
+        if(send(client_fd, msg.c_str(), msg.length() ,0) < 0)
+            std::cout << "Failed Send Try Again"<<std::endl;
+     }
+    else
     {
-        int c = 0;
-            
-        std::cout << server->splited.size() << std::endl;
-        
-            for (unsigned long i = 0; i < server->channels.size(); i++)
+        int a = 0;
+            for (size_t j = 0; j < server->clients.size(); j++)
             {
-               for (unsigned long j = 0; j < server->channels[i].getUsers().size(); j++)
-               {
-                   if(server->channels[i].getUsers()[j].nickname == server->client_cmd.nickname)
+                if (server->client_cmd.nickname == split[1])
+                {
+                   a = 1;
+                   msg = message_err_nick_name(server->hostname, ERR_NICKNAMEINUSE_CODE,"*", server->client_cmd.nickname, ERR_NICKNAMEINUSE_MSG);
+                   if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
+                       std::cout << "Failed Send Try Again"<<std::endl;
+                    
+
+                }
+            }
+            if (a == 0)
+            {
+                     std::string  msg = ":" + server->client_cmd.nickname +"!~"+server->client_cmd.user_name+"@"+server->hostname+ " NICK " + split[1] + "\r\n";
+                      if(send(client_fd, msg.c_str(), msg.length(), 0) < 0)
+                          std::cout<< "Failed Send Try Again"<<std::endl;
+                
+                for (unsigned long i = 0; i < server->channels.size(); i++)
+                {
+                   for (unsigned long j = 0; j < server->channels[i].getUsers().size(); j++)
                    {
-                        c = 1;
-                       server->channels[i].getUsers()[j].nickname = server->splited[1];
-                       for (unsigned long k = 0; k < server->channels[i].getOperators().size(); k++)
+                       if(server->channels[i].getUsers()[j].nickname == server->client_cmd.nickname)
                        {
-                           if(server->channels[i].getOperators()[k].nickname == server->client_cmd.nickname)
+                           server->channels[i].getUsers()[j].nickname = split[1];
+                           for (unsigned long k = 0; k < server->channels[i].getOperators().size(); k++)
                            {
-                               server->channels[i].getOperators()[k].nickname = server->splited[1];
+                               if(server->channels[i].getOperators()[k].nickname == server->client_cmd.nickname)
+                               {
+                                   server->channels[i].getOperators()[k].nickname = split[1];
+                               }
                            }
+                           server->channels[i].sendMessagenick(msg, client_fd);
                        }
-                       server->channels[i].sendMessagenick(msg, server->client_cmd.fd);
                    }
-               }
+                }
+                server->client_cmd.nickname = split[1];
             }
-             if(server->check_error_nickname(split[1]) != 0)
-            {
-               msg = message_err_nick_name(server->hostname, ERR_ERRONEUSNICKNAME_CODE,"*", server->client_cmd.nickname, ERR_ERRONEUSNICKNAME);
-               if(send(server->client_cmd.fd, msg.c_str(), msg.length() ,0) < 0)
-                   std::cout << "Failed Send Try Again"<<std::endl;
-            }
-        
-            else
-            {
-              int a = 0;
             
-              for (size_t j = 0; j < server->clients.size(); j++)
-              {
-                  if (server->client_cmd.nickname == split[1])
-                  {
-                      a = 1;
-                     msg = message_err_nick_name(server->hostname, ERR_NICKNAMEINUSE_CODE,"*", server->client_cmd.nickname, ERR_NICKNAMEINUSE_MSG);
-                     if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
-                         std::cout << "Failed Send Try Again"<<std::endl;
-                       split.clear();
-                      
-                  }
-              }
-              if (a == 0)
-              {
-                    std::string  msg = ":" + server->client_cmd.nickname +"!~"+server->client_cmd.user_name+"@"+server->hostname+ " NICK " + server->splited[1] + "\r\n";
-                    if(send(server->client_cmd.fd, msg.c_str(), msg.length(), 0) < 0)
-                        std::cout<< "Failed Send Try Again"<<std::endl;
-                  server->client_cmd.nickname = server->splited[1];
-              }
-            }
     }
 }
     
