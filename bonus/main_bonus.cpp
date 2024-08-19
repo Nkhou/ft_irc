@@ -18,7 +18,7 @@ void  splited(std::string str, std::vector<std::string> *split)
 {
     // std::vector<std::string> split;
             // std::cout << "str: " << str << std::endl;
-    for (int i = 0; i < str.length(); i++)
+    for (size_t i = 0; i < str.length(); i++)
     {
         if (str[i] == ':' && i < str.length()&& str[i + 1] == ' ')
         {
@@ -39,7 +39,7 @@ void  splited(std::string str, std::vector<std::string> *split)
             i = 0;
         }
     }
-    int i = 0;
+    size_t i = 0;
     // std::cout << "str: " << str << std::endl;
     while (i < str.length() && (str[i] != ' ' && str[i] != '\n' && str[i] != '\r'))
     {
@@ -51,7 +51,7 @@ void  splited(std::string str, std::vector<std::string> *split)
     split->push_back(str);
 }
 std::ostream& operator<< (std::ostream& os, const std::vector<std::string>& v) {
-    for (int i = 0; i < v.size(); i++)
+    for (size_t i = 0; i < v.size(); i++)
     {
         os << v[i] << std::endl;
     }

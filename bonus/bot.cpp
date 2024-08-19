@@ -13,8 +13,8 @@ void Bot::clearMessage()
 }
 void Bot::parcingBuffer(std::vector<std::string> buffer)
 {
-    int i = 1;
-    int c = 0;
+    size_t i = 1;
+    size_t c = 0;
 
     // for (int i = 0; i < buffer.size(); i++)
     // {
@@ -92,7 +92,7 @@ void Bot::parcingBuffer(std::vector<std::string> buffer)
 }
 int Bot::checkDate(std::string date)
 {
-    int i = 0;
+    // size_t i = 0;
     // while ( i < date.length())
     // {
     //     std::cout << "i = "<<i<<" date "<<date[i] << std::endl;
@@ -121,12 +121,13 @@ int Bot::checkDate(std::string date)
             return 1;
         }
     }
-    int k = 0;
+    // int k = 0;
     return 0;
 }
 
 std::string notenghparam(std::string nick, std::string hostname)
 {
+    (void)hostname;
     std::string msg = "privmsg " + nick + " 461 " +  " :Not enough parameters\r\n";
     return msg;
 }
@@ -156,7 +157,7 @@ int Bot::checkDateparcing(std::string date, std::string nick, std::string hostna
 int parcedate(std::string date, t_date *date1)
 {
     t_date date2;
-    int i = 0;
+    size_t i = 0;
     int k ;
     while (date.length() != 0 && i < date.length())
     {
@@ -179,7 +180,7 @@ int parcedate(std::string date, t_date *date1)
         i++;
     }
     i++;
-    int j = 0;
+    // int j = 0;
     std::string str = date.substr(k, i - k);
     if (str == "Jan")
         date2.month = 1;
@@ -288,8 +289,8 @@ void Bot::addjocks()
 }
 void Bot::execbot(int fd )
 {
-    std::cout << "hello" <<messages.size()<< std::endl;
-    for (int i = 0; i < messages.size(); i++)
+    // std::cout << "hello" <<messages.size()<< std::endl;
+    for (size_t i = 0; i < messages.size(); i++)
     {
         std::cout << "i  = " << i << " " << messages[i] << std::endl;
     }
