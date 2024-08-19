@@ -71,6 +71,7 @@ class Channel
         void removefd( int fd);
         void setMaxUsers(size_t maxUsers);
         void setLimits(bool limits);
+        void setOpiritornames(std::string name);
         // void sendMessage(std::string message);
         // void executecmdJOIN(server *server);
         ~Channel();

@@ -1066,8 +1066,8 @@ void Command::nick_auth(std::vector<std::string> split,server *server,int client
 {
   
      std::string msg;
-   std::cout << "nick_authhereeeeeee" << std::endl;
-   std::cout << "********" << server->client_cmd.nickname << std::endl;
+//    std::cout << "nick_authhereeeeeee" << std::endl;
+//    std::cout << "********" << server->client_cmd.nickname << std::endl;
      if( split.size() < 2)
      {
        std::string msg = message_err_nick_name(server->hostname, ERR_NONICKNAMEGIVEN_CODE,"*", server->client_cmd.nickname, ERR_NONICKNAMEGIVEN_MSG);
@@ -1107,19 +1107,23 @@ void Command::nick_auth(std::vector<std::string> split,server *server,int client
                    {
                        if(server->channels[i].getUsers()[j].nickname == server->client_cmd.nickname)
                        {
-                           server->channels[i].getUsers()[j].nickname = split[1];
-                           for (unsigned long k = 0; k < server->channels[i].getOperators().size(); k++)
-                           {
-                               if(server->channels[i].getOperators()[k].nickname == server->client_cmd.nickname)
-                               {
-                                   server->channels[i].getOperators()[k].nickname = split[1];
-                               }
-                           }
+                        server->channels[i].setOpiritornames(split[1]);
+                       
                            server->channels[i].sendMessagenick(msg, client_fd);
                        }
                    }
                 }
-                server->client_cmd.nickname = split[1];
+                for (unsigned long i = 0; i < server->clients.size(); i++)
+                {
+                    if (server->clients[i].fd == client_fd)
+                    {
+                        server->clients[i].nickname = split[1];
+                        server->client_cmd.nickname = split[1];
+                        return;
+                    }
+                }
+               
+                
             }
             
     }

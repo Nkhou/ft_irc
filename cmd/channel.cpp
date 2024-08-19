@@ -16,7 +16,29 @@ int Channel::getUserfd(int fd)
     }
     return 0;
 }
-
+void Channel::setOpiritornames(std::string name)
+{
+    for (unsigned long i = 0; i < users.size(); i++)
+    {
+        if (users[i].nickname == name)
+        {
+            users[i].nickname = name;
+            std::cout << "users[i].nickname: " << users[i].nickname << std::endl;
+            break;
+            // return;
+        }
+    }
+    for (unsigned long i = 0; i < operators.size(); i++)
+    {
+        if (operators[i].nickname.substr(1) == name)
+        {
+            operators[i].nickname = "@" + name;
+            return;
+        }
+    }
+    // this->name = name;
+    // this->name = name;
+}
 Channel::Channel(std::string name, int o, int fd, std::vector<client> clients)
 {
     this->name = name;
@@ -178,7 +200,7 @@ int Channel::addUser(cli client, int o)
             return 1;
         }
     }
-    std::cout << "users.size(): " << limits << std::endl;
+    // std::cout << "users.size(): " << limits << std::endl;
     if (limits)
     {
         if (users.size() >= maxUsers)

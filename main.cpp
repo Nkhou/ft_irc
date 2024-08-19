@@ -356,10 +356,10 @@ int main(int argc,char **argv)
                     //       buff[buff.size() - 2] = '\0';
                       // Push the buffer to buffer_stor
                     //   buffer_stor.push_back(buff);
-                      for (size_t j = 0; j < buffer_stor.size(); j++)
-                      {
-                          std::cout << "buffer_stor " << buffer_stor[j]<< "--------"<< std::endl;
-                      }
+                    //   for (size_t j = 0; j < buffer_stor.size(); j++)
+                    //   {
+                    //       std::cout << "buffer_stor " << buffer_stor[j]<< "--------"<< std::endl;
+                    //   }
                       
                       // Concatenate all buffers in buffer_stor into cmd
                       for (size_t j = 0; j < buffer_stor.size(); j++)
@@ -400,7 +400,7 @@ int main(int argc,char **argv)
 
                             if (split[0] == "PASS")
                             {
-                                std::cout << "split " <<split[1]<<"--------" << std::endl;
+                                // std::cout << "split " <<split[1]<<"--------" << std::endl;
                                 if(split.size() < 2)
                                 {
                                     msg = msg_err(split[0], ser.hostname);
@@ -549,15 +549,13 @@ int main(int argc,char **argv)
             for (size_t j = 0; j < split.size(); j++)
             {
                  std::cout << i<<"  ------   " <<split[j] <<"-------"<< std::endl;
-                 std::cout << "^^^^^^^" << ser.clients[i - 1].flag << std::endl;
+                //  std::cout << "^^^^^^^" << ser.clients[i - 1].flag << std::endl;
             }
-                std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
+                // std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
                 if (i > 0 && split.size() > 0 && ser.clients.size() > 0 && split[0] != "PONG" && ser.clients[i - 1].flag == true)
                 {
-                    std::cout << "split &&&&&&&&&&&&&&&" <<split[1] << std::endl;
-                    std::cout << "split " <<split[0] << std::endl;
-                    std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
-                    std::cout << "fd_ser " <<ser.fds[i].fd<< std::endl;
+                   
+                   
                     ser.splited = split;
                     ser.client_fd = ser.fds[i].fd;
                     ser.client_cmd = ser.clients[i - 1];
