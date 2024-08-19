@@ -86,7 +86,7 @@ void Command::PrivmsgCommand(server *ser)
                             for (unsigned long j = 0; j < ser->channels[i].getUsers().size(); j++)
                             {
                                 std::string msg;
-                                msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getUsers()[j].nickname + " :" + this->message + "\r\n";
+                                msg = ":" + getClientByFd(ser, this->fd)->nickname + "!~" + getClientByFd(ser, this->fd)->user_name + "@" + ser->hostname + " PRIVMSG " + ser->channels[i].getName() + " :" + this->message + "\r\n";
                                 if (ser->channels[i].getUsers()[j].fd != this->fd)
                                 {
                                     if(send(ser->channels[i].getUsers()[j].fd, msg.c_str(), msg.length(), 0) < 0)

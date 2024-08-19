@@ -88,7 +88,7 @@ void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::ve
         for (unsigned long j = 0; j < command[i].size(); j++)
         {
             unsigned long k = j;
-            while (k < command.size() && command[i][k] != ',')
+            while (k < command[i].size() && command[i][k] != ',')
                 k++;
             if (k > j)
             {
@@ -108,11 +108,12 @@ void Command::ParceCommandkick(std::vector<std::string> command, int fd, std::ve
     //     std::cout << "ha anna kant3awd keys "<<this->keys[i] << std::endl;
     if (command.size() == 4)
     {
-        if (command[3][0] == ':')
-            this->message = command[3].substr(1);
-        else
+        // if (command[3][0] == ':')
+        //     this->message = command[3].substr(1);
+        // else
             this->message = command[3];
     }
+
     // for (unsigned long i = 1; i < channel.size(); i++)
     // {
     //     if (channel[i].getName() == command[1])
@@ -728,15 +729,27 @@ void Command::TopicCommand(server *ser)
 {
     for (size_t i = 0; i < ser->channels.size(); i++)
     {
-        if (ser->channels[i].getUserfd(this->fd)== 0)
+        if (ser->channels[i].getName() == this->args[0])
         {
-            std::string msg = ERR_NOTONCHANNEL(args[0], ser->hostname);
-            if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+            if (ser->channels[i].getUser(this->fd) == NULL)
             {
-                std::cout << "Failed Send Try Again"<<std::endl;
+                std::string msg = ERR_NOTONCHANNEL(args[0], ser->hostname);
+                if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                {
+                    std::cout << "Failed Send Try Again"<<std::endl;
+                }
+                return;
             }
-            return;
         }
+        // if (ser->channels[i].getUserfd(this->fd)== 0)
+        // {
+        //     std::string msg = ERR_NOTONCHANNEL(args[0], ser->hostname);
+        //     if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+        //     {
+        //         std::cout << "Failed Send Try Again"<<std::endl;
+        //     }
+        //     return;
+        // }
     }
     for (unsigned long i = 0; i < ser->channels.size(); i++)
         {
@@ -810,49 +823,63 @@ void Command::InviteCommand(server *ser)
     {
         if (ser->channels[i].getName() == this->args[1])
         {
-                if (ser->channels[i].getOperators().size() == 0)
+            // st
+            if (ser->channels[i].getOperators().size() == 0)
+            {
+                std::string msg = NotOPRT(args[0], ser->hostname);
+                if(send(fd, msg.c_str(), msg.length(), 0) < 0)
                 {
-                    std::string msg = NotOPRT(args[0], ser->hostname);
-                    if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+                    std::cout << "Failed Send Try Again"<<std::endl;
+                }
+                return;
+            }
+            for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
+            {
+                if (ser->channels[i].getOperators()[j].fd == this->fd)
+                {
+                    // std::cout << "args: " << this->args[0] << std::endl;
+                    // std::cout << "args: " << this->args[0] << std::endl;
+                    for (unsigned long l = 0; l < ser->clients.size(); l++)
+                    {
+                        if (this->args[0] == ser->clients[l].nickname)
+                        {
+                            for (unsigned long c = 0; c < ser->channels[i].getUsers().size(); c++)
+                            {
+                                if (ser->channels[i].getUsers()[c].nickname == ser->clients[l].nickname)
+                                {
+                                    std::string msg = ERR_USERONCHANNEL(ser->clients[l].nickname, ser->hostname);
+                                    if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
+                                    {
+                                        std::cout << "Failed Send Try Again"<<std::endl;
+                                    }
+                                    return ;
+                                }
+                            }
+                            ser->channels[i].setFd(ser->clients[l].fd);
+                            // ser->channels[i].addUser(ser->clients[l], 0);
+                            std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " INVITE " + this->args[0] + " " + this->args[1] + "\r\n";
+                            ser->channels[i].sendMessage(msg);
+                            if (send(ser->clients[l].fd, msg.c_str(), msg.length(), 0) < 0)
+                            {
+                                std::cout << "Failed Send Try Again"<<std::endl;
+                            }
+                            return ;
+                        }
+                    }
+                    std::string msg = "hello " + ERR_NOSUCHNICK(this->args[1], ser->hostname);
+                    if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
                     {
                         std::cout << "Failed Send Try Again"<<std::endl;
                     }
                     return;
                 }
-                for (unsigned long j = 0; j < ser->channels[i].getOperators().size(); j++)
-                {
-                    if (ser->channels[i].getUsers()[j].fd == this->fd)
-                    {
-                        // std::cout << "args: " << this->args[0] << std::endl;
-                        // std::cout << "args: " << this->args[0] << std::endl;
-                        for (unsigned long l = 0; l < ser->clients.size(); l++)
-                        {
-                            if (this->args[0] == ser->clients[l].nickname)
-                            {
-                                for (unsigned long c = 0; c < ser->channels[i].getUsers().size(); c++)
-                                {
-                                    if (ser->channels[i].getUsers()[c].nickname == ser->clients[l].nickname)
-                                        return ;
-                                }
-                                ser->channels[i].setFd(ser->clients[l].fd);
-                                // ser->channels[i].addUser(ser->clients[l], 0);
-                                std::string msg = ":" + ser->channels[i].getOperators()[j].nickname.substr(1) +"!~"+ser->channels[i].getOperators()[j].user_name + "@"+ser->hostname + " INVITE " + this->args[0] + " " + this->args[1] + "\r\n";
-                                ser->channels[i].sendMessage(msg);
-                                if (send(ser->clients[l].fd, msg.c_str(), msg.length(), 0) < 0)
-                                {
-                                    std::cout << "Failed Send Try Again"<<std::endl;
-                                }
-                                return ;
-                            }
-                        }
-                        std::string msg = ERR_NOSUCHNICK(this->args[1], ser->hostname);
-                        if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
-                        {
-                            std::cout << "Failed Send Try Again"<<std::endl;
-                        }
-                        return;
-                    }
-                }
+            }
+            std::string msg = NotOPRT(args[0], ser->hostname);
+            if(send(fd, msg.c_str(), msg.length(), 0) < 0)
+            {
+                std::cout << "Failed Send Try Again"<<std::endl;
+            }
+            return;
         }
     }
     std::string msg = ERR_NOSUCHCHANNEL(this->args[1], ser->hostname);
@@ -1350,6 +1377,7 @@ void Command::executecmd(server *server) {
     }
     else if (server->splited[0] == "INVITE")
     {
+        // std::cout << "INVITE" << std::endl;
         if (server->splited.size() < 3)
         {
             std::string msg = msg_errcmd(server->client_cmd.nickname,server->splited[0], server->hostname);
@@ -1364,7 +1392,8 @@ void Command::executecmd(server *server) {
     }
     else if (server->splited[0] == "PRIVMSG")
     {
-        if (server->splited.size() == 1)
+        std::cout << "PRIVMSG" << std::endl;
+        if (server->splited.size() < 1)
         {
             std::string msg = msg_errcmd(server->client_cmd.nickname, server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)

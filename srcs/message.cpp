@@ -180,3 +180,8 @@ std::string ERR_NOSUCHNICK(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 401 " + nick + " :No such nick/channel\r\n";
     return msg;
 }
+std::string ERR_USERONCHANNEL(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 443 " + nick + " :is already on channel\r\n";
+    return msg;
+}
