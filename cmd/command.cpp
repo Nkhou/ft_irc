@@ -272,10 +272,10 @@ void Command::ModeCommand(server *ser)
             }
         }
     }
-    for (size_t p = 0; p < this->keys.size(); p++)
-    {
-        std::cout << "---args : " << this->keys[p] << std::endl;
-    }
+    // for (size_t p = 0; p < this->keys.size(); p++)
+    // {
+    //     std::cout << "---args : " << this->keys[p] << std::endl;
+    // }
     if (ser->channels.size() == 0)
     {
         std::string msg = ChannelExist(args[0], ser->hostname);
@@ -292,7 +292,13 @@ void Command::ModeCommand(server *ser)
         {
             if (ser->channels[i].getName() == this->args[0])
             {
-                std::string msg = ":" +ser->client_cmd.nickname + "!~" + ser->client_cmd.user_name + "@" + ser->hostname + " MODE " + this->args[0] + " ";
+                std::string msg = ":" +ser->hostname + " 324 " + ser->channels[i].getName() + " ";
+                if (ser->channels[i].getMode().size() == 0)
+                {
+                    msg += "+\r\n";
+                    ser->channels[i].sendMessage(msg);
+                    return;
+                }
                 // std::string msg = ":" + ser->hostname + " 324 " + ser->channels[i].getName() + " ";
                 for (unsigned long j = 0; j < ser->channels[i].getMode().size(); j++)
                 {
@@ -839,7 +845,7 @@ void Command::InviteCommand(server *ser)
                                 return ;
                             }
                         }
-                        std::string msg = msg_errpriv(this->args[1], ser->hostname);
+                        std::string msg = ERR_NOSUCHNICK(this->args[1], ser->hostname);
                         if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
                         {
                             std::cout << "Failed Send Try Again"<<std::endl;
@@ -849,7 +855,7 @@ void Command::InviteCommand(server *ser)
                 }
         }
     }
-    std::string msg = msg_errpriv(this->args[1], ser->hostname);
+    std::string msg = ERR_NOSUCHCHANNEL(this->args[1], ser->hostname);
     if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
     {
         std::cout << "Failed Send Try Again"<<std::endl;
@@ -949,7 +955,7 @@ client *Command::getClientByFd(server *ser, int fd)
 //             }
 //             if (flag == 0)
 //             {
-//                 std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                 std::string msg = msg_errcmd(ser->splited[0], ser->hostname);
 //                 if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
 //                 {
 //                     std::cout << "Failed Send Try Again"<<std::endl;
@@ -1008,13 +1014,13 @@ client *Command::getClientByFd(server *ser, int fd)
 //                         }
 //                     // if (ser->channels[i].getUsers().size() == 0)
 //                     // {
-//                     //     std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                     //     std::string msg = msg_errcmd(ser->splited[0], ser->hostname);
 //                     //     if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
 //                     //     {
 //                     //         std::cout << "Failed Send Try Again"<<std::endl;
 //                     //     }
 //                     // }
-//                     // std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                     // std::string msg = msg_errcmd(ser->splited[0], ser->hostname);
 //                     // if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
 //                     // {
 //                     //     std::cout << "Failed Send Try Again"<<std::endl;
@@ -1051,7 +1057,7 @@ client *Command::getClientByFd(server *ser, int fd)
 //                 }
 //                 if (flag == 0)
 //                 {
-//                     std::string msg = msg_errpriv(ser->splited[0], ser->hostname);
+//                     std::string msg = msg_errcmd(ser->splited[0], ser->hostname);
 //                     if(send(ser->client_fd, msg.c_str(), msg.length(), 0) < 0)
 //                     {
 //                         std::cout << "Failed Send Try Again"<<std::endl;
@@ -1230,7 +1236,7 @@ void Command::executecmd(server *server) {
     {
         if (server->splited.size() < 2)
         {
-            std::string msg = msg_err(server->splited[0], server->hostname);
+            std::string msg = msg_errcmd(server->client_cmd.nickname, server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
             {
                 std::cout << "Failed Send Try Again"<<std::endl;
@@ -1248,18 +1254,18 @@ void Command::executecmd(server *server) {
     {
         if (server->splited.size() < 3)
         {
-            for (unsigned long i = 0; i < server->clients.size(); i++)
-            {
-                if (server->clients[i].fd == server->client_fd)
-                {
-                    std::string msg = kickerr(server->clients[i].nickname, server->hostname);
+            // for (unsigned long i = 0; i < server->clients.size(); i++)
+            // {
+            //     if (server->clients[i].fd == server->client_fd)
+            //     {
+                    std::string msg = kickerr(server->client_cmd.nickname, server->hostname);
                     if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
                     {
                         std::cout << "Failed Send Try Again"<<std::endl;
                     }
                     return;
-                }
-            }
+            //     }
+            // }
             // std::string msg = kickerr(server->splited[0], server->hostname);
             // if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
             // {
@@ -1275,7 +1281,7 @@ void Command::executecmd(server *server) {
         std::cout << "MODE" << std::endl;
         if (server->splited.size() < 2)
         {
-            std::string msg = msg_err(server->splited[0], server->hostname);
+            std::string msg = msg_errcmd(server->client_cmd.nickname,server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
             {
                 std::cout << "Failed Send Try Again"<<std::endl;
@@ -1332,7 +1338,7 @@ void Command::executecmd(server *server) {
     {
         if (server->splited.size() < 2)
         {
-            std::string msg = msg_err(server->splited[0], server->hostname);
+            std::string msg = msg_errcmd(server->client_cmd.nickname,server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
             {
                 std::cout << "Failed Send Try Again"<<std::endl;
@@ -1346,7 +1352,7 @@ void Command::executecmd(server *server) {
     {
         if (server->splited.size() < 3)
         {
-            std::string msg = msg_err(server->splited[0], server->hostname);
+            std::string msg = msg_errcmd(server->client_cmd.nickname,server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
             {
                 std::cout << "Failed Send Try Again"<<std::endl;
@@ -1360,7 +1366,7 @@ void Command::executecmd(server *server) {
     {
         if (server->splited.size() == 1)
         {
-            std::string msg = msg_errsend(server->splited[0], server->hostname);
+            std::string msg = msg_errcmd(server->client_cmd.nickname, server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
             {
                 std::cout << "Failed Send Try Again"<<std::endl;
@@ -1369,7 +1375,7 @@ void Command::executecmd(server *server) {
         }
         else if (server->splited.size() == 2)
         {
-            std::string msg = msg_err(server->splited[0], server->hostname);
+            std::string msg = msg_errcmd(server->client_cmd.nickname,server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
             {
                 std::cout << "Failed Send Try Again"<<std::endl;

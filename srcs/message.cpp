@@ -28,6 +28,11 @@ std::string msg_err(std::string nick, std::string hostname)
    std::string msg = ":" + hostname + " 461 " +"* "+ nick + " :Not enough parameters\r\n";
     return msg;
 }
+std::string msg_errcmd(std::string nick, std::string split ,std::string hostname)
+{
+   std::string msg = ":" + hostname + " 461 " +" "+ nick +" " +split+ " :Not enough parameters\r\n";
+    return msg;
+}
 
 std::string msg_err_one(std::string nick, std::string hostname)
 {
@@ -168,5 +173,10 @@ std::string ERR_NOTOPERATOR(std::string nick, std::string hostname)
 std::string ERR_ALREADYREGISTRED(std::string nick, std::string hostname)
 {
     std::string msg = ":" + hostname + " 462 " + nick + " :You may not reregister\r\n";
+    return msg;
+}
+std::string ERR_NOSUCHNICK(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 401 " + nick + " :No such nick/channel\r\n";
     return msg;
 }

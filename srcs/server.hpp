@@ -86,4 +86,6 @@ std::string ERR_CHANNELISFULL(std::string nick, std::string hostname);
 std::string msg_err_one(std::string nick, std::string hostname);
 std::string msg_may_registered(std::string nick,std::string hostname);
 std::string message_err_pass_inc(std::string hostname, std::string code, std::string msg);
+std::string msg_errcmd(std::string nick, std::string split ,std::string hostname);
+std::string ERR_NOSUCHNICK(std::string nick, std::string hostname);
 #endif
