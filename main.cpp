@@ -411,6 +411,12 @@ int main(int argc,char **argv)
                                 {
                                     ser.clients[i - 1].password = true;
                                 }
+                                else if(split[1] != ser.pass)
+                                {
+                                    msg = message_err_pass_inc(ser.hostname, ERR_PASSWDMISMATCH_CODE, ERR_PASSWDMISMATCH);
+                                    if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
+                                        return(std::cout << "Failed Send Try Again"<<std::endl,1);
+                                }
                                 split.clear();
                            }    
                          

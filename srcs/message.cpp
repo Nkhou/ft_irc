@@ -6,12 +6,17 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 11:06:05 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/16 08:27:46 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:39:43 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
+std::string message_err_pass_inc(std::string hostname, std::string code, std::string msg)
+{
+	std::string message =  ":" + hostname + " " + code+" "+msg + "\r\n";
+	return message;
+}
 std::string message_err_nick_name(std::string hostname, std::string code, std::string nickname, std::string command, std::string msg)
 {
 	std::string message =  ":" + hostname + " " + code + " " + nickname + " " + command +" "+msg + "\r\n";

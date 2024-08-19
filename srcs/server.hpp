@@ -6,7 +6,7 @@
 /*   By: saboulal <saboulal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 12:53:03 by saboulal          #+#    #+#             */
-/*   Updated: 2024/08/16 08:56:01 by saboulal         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:38:18 by saboulal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,5 @@ std::string ERR_NOTONCHANNEL(std::string nick, std::string hostname);
 std::string ERR_CHANNELISFULL(std::string nick, std::string hostname);
 std::string msg_err_one(std::string nick, std::string hostname);
 std::string msg_may_registered(std::string nick,std::string hostname);
+std::string message_err_pass_inc(std::string hostname, std::string code, std::string msg);
 #endif

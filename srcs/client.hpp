@@ -16,7 +16,8 @@
 #define ERR_ERRONEUSNICKNAME ":Erroneous Nickname"
 #define ERR_NICKNAMEINUSE_CODE "433"
 #define ERR_NICKNAMEINUSE_MSG "Nickname is already in use"
-
+#define ERR_PASSWDMISMATCH ":Password incorrect"
+#define ERR_PASSWDMISMATCH_CODE "464"
 #include <cstring>
 
 #define GREEN "\033[0;32m"
