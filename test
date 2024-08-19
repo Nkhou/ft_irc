@@ -23,27 +23,7 @@ user s s s s
 :e3r10p12.1337.ma 001 b Welcome to e3r10p12.1337.ma Internet Relay Chat Network
 join #a
 :e3r10p12.1337.ma 475 #a :Cannot join channel (+k)
-join #a,#b,#c,#d
---------------------------------------------------
-pass ss
-nick b
-user s s s s
-:e3r10p12.1337.ma 001 b Welcome to e3r10p12.1337.ma Internet Relay Chat Network
-join #a
-:b!~s@127.0.0.1 JOIN #a
-:127.0.0.1 353 b @ #a :@b
-:127.0.0.1 366 b #a :End of /NAMES list
-topic #a jjj
-:b!~s@e3r10p12.1337.ma TOPIC #a :jjj
-topic #a
-TOPIC #a :jjj
-topic #a :
-:e3r10p12.1337.ma 442 #a :You're not on that channel
-
----------------------------------------------------
-RPL_TOPIC (332) 
-  "<client> <channel> :<topic>"
-
+join #a,#b,#c,#d//
 --------------------------------------------------
 pass ss
 user a b c d

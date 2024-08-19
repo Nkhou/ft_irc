@@ -1452,6 +1452,11 @@ void Command::JoinCommand(server *server) {
                 {
                     if (server->channels[i].getUser(server->client_fd))
                     {
+                        // std::string msg = ERR_ALREADYREGISTRED(server->hostname);
+                        // if (send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
+                        // {
+                        //     std::cout << "Failed Send Try Again"<<std::endl;
+                        // }
                         return ;
                     }
                     if (checkMode(server->channels[i].getMode(), "+i") == 1 && !server->channels[i].userinvite(server->client_fd))
@@ -1521,13 +1526,6 @@ void Command::JoinCommand(server *server) {
         for (unsigned long i = 0; i < this->args.size(); i++)
         {
             int c = 0;
-            // for (unsigned long j = 0; j < server->channels[i].getUsers().size(); j++)
-            //         {
-            //             if (server->channels[i].getUsers()[j].fd == this->fd)
-            //             {
-            //                 return ;
-            //             }
-            //         }
             if (server->channels.size() == 0)
             {
                 server->channels.push_back(Channel(this->args[i]));
@@ -1545,8 +1543,15 @@ void Command::JoinCommand(server *server) {
                 {
                     if (server->channels[j].getName() == this->args[i])
                     {
+                        // if (server->channels[j].getUser(server->client_fd))
+                        // {
+                        //     c = 1;
+                        //     break ;
+                        // }
                         if (!server->channels[i].getUser(server->client_fd))
                         {
+                            std::cout << "Here" << std::endl;
+
                             if (checkMode(server->channels[j].getMode(), "+i") == 1 && !server->channels[i].userinvite(server->client_fd))
                             {  
                                 c = 1;
@@ -1557,9 +1562,20 @@ void Command::JoinCommand(server *server) {
                                 }
                                 // return;
                             }
+                            else if (checkMode(server->channels[j].getMode(), "+k") && this->keys.size() == 0)
+                            {
+                                c = 1;
+                                std::string msg = ERR_BADCHANNELKEY(args[0], server->hostname);
+                                if (send(fd, msg.c_str(), msg.length(), 0) < 0)
+                                {
+                                    std::cout << "Failed Send Try Again"<<std::endl;
+                                }
+                                // return;
+                            }
                             else if (checkMode(server->channels[j].getMode(), "+k") == 1 && i <= this->keys.size() && server->channels[j].getKey() != this->keys[i])
                             {
                                 c = 1;
+                                std::cout << "Here" << std::endl;
                                 if (server->channels[j].getKey() != this->args[i + 1]) //need more check and fix this
                                 {
                                      std::string msg = ERR_BADCHANNELKEY(args[0], server->hostname);

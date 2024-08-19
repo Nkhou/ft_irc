@@ -160,3 +160,8 @@ std::string ERR_NOTOPERATOR(std::string nick, std::string hostname)
     std::string msg = ":" + hostname + " 482 " + nick + " :You're not channel operator\r\n";
     return msg;
 }
+std::string ERR_ALREADYREGISTRED(std::string nick, std::string hostname)
+{
+    std::string msg = ":" + hostname + " 462 " + nick + " :You may not reregister\r\n";
+    return msg;
+}
