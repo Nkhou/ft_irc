@@ -253,7 +253,6 @@ int main(int argc,char **argv)
                    fdpoll.revents = 0;
                    
                 cli.ip_addr = inet_ntoa(addr.sin_addr);
-                std::cout << "ip address " << cli.ip_addr << std::endl;
                 cli.fd = cli_fd;
                 cli.nickname ="";
                 cli.realname = "";
@@ -277,7 +276,7 @@ int main(int argc,char **argv)
                     
                     memset(buffer,0,sizeof(buffer));
                     ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0);
-                    // size += n;
+                    
                     buff += buffer;
                     while (buff.find("\n") == std::string::npos  && buff.size() > 0)
                     {
@@ -285,19 +284,14 @@ int main(int argc,char **argv)
                         std::cout << "size " << size << std::endl;
                         size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
                         buff += buffer;
-                        // size += n;
+                        
                     }
-                    // memset(buffer,0,sizeof(buffer));
-                    // ssize_t size = recv(ser.fds[i].fd,buffer,sizeof(buffer),0); //receive the data from the client
-                    // buff += buffer;
-                    // need to add ctrl + c to close the server and Ctrl + D to  join the buffer
-
                     if(size == 0)
                     {
-                        // std::cout <<"<<<<<<<<<<<hi"<<std::endl;
+                       
                         deletechannels(ser, ser.fds[i].fd);
                         close(ser.fds[i].fd);
-                        // close(ser.fds[i].fd);
+                        
                         ser.fds.erase(ser.fds.begin() + i);
                         buffer_stor.clear();
                         cmd.clear();
@@ -307,10 +301,10 @@ int main(int argc,char **argv)
                     }
                     else
                     {
-                    //    buff[buff.size()] = '\0';
+                   
                        if (size < 2)
 						{
-							// buffer_stor.push_back(buff);
+							
 							continue;
 						}
                        
@@ -319,48 +313,17 @@ int main(int argc,char **argv)
                     size_t ends1 = buff.find("\r");
                     if (ends != std::string::npos && ends1 != std::string::npos)
                     {
-                        // std::cout << "buff " << buff.substr(0, ends) << std::endl;
-                        // buff.substr(0, ends);
+                        
                         buffer_stor.push_back(buff.substr(0, ends - 1));
                     }
                     else if (ends != std::string::npos)
                     {
-                        // std::cout << "2buff " << buff.substr(0, ends - 1)<< "------"<< std::endl;
-                        // buff.substr(0, ends);
+                        
                         buffer_stor.push_back(buff.substr(0, ends));
                     }
-                    // else if (ends1 != std::string::npos)
-                    // {
-                    //     std::cout << "3buff " << buff.substr(0, ends1) << std::endl;
-                    //     buff.substr(0, ends1);
-                    //     buffer_stor.push_back(buff.substr(0, ends1 - 1));
-                    // }
-                    // else
-                    //     buff.substr(0, buff.size() - 1);
-                    // std::cout << "buff " << buff << std::endl;
-                    //  bool ends_with_newline = buff.find("\n") == std::string::npos;
-                    //  std::cout << "ends_with_newline " << ends_with_newline << std::endl;
-                    //  bool ends_with_carriage_return = (size > 2 && buff.find("\r") == std::string::npos);
-                    //     std::cout << "ends_with_carriage_return " << ends_with_carriage_return << std::endl;
+                   
                       
-                    //   if (!ends_with_newline && buff.find("\r") == std::string::npos)
-                    //   {
-                    //       buffer_stor.push_back(buff);
-                    //       continue;
-                    //   }
-                      
-                    // //   // Null-terminate the buff correctly
-                    //   if (ends_with_newline)
-                    //       buff[buff.size() - 1] = '\0';
-                    //   if (ends_with_carriage_return)
-                    //       buff[buff.size() - 2] = '\0';
-                      // Push the buffer to buffer_stor
-                    //   buffer_stor.push_back(buff);
-                    //   for (size_t j = 0; j < buffer_stor.size(); j++)
-                    //   {
-                    //       std::cout << "buffer_stor " << buffer_stor[j]<< "--------"<< std::endl;
-                    //   }
-                      
+                    
                       // Concatenate all buffers in buffer_stor into cmd
                       for (size_t j = 0; j < buffer_stor.size(); j++)
                             cmd += buffer_stor[j];
@@ -400,7 +363,7 @@ int main(int argc,char **argv)
 
                             if (split[0] == "PASS")
                             {
-                                // std::cout << "split " <<split[1]<<"--------" << std::endl;
+                                
                                 if(split.size() < 2)
                                 {
                                     msg = msg_err(split[0], ser.hostname);
@@ -422,21 +385,17 @@ int main(int argc,char **argv)
                          
 
                         }
-                        // i > 0 && split.size() > 0 && ser.clients[i - 1].password == true &&  (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == "")
+                        
                         while (i > 0 && split.size() > 0 && ser.clients[i - 1].password == true &&  (ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
                         {
 
-                            // std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
                            
-                            // std::cout <<
-                            // if (!(ser.clients[i - 1].nickname == "" || ser.clients[i - 1].user_name == ""))
-                            //     break;
-                            std::cout << "split " <<split[0] << std::endl;
+                            
                             if (split.size() > 0 && split[0] == "NICK" )
                             {
                                 if(split.size() >= 2)
                                 {
-                                    std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
+                                    
                                    if(ser.check_error_nickname(split[1]) != 0)
                                     {
                                        msg = message_err_nick_name(ser.hostname, ERR_ERRONEUSNICKNAME_CODE,"*", ser.clients[i - 1].nickname, ERR_ERRONEUSNICKNAME);
@@ -480,16 +439,12 @@ int main(int argc,char **argv)
                             {
                                 if(split.size() == 5 || split.size() > 5)
                                 {
-                                    // std::cout << "-------fd " <<ser.clients[i - 1].fd<< std::endl;
+                                    
                                       ser.clients[i - 1].user_name = split[1];
                                       ser.clients[i - 1].hostname = split[2];
                                       ser.clients[i - 1].servername = split[3];
                                       ser.clients[i - 1].realname = split[4];
-                                    split.clear();
-                                    //   std::cout<< "split[1]"  << split[1] << std::endl;
-                                    //     std::cout<< "split[2]"  << split[2] << std::endl;
-                                    //     std::cout<< "split[3]"  << split[3] << std::endl;
-                                    //     std::cout<< "split[4]"  << split[4] << std::endl;
+                                      split.clear();
                                    
                                 }  
                                 else if(split.size() < 5 && split.size() != 0)
@@ -515,18 +470,16 @@ int main(int argc,char **argv)
                                              if(send(ser.clients[i - 1].fd, msg.c_str(), msg.length(), 0) < 0)
                                                 return(std::cout << "Failed Send Try Again"<<std::endl,1);
                                             }
-                                            // split.clear();
                                          ser.clients[i - 1].flag_cmd = true;
                                         }
                                 }
-                                // else
                                     split.clear();
                             }
                              if (ser.clients[i - 1].flag == false)
                             {
                                 std::cout << ser.clients[i - 1].nickname << std::endl;
                                 std::cout << ser.clients[i - 1].user_name << std::endl;
-                                // std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
+                                
                                   if (ser.clients[i - 1].nickname != "" && ser.clients[i - 1].user_name != "")
                                   {
                                       msg = msg_welcome(ser.clients[i - 1].nickname, ser.hostname);
@@ -552,12 +505,8 @@ int main(int argc,char **argv)
 
             }
             
-            for (size_t j = 0; j < split.size(); j++)
-            {
-                 std::cout << i<<"  ------   " <<split[j] <<"-------"<< std::endl;
-                //  std::cout << "^^^^^^^" << ser.clients[i - 1].flag << std::endl;
-            }
-                // std::cout << "fd " <<ser.clients[i - 1].fd<< std::endl;
+         
+               
                 if (i > 0 && split.size() > 0 && ser.clients.size() > 0 && split[0] != "PONG" && ser.clients[i - 1].flag == true)
                 {
                    
