@@ -6,6 +6,11 @@ SRCS = main.cpp \
 		cmd/channel.cpp \
 		cmd/command.cpp \
 		cmd/privmsg.cpp \
+		cmd/kick.cpp \
+		cmd/invite.cpp \
+		cmd/join.cpp \
+		cmd/mode.cpp \
+		cmd/topic.cpp \
 
 SRC_BONUS = bonus/main_bonus.cpp \
 			bonus/bot.cpp

@@ -47,5 +47,6 @@ class Command {
         client *getClientByFd(server *ser, int fd);
         
 };
+int checkMode(std::vector<std::string> mode, std::string mode1);
 
 #endif
