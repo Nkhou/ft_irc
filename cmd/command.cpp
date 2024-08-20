@@ -2,7 +2,7 @@
 
 void Command::ParceCommand(std::vector<std::string> command, int fd, std::string hostname)
 {
-    for (unsigned long i = 1; i < command.size(); i++)
+    for (unsigned long i = 1; i < 3; i++)
     {
         unsigned long j = 0;
         while (j < command[i].size())
@@ -1392,8 +1392,8 @@ void Command::executecmd(server *server) {
     }
     else if (server->splited[0] == "PRIVMSG")
     {
-        std::cout << "PRIVMSG" << std::endl;
-        if (server->splited.size() < 1)
+        std::cout << "PRIVMSG*" << std::endl;
+        if (server->splited.size() <= 1)
         {
             std::string msg = msg_errcmd(server->client_cmd.nickname, server->splited[0], server->hostname);
             if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
@@ -1402,15 +1402,15 @@ void Command::executecmd(server *server) {
             }
             return;
         }
-        else if (server->splited.size() == 2)
-        {
-            std::string msg = msg_errcmd(server->client_cmd.nickname,server->splited[0], server->hostname);
-            if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
-            {
-                std::cout << "Failed Send Try Again"<<std::endl;
-            }
-            return;
-        }
+        // else if (server->splited.size() == 2)
+        // {
+        //     std::string msg = msg_errcmd(server->client_cmd.nickname,server->splited[0], server->hostname);
+        //     if(send(server->client_fd, msg.c_str(), msg.length(), 0) < 0)
+        //     {
+        //         std::cout << "Failed Send Try Again"<<std::endl;
+        //     }
+        //     return;
+        // }
         // std::cout << "PRIVMSG" << std::endl;
         ParcePrivmsg(server->splited, server->client_fd);
         
