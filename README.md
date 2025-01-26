@@ -56,5 +56,3 @@ make
 4. Push to the branch
 5. Create a pull request
 
-## License
-This project is open-source. See `LICENSE` file for details.
