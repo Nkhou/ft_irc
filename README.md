@@ -54,5 +54,4 @@ make
 2. Create your feature branch
 3. Commit changes
 4. Push to the branch
-5. Create a pull request
 
